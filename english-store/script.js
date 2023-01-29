@@ -48,7 +48,7 @@ document.addEventListener("click", (event) => {
                   return semiResult
             }, [])
 
-            document.querySelector("#result").innerHTML = JSON.stringify(resultAbstract) + "<br /><br />" + JSON.stringify(resultSocio) + "<br /><br />" + JSON.stringify(resultUnknown)
+            document.querySelector("#result").innerHTML = "resultAbstract: " + JSON.stringify(resultAbstract) + "<br /><br /> resultSocio: " + JSON.stringify(resultSocio) + "<br /><br /> resultUnknown: " + JSON.stringify(resultUnknown)
       }
 })
 
