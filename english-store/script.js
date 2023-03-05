@@ -1,7 +1,7 @@
 const box = document.querySelector("#root")
 const renderList = () => {
-      return currentDict.map((item) => {
-            return `<tr><td><input class="abstract" style="width: 20px; height: 20px" type="checkbox" /></td><td><input class="socio" style="width: 20px; height: 20px" type="checkbox" /></td><td><input class="unknown" style="width: 20px; height: 20px" type="checkbox" /></td><td>${item.en}</td><td>${item.ru}</td><td>${item.transcription}</td></tr>`
+      return currentDict.map((item, index) => {
+            return `<tr><td>${index+1}</td><td><input class="abstract" style="width: 20px; height: 20px" type="checkbox" /></td><td><input class="socio" style="width: 20px; height: 20px" type="checkbox" /></td><td><input class="unknown" style="width: 20px; height: 20px" type="checkbox" /></td><td>${item.en}</td><td>${item.ru}</td><td>${item.transcription}</td></tr>`
       }).join("")
 }
 
