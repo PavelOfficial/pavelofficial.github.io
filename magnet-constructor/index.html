@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Магнитный конструктор</title>
+  <link href="/assets/bootstrap.min.css" rel="stylesheet" />
+
+  <script>
+    const fetchXML = (url) => {
+      const request = new XMLHttpRequest();
+      request.open('GET', url, false);  // `false` makes the request synchronous
+      request.send(null);
+
+      if (request.status === 200) {
+        return request.responseText;
+      }
+
+      return ""
+    }
+  </script>
+  <style>
+      .full-width {
+          width: 100%;
+      }
+
+      .larger-text {
+          font-size: 1.35em;
+      }
+
+      .mt-10 {
+          margin-top: 3em;
+      }
+
+      .high-line {
+          line-height: 2.5em;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="row high-line">
+    <div class="col-md-8"></div>
+    <div class="col-md-4 text-end">
+      <a class="me-1" href="#">патент</a>
+      <a class="me-1" href="#">телегам</a>
+      <a class="me-1" href="#">skype</a>
+      <a class="me-1" href="#">email</a>
+    </div>
+  </div>
+</div>
+<div class="container larger-text mt-10">
+  <h1 class="mb-5 text-center">Вау! Новый конструктор на магнитах. Кубики объединяются в фигуры прям как в Minecraft!</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        Совсем недавно был придуман новый магнитный конструктор, позволяющий создавать фигуры из маленьких кубиков.
+        Собирать фигуры очень просто и удобно, что дарит много радости, веселья и удовольствия от творчества.
+      </p>
+    </div>
+    <div class="col-md-8">
+      <img class="full-width" src="/assets/635863639456912940.jpg" alt="Домик" />
+    </div>
+  </div>
+
+  <p>
+    Многие из вас играли сами или по крайней мере видели невероятно популярную онлайн игру Minecraft.
+    Тысячи людей постоянно веселятся на виртуальных просторах этой игры.
+    Игроки создают архитектурные шедевры, статуи и прочие фантазийные конструкции из кубов.
+  </p>
+</div>
+
+<script src="/assets/bootstrap.bundle.min.js"></script>
+</body>
+</html>
