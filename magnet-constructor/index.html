@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Магнитный конструктор</title>
+  <link rel="icon" type="image/x-icon" href="/assets/icons8-3d-cube-64.png">
   <link href="/assets/bootstrap.min.css" rel="stylesheet"/>
 
   <script>
@@ -26,11 +27,15 @@
       }
 
       body {
-          background: url(/assets/bg-1.jpg);
+          background: url(/assets/bg-4.jpg);
       }
 
       .full-width {
           width: 100%;
+      }
+
+      .width-70 {
+          width: 70%;
       }
 
       .larger-text {
@@ -45,29 +50,93 @@
           line-height: 2.5em;
       }
 
+      .top-plate {
+          background: rgba(245, 243, 189, 0.9);
+          border-radius: 0 0 20px 20px;
+      }
+
       .plate {
+          color: #000000;
           background: rgba(255, 255, 255, 0.85);
+          /* background: linear-gradient(180deg, rgba(238, 253, 253, 0.9) 0%, rgba(240, 249, 255, 0.9) 15%, rgba(245, 245, 253, 0.9) 30%, rgba(255 250 254, 0.9) 45%, rgba(246, 255, 252, 0.9) 60%, rgba(245 255 247, 0.9) 75%, rgba(247 255 242, 0.9) 90%, rgba(250 251 236, 0.9) 100%); */
+          background: linear-gradient(180deg, rgba(238, 253, 253, 0.9) 0%, rgba(240, 249, 255, 0.9) 15%, rgba(245, 245, 253, 0.9) 30%, rgba(255, 250, 254, 0.9) 45%, rgba(246, 255, 252, 0.9) 60%, rgba(245, 255, 247, 0.9) 75%, rgba(247, 255, 242, 0.9) 90%, rgba(250, 251, 236, 0.9) 100%);
+      }
+
+      .to-center {
+          display: block;
+          margin: 0 auto;
+      }
+
+      .theme-header-1 {
+          position: relative;
+          z-index: 2;
+          display: inline-block;
+          background: #f63c2a;
+          color: #ffffff;
+          transform: rotate(-15deg) scale(1.5) translateX(-20px) translateY(-3px);
+          padding: 10px 20px;
+          box-shadow: 10px 5px 5px yellow;
+          border-radius: 5px;
+          margin-right: -25px;
+      }
+
+      .theme-header-2 {
+          position: relative;
+          z-index: 3;
+          display: inline-block;
+          background: #2a6df8;
+          color: #ffffff;
+          transform: rotate(-5deg);
+          padding: 10px 20px;
+          box-shadow: 10px 5px 5px #c533ff;
+          border-radius: 5px;
+      }
+
+      .theme-header-3 {
+          position: relative;
+          z-index: 1;
+          display: inline-block;
+          background: #38c23b;
+          color: #ffffff;
+          transform: rotate(-3deg) translateY(-10px);
+          padding: 30px 20px 10px 20px;
+          box-shadow: 10px 5px 5px #29ffe5;
+          border-radius: 5px;
+      }
+
+      .header-box {
+          display: block;
+          transform: translateY(-55px);
+      }
+
+      .first-row {
+          margin-top: -55px;
+      }
+
+      .article {
+          margin-top: 100px;
       }
   </style>
 </head>
 <body>
-<div class="container plate">
+<div class="container top-plate">
   <div class="row high-line">
-    <div class="col-md-8"></div>
-    <div class="col-md-4 text-end">
-      <a class="me-1" target="_blank" href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU349200702&_cid=P21-LGHOMK-85594-1">патент</a>
+    <div class="col-md-6 col-sm-6"></div>
+    <div class="col-md-6 col-sm-6 text-end">
+      <a class="me-1" target="_blank"
+         href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU349200702&_cid=P21-LGHOMK-85594-1">патент</a>
       <a class="me-1" target="_blank" href="https://t.me/PavelOfficial">телегам</a>
       <a class="me-1" href="skype:pavelofficial?chat">skype</a>
       <a class="me-1" href="mailto:pavelofficial@ya.ru">email</a>
     </div>
   </div>
 </div>
-<div class="container article larger-text mt-3 plate pb-5">
-  <h1 class="mb-5 mt-5 text-center pt-3">
-    Вау! Новый конструктор на магнитах.
-    <br/>Кубики объединяются в фигуры прям как в Minecraft!
+<div class="container article larger-text plate pb-5 mb-5">
+  <h1 class="mb-5 mt-5 text-center pt-3 header-box">
+    <span class="theme-header-1">Вау!</span><span class="theme-header-2">Новый конструктор на магнитах.</span>
+    <br/><span class="theme-header-3">Кубики объединяются в фигуры прям как в Minecraft!</span>
   </h1>
-  <div class="row">
+  <div class="row first-row">
     <div class="col-lg-4">
       <p>
         Совсем недавно был придуман новый магнитный конструктор, позволяющий создавать фигуры из маленьких кубиков.
@@ -75,7 +144,7 @@
       </p>
     </div>
     <div class="col-lg-8">
-      <img class="full-width" src="/assets/png/001.png" alt="Домик"/>
+      <img class="full-width mb-3" src="/assets/png/001.png" alt="Домик"/>
     </div>
   </div>
   <p>
@@ -86,7 +155,7 @@
 
   <div class="row">
     <div class="col-lg-6 col-xl-8">
-      <img class="full-width" src="/assets/png/0004.png" alt="Подростки с конструктором"/>
+      <img class="full-width mb-3" src="/assets/png/0004.png" alt="Подростки с конструктором"/>
     </div>
     <div class="col-lg-6 col-xl-4">
       <p>
@@ -125,25 +194,27 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <img class="full-width" src="/assets/png/0003.png" alt="Замок"/>
+      <img class="full-width mb-3" src="/assets/png/0003.png" alt="Замок"/>
     </div>
   </div>
   <p>
     Мною было найдено несколько патентов. Вот некоторые из них:
-    <a href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU250396789&_cid=P12-KE6VM5-46660-1">патент 1</a>,
+    <a target="_blank" href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU250396789&_cid=P12-KE6VM5-46660-1">патент 1</a>,
     <a
+      target="_blank"
       href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU29497968&tab=PCTDESCRIPTION&_cid=P10-KDXELX-75677-1">патент
       2</a>,
     <a
+      target="_blank"
       href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU253582011&tab=NATIONALBIBLIO&_cid=P20-KE8YO4-98130-1">патент
       3</a>,
-    <a href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU277710147&_cid=P11-KEGTDB-94412-2">патент 4</a>
+    <a target="_blank" href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU277710147&_cid=P11-KEGTDB-94412-2">патент 4</a>
   </p>
   <div class="row">
     <div class="col-lg-6">
       <p>
         Патенты пытаются решить аналогичную задачу. Но они обладают массой недостатков,
-        которые мешают конструктору быть удобными:
+        которые мешают конструктору быть удобным:
         — детали можно стыковать друг с другом не любой стороной, а только некоторыми
         — сложная конструкция множества деталей и в следствии чего сложность
         и дороговизна производства и ненадежность конструкции
@@ -151,7 +222,7 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <img class="full-width" src="/assets/png/0002.png" alt="Схемы"/>
+      <img class="full-width mb-3" src="/assets/png/0002.png" alt="Схемы"/>
     </div>
   </div>
   <p>
@@ -162,7 +233,7 @@
   </p>
   <div class="row">
     <div class="col-lg-4">
-      <img class="full-width" src="/assets/png/cube.png" alt="Куб"/>
+      <img class="full-width mb-3" src="/assets/png/cube.png" alt="Куб"/>
     </div>
     <div class="col-lg-8">
       <p>
@@ -193,7 +264,7 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <img class="full-width" src="/assets/png/002.png" alt="Совмещение кубов"/>
+      <img class="full-width mb-3" src="/assets/png/002.png" alt="Совмещение кубов"/>
     </div>
   </div>
   <p>
@@ -207,11 +278,11 @@
   </p>
   <div class="row">
     <div class="col-lg-12">
-      <img class="full-width" src="/assets/png/003.png" alt="Дети с конструктором"/>
+      <img class="width-70 mb-3 to-center" src="/assets/png/003.png" alt="Дети с конструктором"/>
       <div>
         <div>
           <p>
-            В общем конструктор чумавой. Вы и ваши друзья, вся семья и особенно дети будут
+            В общем конструктор классный! Вы и ваши друзья, вся семья и особенно дети будут
             в восторге от этого увлекательного развлечения. Поделитесь этой статьей(скопировать ссылку) со знакомыми.
             Распространяйте статью везде, где возможно. Чем больше людей узнают об этой новинке,
             тем больше шансов у этого конструктора увидеть свет. Все зависит только от вас!
@@ -222,7 +293,8 @@
           </p>
           <p class="ms-5 text-break">
             <b>Skype:</b> <i><a href="skype:pavelofficial?chat">pavelofficial</a></i><br/>
-            <b>Telegram:</b> <i><a target="_blank" href="https://t.me/PavelOfficial">https://t.me/PavelOfficial</a></i><br/>
+            <b>Telegram:</b> <i><a target="_blank"
+                                   href="https://t.me/PavelOfficial">https://t.me/PavelOfficial</a></i><br/>
             <b>Email:</b> <i><a href="mailto:pavelofficial@ya.ru">pavelofficial@ya.ru</a></i><br/>
             <b>Патент:</b> <i><a
             href="https://patentscope.wipo.int/search/ru/detail.jsf?docId=RU349200702&_cid=P21-LGHOMK-85594-1"
@@ -231,12 +303,18 @@
                                                   href="https://yandex.ru/patents/doc/RU208682U1_20211229?ysclid=lge2div7hc837744882"
                                                   target="_blank">https://yandex.ru/patents/doc/RU208682U1_20211229?ysclid=lge2div7hc837744882</a></i><br/>
           </p>
+
+          <div class="m-5 text-end small">
+            <i>
+              Изображение от <a
+              href="https://ru.freepik.com/free-vector/abstract-background-with-colorful-cubes_798114.htm#page=11&query=cubes&position=9&from_view=search&track=sph">Freepik</a>
+            </i>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-        <script src="/assets/bootstrap.bundle.min.js"></script>
+<script src="/assets/bootstrap.bundle.min.js"></script>
 </body>
 </html>
