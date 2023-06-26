@@ -4349,8 +4349,8 @@ const resultUnknown = [{
 
 const words = [
   ...resultAbstract,
-  ...resultSocio,
-  ...resultUnknown,
+//  ...resultSocio,
+//  ...resultUnknown,
 ]
 
 words.forEach((word) => {
