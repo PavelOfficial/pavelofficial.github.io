@@ -1,4 +1,5 @@
-const resultAbstract = [{
+const resultAbstract = [
+  {
   "ru": "способность, умение",
   "en": "ability",
   "transcription": "[əˈbɪləti]"
@@ -1855,6 +1856,16 @@ const resultAbstract = [{
   "en": "wrong",
   "transcription": "[rɔːŋ]"
 }, {"ru": "да, утвердительный ответ", "en": "yes", "transcription": "[jes]"}]
+
+
+
+
+
+
+
+
+
+
 const resultSocio = [{
   "ru": "восхищаться, любоваться",
   "en": "admire",

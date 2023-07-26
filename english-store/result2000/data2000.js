@@ -2224,6 +2224,7 @@ const resultSocio = [{
   "en": "worry",
   "transcription": "[ˈwɜːri]"
 }]
+
 const resultUnknown = [{
   "ru": "неопределенный артикль, один из",
   "en": "a",
