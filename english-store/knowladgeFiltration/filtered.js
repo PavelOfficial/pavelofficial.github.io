@@ -4348,8 +4348,8 @@ const resultUnknown = [{
 
 
 const words = [
-  ...resultAbstract.slice(600, 800), // 0, 200 / 400, 600
-//  ...resultSocio,
+// ...resultAbstract.slice(800, 1000), // 0, 200 / 400, 600 / 600, 800
+  ...resultSocio.slice(0, 200),
 //  ...resultUnknown,
 ]
 
