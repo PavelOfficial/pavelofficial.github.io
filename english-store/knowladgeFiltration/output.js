@@ -1,4 +1,4 @@
-const words = unknown.socio.slice(0, 200)
+const words = unknown.abstract.slice(0, 400)
 
 words.forEach((word) => {
   const shakeCount = words.length * 10
