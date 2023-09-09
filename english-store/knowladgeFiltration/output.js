@@ -1,4 +1,4 @@
-const words = unknown.abstract.slice(0, 400)
+const words = known.rest.slice(0, 10000)
 
 words.forEach((word) => {
   const shakeCount = words.length * 10
