@@ -1,0 +1,172 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Поиск ненужных слов</title>
+</head>
+<body>
+<style>
+    html {
+        font-family: Arial, sans-serif;
+    }
+
+    button {
+        color: #ffffff;
+        background: #6699ff;
+        line-height: 35px;
+        font-size: 25px;
+        margin-right: 15px;
+    }
+
+    input[type=checkbox] {
+        width: 20px;
+        height: 20px;
+    }
+
+    #word-list {
+        line-height: 25px;
+        font-size: 20px;
+    }
+
+
+</style>
+<div id="root"></div>
+<div id="word-list">
+
+</div>
+<br/>
+<div>
+  <button type="button" id="apply">apply</button>
+  <button type="button" id="apply-and-next">apply and next page</button>
+  <button type="button" id="save-indexes">save indexes</button>
+</div>
+<div>
+  <input id="page-num" type="text" value="" />
+  <button id="go-page" type="button">GO</button>
+</div>
+<div>
+  <script src="./enTrans.js"></script>
+  <script src="./ruTrans.js"></script>
+  <script src="./known.js"></script>
+  <script>
+    function downloadText(filename, text) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    const leadingZeros = (num) => {
+      return String('0000000000000' + num).slice(-5)
+    }
+
+    const enWordsMap = enWords.reduce((result, item, index) => {
+      result.set(item, ruWords[index])
+
+      return result
+    }, new Map())
+
+    const enWordsIndexMap = enWords.reduce((result, item, index) => {
+      result.set(item, index)
+
+      return result
+    }, new Map())
+
+    const knownWordSet = new Set(knownWords)
+    const finalEnWords = enWords.filter((item) => {
+      return !knownWordSet.has(item)
+    })
+
+    console.log("finalEnWords", finalEnWords)
+    console.log("finalEnWords.length: ", finalEnWords.length)
+
+    let pageNum = parseInt(localStorage.getItem("page"), 10) || 0
+    const unknownIndexes = JSON.parse(localStorage.getItem("unknownIndexes")) || []
+    const unknownIndexesSet = new Set(unknownIndexes)
+    const itemsOnPageCount = 20
+
+    const renderPage = (pageIndex) => {
+      const items = finalEnWords.slice(pageIndex * itemsOnPageCount, (pageIndex + 1) * itemsOnPageCount)
+      const pageResult = items.reduce((result, enWord) => {
+        const ruWord = enWordsMap.get(enWord)
+        const index = enWordsIndexMap.get(enWord)
+
+        result += `<div><label><input type="checkbox" value="${index}" ${unknownIndexesSet.has(index) ? "checked='checked'" : ""} /> ${leadingZeros(index)}. ${enWord} - ${ruWord}</label></div>`
+
+        return result
+      }, "")
+
+      console.log("pageResult: ", pageResult)
+
+      document.getElementById("word-list").innerHTML = pageResult
+    }
+
+    document.getElementById("page-num").value = pageNum
+    renderPage(pageNum)
+
+    function apply() {
+      const indexes = Array.from(document.getElementById("word-list").querySelectorAll("input[type=checkbox]")).reduce((resultIndexes, input) => {
+        const checkedIndexes = resultIndexes[0]
+        const uncheckedreadyIndexes = resultIndexes[1]
+        const index = parseInt(input.value, 10)
+        const checked = input.checked ? true : false
+
+        if (checked) {
+          checkedIndexes.push(index)
+        } else {
+          uncheckedreadyIndexes.push(index)
+        }
+
+        return resultIndexes
+      }, [[], []])
+
+      let unknownIndexes = JSON.parse(localStorage.getItem("unknownIndexes")) || []
+
+      unknownIndexes = unknownIndexes.filter((index) => {
+        return !indexes[1].includes(index)
+      })
+
+      unknownIndexes = unknownIndexes.concat(indexes[0])
+
+      localStorage.setItem("unknownIndexes", JSON.stringify(unknownIndexes))
+    }
+
+    document.getElementById("apply").onclick = () => {
+      apply()
+    }
+
+    document.getElementById("apply-and-next").onclick = () => {
+      apply()
+      pageNum += 1
+
+      localStorage.setItem("page", String(pageNum))
+      document.getElementById("page-num").value = pageNum
+
+      renderPage(pageNum)
+    }
+
+    document.getElementById("save-indexes").onclick = () => {
+      const unknownIndexes = localStorage.getItem("unknownIndexes") || []
+
+      downloadText(`unkown-indexes-${Date.now()}.json`, JSON.stringify(unknownIndexes))
+    }
+
+    document.getElementById("go-page").onclick = () => {
+      const value = parseInt(document.getElementById("page-num").value, 10)
+
+      if (isNaN(value)) {
+        return
+      }
+
+      pageNum = value
+      localStorage.setItem("page", String(pageNum))
+
+      renderPage(pageNum)
+    }
+
+  </script>
+</div>
+</body>
+</html>
