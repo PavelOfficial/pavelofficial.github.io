@@ -54,6 +54,7 @@
   <script src="./enTrans.js"></script>
   <script src="./ruTrans.js"></script>
   <script src="./known.js"></script>
+  <script src="./filteredIndexes.js"></script>
   <script>
     function downloadText(filename, text) {
       var element = document.createElement('a');
@@ -82,8 +83,16 @@
     }, new Map())
 
     const knownWordSet = new Set(knownWords)
-    const finalEnWords = enWords.filter((item) => {
-      return !knownWordSet.has(item)
+    const finalEnWords = enWords.filter((item, index) => {
+      if (knownWordSet.has(item)) {
+        return false
+      }
+
+      if (index <= 460) {
+        return includeIndexes.includes(index)
+      }
+
+      return !excludeIndexes.includes(index)
     })
 
     console.log("finalEnWords", finalEnWords)
