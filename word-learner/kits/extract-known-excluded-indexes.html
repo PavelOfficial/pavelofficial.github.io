@@ -1,0 +1,47 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+  <script src="./known-excluded/dict2000.js"></script>
+  <script src="./known-excluded/dict3000.js"></script>
+  <script src="./known-excluded/dict5000.js"></script>
+  <script src="./known-excluded/dict7000.js"></script>
+  <script src="./known-excluded/all.js"></script>
+
+  <script src="../8000/enTrans.js"></script>
+  <script src="../2700/eng-words.js"></script>
+
+  <script>
+    const extractIndexes = (list) => {
+      return list.map((word) => {
+        if (enWords8000.indexOf(word) !== -1) {
+          return ["8000", enWords8000.indexOf(word)]
+        }
+
+        if (engWords2700.indexOf(word) !== -1) {
+          return ["2700", engWords2700.indexOf(word)]
+        }
+
+        return [null, word]
+      })
+    }
+
+    const engDictNotKnownIndexes2000 = extractIndexes(engDictNotKnown2000)
+    const engDictNotKnownIndexes3000 = extractIndexes(engDictNotKnown3000)
+    const engDictNotKnownIndexes5000 = extractIndexes(engDictNotKnown5000)
+    const engDictNotKnownIndexes7000 = extractIndexes(engDictNotKnown7000)
+    const engDictNotKnownIndexesAll = extractIndexes(engDictNotKnownAll)
+
+    console.log("engDictNotKnownIndexes2000: ", JSON.stringify(engDictNotKnownIndexes2000))
+    console.log("engDictNotKnownIndexes3000: ", JSON.stringify(engDictNotKnownIndexes3000))
+    console.log("engDictNotKnownIndexes5000: ", JSON.stringify(engDictNotKnownIndexes5000))
+    console.log("engDictNotKnownIndexes7000: ", JSON.stringify(engDictNotKnownIndexes7000))
+    console.log("engDictNotKnownIndexesAll: ", JSON.stringify(engDictNotKnownIndexesAll))
+
+  </script>
+</div>
+</body>
+</html>

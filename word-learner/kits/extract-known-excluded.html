@@ -1,0 +1,35 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+  <script src="./full/dict2000.js"></script>
+  <script src="./full/dict3000.js"></script>
+  <script src="./full/dict5000.js"></script>
+  <script src="./full/dict7000.js"></script>
+  <script src="./allKnownWords.js"></script>
+  <script src="./full/all.js"></script>
+  <script>
+    const excludeKnownAndAdditional = (list, excludeArray) => {
+      return list.filter((item) => !allKnownWords.includes(item)).filter((item) => {
+        return !excludeArray.includes(item)
+      })
+    }
+
+    const engDictNotKnown2000 = excludeKnownAndAdditional(dict2000, [])
+    const engDictNotKnown3000 = excludeKnownAndAdditional(dict3000, dict2000)
+    const engDictNotKnown5000 = excludeKnownAndAdditional(dict5000, dict2000.concat(dict3000))
+    const engDictNotKnown7000 = excludeKnownAndAdditional(dict7000, dict2000.concat(dict3000).concat(dict5000))
+    const engDictNotKnownAll = excludeKnownAndAdditional(dictAll, dict2000.concat(dict3000).concat(dict5000).concat(dict7000))
+
+    console.log("engDictNotKnown2000: ", JSON.stringify(engDictNotKnown2000))
+    console.log("engDictNotKnown3000: ", JSON.stringify(engDictNotKnown3000))
+    console.log("engDictNotKnown5000: ", JSON.stringify(engDictNotKnown5000))
+    console.log("engDictNotKnown7000: ", JSON.stringify(engDictNotKnown7000))
+    console.log("engDictNotKnownAll: ", JSON.stringify(engDictNotKnownAll))
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+  <script src="./known.js"></script>
+  <script src="./8000/enTrans.js"></script>
+  <script src="./8000/unkown-indexes-8000.js"></script>
+  <script>
+    const unknownIndexes8000Before460 = indexes8000.filter((index) => {
+      return index <= 460
+    })
+
+    const knownIndexes8000Before460 = (new Array(461)).fill(null).map((_, index) => {
+      return index
+    }).filter((index) => {
+      return !unknownIndexes8000Before460.includes(index)
+    })
+
+    const knownIndexes8000After460 = indexes8000.filter((index) => {
+      return index > 460
+    })
+
+    const known8000 = knownIndexes8000Before460.concat(knownIndexes8000After460)
+    const wordsKnown8000 = known8000.map((index) => {
+      return enWords[index]
+    })
+
+    const allKnownWords = Array.from(new Set(wordsKnown8000.concat(knownWords)))
+
+    console.log("allKnownWords: ", JSON.stringify(allKnownWords))
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+  <script src="./source/words2000.js"></script>
+  <script src="./source/words3000.js"></script>
+  <script src="./source/words5000.js"></script>
+  <script src="./source/words7000.js"></script>
+  <script>
+    const engDict2000 = dict2000.map(item => item.en)
+    const engDict3000 = dict3000.map(item => item.en)
+    const engDict5000 = dict5000.map(item => item.en)
+    const engDict7000 = dict7000.map(item => item.en)
+
+    console.log("engDict2000: ", JSON.stringify(engDict2000))
+    console.log("engDict3000: ", JSON.stringify(engDict3000))
+    console.log("engDict5000: ", JSON.stringify(engDict5000))
+    console.log("engDict7000: ", JSON.stringify(engDict7000))
+
+  </script>
+</div>
+</body>
+</html>

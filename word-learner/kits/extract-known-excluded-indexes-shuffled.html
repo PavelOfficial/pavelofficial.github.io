@@ -1,0 +1,54 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+  <script src="./known-excluded-indexes/dict2000.js"></script>
+  <script src="./known-excluded-indexes/dict3000.js"></script>
+  <script src="./known-excluded-indexes/dict5000.js"></script>
+  <script src="./known-excluded-indexes/dict7000.js"></script>
+  <script src="./known-excluded-indexes/all.js"></script>
+
+  <script>
+    const extractShuffled = (list) => {
+      let shuffled = list.filter(item => item[0] !== null)
+
+      const singleShuffle = () => {
+        const shuffledLength = shuffled.length
+
+        if (shuffledLength > 0) {
+          shuffled.forEach((item, index) => {
+            const replaceIndex = Math.floor(Math.random() * shuffledLength)
+
+            const temp = shuffled[index]
+            shuffled[index] = shuffled[replaceIndex]
+            shuffled[replaceIndex] = temp
+          }, [])
+        }
+      }
+
+      for (let i = 0; i < 100; i++) {
+        singleShuffle()
+      }
+
+      return shuffled
+    }
+
+    const engDictNotKnownIndexesShuffled2000 = extractShuffled(engDictNotKnownIndexes2000)
+    const engDictNotKnownIndexesShuffled3000 = extractShuffled(engDictNotKnownIndexes3000)
+    const engDictNotKnownIndexesShuffled5000 = extractShuffled(engDictNotKnownIndexes5000)
+    const engDictNotKnownIndexesShuffled7000 = extractShuffled(engDictNotKnownIndexes7000)
+    const engDictNotKnownIndexesShuffledAll = extractShuffled(engDictNotKnownIndexesAll)
+
+    console.log("engDictNotKnownIndexesShuffled2000: ", JSON.stringify(engDictNotKnownIndexesShuffled2000))
+    console.log("engDictNotKnownIndexesShuffled3000: ", JSON.stringify(engDictNotKnownIndexesShuffled3000))
+    console.log("engDictNotKnownIndexesShuffled5000: ", JSON.stringify(engDictNotKnownIndexesShuffled5000))
+    console.log("engDictNotKnownIndexesShuffled7000: ", JSON.stringify(engDictNotKnownIndexesShuffled7000))
+    console.log("engDictNotKnownIndexesShuffledAll: ", JSON.stringify(engDictNotKnownIndexesShuffledAll))
+
+  </script>
+</div>
+</body>
+</html>
