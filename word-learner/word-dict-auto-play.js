@@ -11,19 +11,19 @@
   // enWords8000
   // engWords2700
   const playLists = [{
-    name: "Популрные 2000",
+    name: "Популярные 2000",
     dict: engDictNotKnownIndexes2000,
   },{
-    name: "Популрные 3000",
+    name: "Популярные 3000",
     dict: engDictNotKnownIndexes3000,
   },{
-    name: "Популрные 5000",
+    name: "Популярные 5000",
     dict: engDictNotKnownIndexes5000,
   },{
-    name: "Популрные 7000",
+    name: "Популярные 7000",
     dict: engDictNotKnownIndexes7000,
   },{
-    name: "Популрные остаток",
+    name: "Популярные остаток",
     dict: engDictNotKnownIndexesAll,
   }]
 
