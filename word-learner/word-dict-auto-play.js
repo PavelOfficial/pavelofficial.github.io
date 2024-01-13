@@ -27,6 +27,8 @@
     dict: engDictNotKnownIndexesAll,
   }]
 
+  const DEFAULT_TRANSLATION_DELAY = 350
+  let TRANSLATION_DELAY = 350
   let currentList = null
   let currentWord = null
   let currentDescription = null
@@ -213,7 +215,7 @@
           onend: function() {
             setTimeout(() => {
               audioRu.play()
-            }, 350)
+            }, TRANSLATION_DELAY)
           }
         });
 
@@ -265,17 +267,40 @@
       }
     }
 
+    window.handleSelectDelayChange = (event) => {
+      const value = event.target.value
+
+      if (value === "DEFAULT DELAY") {
+        TRANSLATION_DELAY = DEFAULT_TRANSLATION_DELAY
+      } else {
+        TRANSLATION_DELAY = parseFloat(value) * 1000
+      }
+    }
+
     const localStorageCurrentSelection = localStorage.getItem("current-list")
 
     const content = `
-      <select onchange="handleSelectDictChange(event)">
-        <option value="">NONE</option>
-        ${playLists.map((list) => {
-          const selected = list.name === localStorageCurrentSelection
-
-          return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
-        }).join('')}  
-      </select>
+      <div>
+        <select onchange="handleSelectDictChange(event)">
+          <option value="">NONE</option>
+          ${playLists.map((list) => {
+            const selected = list.name === localStorageCurrentSelection
+  
+            return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
+          }).join('')}  
+        </select>
+      </div>
+      <div>
+        <select onchange="handleSelectDelayChange(event)">
+          <option value="DEFAULT">DEFAULT</option>
+          <option value="0.5">0.5</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
     `
 
     playlistBox.innerHTML = content
