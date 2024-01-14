@@ -48,6 +48,8 @@
   let currentWord = null
   let currentDescription = null
   let currentSelection = null
+  let indexFrom = null
+  let indexTo = null
   let isPlaying = false
   let handleAudioPlay = () => {}
 
@@ -104,6 +106,13 @@
           return item[0] === currentSelection[0] && item[1] === currentSelection[1]
         })
 
+        if (indexTo !== null && index + 1 > indexTo) {
+          switchToNext = true
+          switchPlaying(false, true)
+
+          return
+        }
+
         let nextItem
         if (switchToNext) {
           nextItem = currentList.dict[index + 1]
@@ -116,7 +125,7 @@
           handleSelectDictItem(nextItem[0], nextItem[1], switchToNext)
           playAudio(afterPlayAudio)
         } else {
-          switchPlaying(false)
+          switchPlaying(false, true)
         }
       }
     }
@@ -128,7 +137,15 @@
   const currentPlaylist = document.querySelector(".current-playlist")
   const currentAudioBox = document.querySelector(".audio-box")
 
-  function switchPlaying(nextIsPlaying) {
+  function switchPlaying(nextIsPlaying, noInit) {
+    if (!noInit && indexFrom !== null) {
+      const firstItem = currentList.dict[indexFrom]
+
+      if (firstItem) {
+        handleSelectDictItem(firstItem[0], firstItem[1], true)
+      }
+    }
+
     isPlaying = nextIsPlaying !== undefined ? nextIsPlaying : !isPlaying
 
     playAudio(afterPlayAudio)
@@ -266,7 +283,7 @@
     renderAll()
     renderСurrentPlaylist()
 
-    const firstItem = currentList.dict[0]
+    const firstItem = currentList.dict[indexFrom ?? 0]
 
     if (firstItem) {
       handleSelectDictItem(firstItem[0], firstItem[1], true)
@@ -289,6 +306,26 @@
         TRANSLATION_DELAY = DEFAULT_TRANSLATION_DELAY
       } else {
         TRANSLATION_DELAY = parseFloat(value) * 1000
+      }
+    }
+
+    window.handleFromIndexBlur = (event) => {
+      const value = event.target.value
+
+      if (!value) {
+        indexFrom = null
+      } else {
+        indexFrom = parseInt(value, 10) - 1
+      }
+    }
+
+    window.handleToIndexBlur = (event) => {
+      const value = event.target.value
+
+      if (!value) {
+        indexTo = null
+      } else {
+        indexTo = parseInt(value, 10) - 1
       }
     }
 
@@ -315,6 +352,20 @@
           <option value="4">4</option>
           <option value="5">5</option>
         </select>
+      </div>
+      <div>
+        <div>
+          <label>
+            Индекс от:
+            <input style="width: 50px" type="number" onblur="handleFromIndexBlur(event)" />
+          </label>
+        </div>
+        <div>
+          <label>
+            Индекс до:
+            <input style="width: 50px" type="number" onblur="handleToIndexBlur(event)" />
+          </label>
+        </div>
       </div>
     `
 
