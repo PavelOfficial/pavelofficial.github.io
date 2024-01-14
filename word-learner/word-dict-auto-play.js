@@ -12,18 +12,33 @@
   // engWords2700
   const playLists = [{
     name: "Популярные 2000",
+    dict: engDictAllIndexes2000,
+  }, {
+    name: "Популярные 3000",
+    dict: engDictAllIndexes3000,
+  }, {
+    name: "Популярные 5000",
+    dict: engDictAllIndexes5000,
+  }, {
+    name: "Популярные 7000",
+    dict: engDictAllIndexes7000,
+  }, {
+    name: "Популярные остаток",
+    dict: engDictAllIndexesAll,
+  }, {
+    name: "Популярные сокращенный 2000",
     dict: engDictNotKnownIndexes2000,
   },{
-    name: "Популярные 3000",
+    name: "Популярные сокращенный 3000",
     dict: engDictNotKnownIndexes3000,
   },{
-    name: "Популярные 5000",
+    name: "Популярные сокращенный 5000",
     dict: engDictNotKnownIndexes5000,
   },{
-    name: "Популярные 7000",
+    name: "Популярные сокращенный 7000",
     dict: engDictNotKnownIndexes7000,
-  },{
-    name: "Популярные остаток",
+  }, {
+    name: "Популярные сокращенный все",
     dict: engDictNotKnownIndexesAll,
   }]
 

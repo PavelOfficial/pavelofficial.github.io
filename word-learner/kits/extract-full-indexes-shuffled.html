@@ -1,0 +1,81 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>Заголовок</title>
+</head>
+<body>
+<div>
+
+  <script src="./full/dict2000.js"></script>
+  <script src="./full/dict3000.js"></script>
+  <script src="./full/dict5000.js"></script>
+  <script src="./full/dict7000.js"></script>
+  <script src="./full/all.js"></script>
+
+
+  <script src="../8000/enTrans.js"></script>
+  <script src="../2700/eng-words.js"></script>
+
+  <script>
+    const extractShuffled = (list) => {
+      let shuffled = list.filter(item => item[0] !== null)
+
+      const singleShuffle = () => {
+        const shuffledLength = shuffled.length
+
+        if (shuffledLength > 0) {
+          shuffled.forEach((item, index) => {
+            const replaceIndex = Math.floor(Math.random() * shuffledLength)
+
+            const temp = shuffled[index]
+            shuffled[index] = shuffled[replaceIndex]
+            shuffled[replaceIndex] = temp
+          }, [])
+        }
+      }
+
+      for (let i = 0; i < 100; i++) {
+        singleShuffle()
+      }
+
+      return shuffled
+    }
+
+    const extractIndexes = (list) => {
+      return list.map((word) => {
+        if (enWords8000.indexOf(word) !== -1) {
+          return ["8000", enWords8000.indexOf(word)]
+        }
+
+        if (engWords2700.indexOf(word) !== -1) {
+          return ["2700", engWords2700.indexOf(word)]
+        }
+
+        return [null, word]
+      })
+    }
+
+    const removePrev = (wordsBase, wordsExclude) => {
+      const wordsExcludeSet = new Set(wordsExclude)
+
+      return wordsBase.filter((word) => {
+        return !wordsExcludeSet.has(word)
+      })
+    }
+
+    const engFullDictIndexes2000 = extractShuffled(extractIndexes(dict2000))
+    const engFullDictIndexes3000 = extractShuffled(extractIndexes(removePrev(dict3000, dict2000)))
+    const engFullDictIndexes5000 = extractShuffled(extractIndexes(removePrev(dict5000, dict2000.concat(dict3000))))
+    const engFullDictIndexes7000 = extractShuffled(extractIndexes(removePrev(dict7000, dict2000.concat(dict3000).concat(dict5000))))
+    const engFullDictIndexesAll = extractShuffled(extractIndexes(removePrev(dictAll, dict2000.concat(dict3000).concat(dict5000).concat(dict7000))))
+
+    console.log("engFullDictIndexes2000: ", JSON.stringify(engFullDictIndexes2000))
+    console.log("engFullDictIndexes3000: ", JSON.stringify(engFullDictIndexes3000))
+    console.log("engFullDictIndexes5000: ", JSON.stringify(engFullDictIndexes5000))
+    console.log("engFullDictIndexes7000: ", JSON.stringify(engFullDictIndexes7000))
+    console.log("engFullDictIndexesAll: ", JSON.stringify(engFullDictIndexesAll))
+
+  </script>
+</div>
+</body>
+</html>
