@@ -44,12 +44,13 @@
 
   const DEFAULT_TRANSLATION_DELAY = 350
   let TRANSLATION_DELAY = 350
+  let selectDelayValue = localStorage.getItem("selectDelayValue")
   let currentList = null
   let currentWord = null
   let currentDescription = null
   let currentSelection = null
-  let indexFrom = null
-  let indexTo = null
+  let indexFrom = localStorage.getItem("indexFrom") ? parseInt(localStorage.getItem("indexFrom"), 10) - 1 : null
+  let indexTo = localStorage.getItem("indexTo") ? parseInt(localStorage.getItem("indexTo") - 1, 10) : null
   let isPlaying = false
   let handleAudioPlay = () => {}
 
@@ -307,6 +308,12 @@
       } else {
         TRANSLATION_DELAY = parseFloat(value) * 1000
       }
+
+      localStorage.setItem("selectDelayValue", value)
+    }
+
+    if (selectDelayValue !== undefined) {
+      handleSelectDelayChange({ target: { value: selectDelayValue } })
     }
 
     window.handleFromIndexBlur = (event) => {
@@ -314,8 +321,10 @@
 
       if (!value) {
         indexFrom = null
+        localStorage.removeItem("indexFrom")
       } else {
         indexFrom = parseInt(value, 10) - 1
+        localStorage.setItem("indexFrom", String(value))
       }
     }
 
@@ -324,8 +333,10 @@
 
       if (!value) {
         indexTo = null
+        localStorage.removeItem("indexTo")
       } else {
         indexTo = parseInt(value, 10) - 1
+        localStorage.setItem("indexTo", String(value))
       }
     }
 
@@ -344,26 +355,26 @@
       </div>
       <div>
         <select onchange="handleSelectDelayChange(event)">
-          <option value="DEFAULT">DEFAULT</option>
-          <option value="0.5">0.5</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
+          <option ${selectDelayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
+          <option ${selectDelayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
+          <option ${selectDelayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
+          <option ${selectDelayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
+          <option ${selectDelayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
+          <option ${selectDelayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
+          <option ${selectDelayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
         </select>
       </div>
       <div>
         <div>
           <label>
             Индекс от:
-            <input style="width: 50px" type="number" onblur="handleFromIndexBlur(event)" />
+            <input style="width: 50px" type="number" value="${indexFrom !== null ? indexFrom + 1 : ""}" onblur="handleFromIndexBlur(event)" />
           </label>
         </div>
         <div>
           <label>
             Индекс до:
-            <input style="width: 50px" type="number" onblur="handleToIndexBlur(event)" />
+            <input style="width: 50px" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
           </label>
         </div>
       </div>
