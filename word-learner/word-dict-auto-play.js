@@ -3,11 +3,32 @@
     return String('0000000000000' + num).slice(-5)
   }
 
+  const allNotKnownIndexesAll = [
+    ...engDictNotKnownIndexes2000,
+    ...engDictNotKnownIndexes3000,
+    ...engDictNotKnownIndexes5000,
+    ...engDictNotKnownIndexes7000,
+    ...engDictNotKnownIndexesAll,
+  ].map(([playListIndex, wordIndex]) => {
+    return String(playListIndex) + '-' + String(wordIndex)
+  })
+
+  const allNotKnownIndexesAllSet = new Set(allNotKnownIndexesAll)
+
+  const excludePopular = (words) => {
+    const result = words.filter((word) => {
+      return !allNotKnownIndexesAllSet.has(String(word[0]) + '-' + String(word[1]))
+    })
+
+    return result
+  }
+
   // allWordsMap
   const dictMap = {
     8000: enWords8000,
     2700: engWords2700,
   }
+
   // enWords8000
   // engWords2700
   const playLists = [{
@@ -40,7 +61,22 @@
   }, {
     name: "Популярные сокращенный все",
     dict: engDictNotKnownIndexesAll,
-  }]
+  }, {
+    name: "Популярные простые 2000",
+    dict: excludePopular(engDictAllIndexes2000),
+  }, {
+    name: "Популярные простые 3000",
+    dict: excludePopular(engDictAllIndexes3000),
+  }, {
+    name: "Популярные простые 5000",
+    dict: excludePopular(engDictAllIndexes5000),
+  }, {
+    name: "Популярные простые 7000",
+    dict: excludePopular(engDictAllIndexes7000),
+  }, {
+    name: "Популярные простые остаток",
+    dict: excludePopular(engDictAllIndexesAll),
+  },]
 
   const DEFAULT_TRANSLATION_DELAY = 350
   let TRANSLATION_DELAY = 350
