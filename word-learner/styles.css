@@ -30,8 +30,14 @@ html, body {
 }
 
 .controls {
+    display: flex;
+    justify-content: center;
     margin-top: 50px;
     text-align: center;
+}
+
+.controls button {
+    margin: 0 25px;
 }
 
 button {

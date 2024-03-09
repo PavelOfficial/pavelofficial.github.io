@@ -5598,7 +5598,7 @@ const enWords8000 = ["fly", // v
 "scene",
 "destroyed",
 "bitterly",
-"salvation",
+"salvation", // v
 "Jew",
 "prayer",
 "childhood",
@@ -5797,7 +5797,7 @@ const enWords8000 = ["fly", // v
 "pamphlet",
 "booklet",
 "intrigue",
-"vine",
+"vine", // v
 "hereditary",
 "spree",
 "shapeless",
@@ -5823,7 +5823,7 @@ const enWords8000 = ["fly", // v
 "slept",
 "beset",
 "largest",
-"publicly",
+"publicly", // v
 "forge",
 "nick",
 "soften",
@@ -5831,13 +5831,13 @@ const enWords8000 = ["fly", // v
 "gaunt",
 "defiant",
 "schoolboy",
-"clash",
+"clash", // v
 "snarl",
 "creating",
-"slant",
-"negligence",
-"wasteful",
-"mournful",
+"slant", // v
+"negligence", // v, убрать нактонный 5837 -> 5838
+"wasteful", // !!!!! 5839 сдвинуть на один назад и только в русских переводах!!!!
+"mournful", // 5840
 "basis",
 "compile",
 "oath",
@@ -5847,7 +5847,7 @@ const enWords8000 = ["fly", // v
 "session",
 "intervention",
 "message",
-"colorful",
+"colorful", // 5850
 "sparkle",
 "blew",
 "improved",
@@ -5897,7 +5897,7 @@ const enWords8000 = ["fly", // v
 "privilege",
 "czar",
 "borne",
-"arithmetic",
+"arithmetic", // 5990
 "statistics",
 "harmony",
 "claw",
@@ -5940,26 +5940,26 @@ const enWords8000 = ["fly", // v
 "appeared",
 "appears",
 "attended",
-"awe",
-"beauty",
-"beginning",
+"awe", // 5943
+"beauty", // 5944
+"beginning", // 5945
 "blob",
 "books",
 "British",
 "calling",
-"cannot",
-"card",
+"cannot", // x нету !!!!!!
+"card", // v
 "Chris",
 "clink",
 "coax",
 "comfort",
-"command",
+"command", // v
 "committee",
 "companion",
-"concerning",
+"concerning", // v
 "conflict",
-"continued",
-"contrary",
+"continued", // v
+"contrary", // v
 "convalesce",
 "convert",
 "cooler",
@@ -5973,7 +5973,7 @@ const enWords8000 = ["fly", // v
 "difficulty",
 "digestion",
 "discovery",
-"ditty",
+"ditty", // v
 "doom",
 "dreamt",
 "drew",
@@ -5997,22 +5997,22 @@ const enWords8000 = ["fly", // v
 "foolish",
 "fore",
 "foreword",
-"formed",
-"forms",
-"fourth",
-"gentlemen",
-"goes",
-"greatest",
+"formed", // v
+"forms", // v
+"fourth", // v
+"gentlemen", // v
+"goes", // v
+"greatest", // v
 "hands",
 "heads",
 "hell",
 "helped",
-"holding",
+"holding", // v
 "hours",
 "human",
 "humor",
 "hundreds",
-"hybrid",
+"hybrid", // v
 "hygienic",
 "illuminate",
 "importance",
@@ -6037,7 +6037,7 @@ const enWords8000 = ["fly", // v
 "lived",
 "living",
 "looking",
-"loved",
+"loved", // v
 "Lucy",
 "matters",
 "mayor",
@@ -6068,7 +6068,7 @@ const enWords8000 = ["fly", // v
 "plainly",
 "plans",
 "playing",
-"points",
+"points", // v
 "possessed",
 "powers",
 "presented",
@@ -6097,7 +6097,7 @@ const enWords8000 = ["fly", // v
 "seeing",
 "shady",
 "shock",
-"sixth",
+"sixth", // V - правильно
 "sleigh",
 "snare",
 "solder",

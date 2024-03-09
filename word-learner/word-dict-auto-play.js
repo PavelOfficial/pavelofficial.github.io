@@ -62,6 +62,10 @@
 
   let isWordPlaying = false
   let switchToNext = false
+  let translationDisplaied = true
+  let skipTranslation = false
+  let translationDescriptor = null
+  let lastFinishWordPlaying = () => {}
 
   function getListByName(name) {
     return playLists.find((list) => {
@@ -132,6 +136,8 @@
     }
   }
 
+  const skipButton = document.querySelector(".skip-button")
+  const displayTranslationButton = document.querySelector(".display-translation-button")
   const playPauseButton = document.querySelector(".play-pause-button")
   const wordBox = document.querySelector(".word-box")
   const playlistBox = document.querySelector(".playlist-controls")
@@ -153,6 +159,21 @@
   }
 
   playPauseButton.onclick = () => switchPlaying()
+
+  displayTranslationButton.onclick = () => {
+    translationDisplaied = !translationDisplaied
+
+    wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
+  }
+
+  skipButton.onclick = () => {
+    skipTranslation = true
+
+    if (translationDescriptor !== null) {
+      clearTimeout(translationDescriptor)
+      lastFinishWordPlaying()
+    }
+  }
 
   function handleSelectDictItem(packName, index, nextSwitchToNext) {
     currentSelection = [packName, index]
@@ -222,7 +243,7 @@
       content = `
         <div class="word-value">${currentDescription.en}</div>
         <div class="word-transcription">${currentDescription.transcription}</div>
-        <div class="word-translations">${currentDescription.blocks.map((item) => {
+        <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
           return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
         })}</div>
       `
@@ -241,13 +262,31 @@
       playAWord = (callback) => {
         isWordPlaying = true
 
+        const finish = () => {
+          skipTranslation = false
+          isWordPlaying = false
+          callback()
+        }
+
+        lastFinishWordPlaying = finish
+
         audioEng = new Howl({
           src: [engSrc],
           volume: 1,
           speed: 2,
           onend: function() {
-            setTimeout(() => {
-              audioRu.play()
+            if (skipTranslation) {
+              finish()
+              return
+            }
+
+            translationDescriptor = setTimeout(() => {
+              translationDescriptor = null
+              if (skipTranslation) {
+                finish()
+              } else {
+                audioRu.play()
+              }
             }, TRANSLATION_DELAY)
           }
         });
@@ -258,8 +297,7 @@
           speed: 2,
           onend: function() {
             setTimeout(() => {
-              isWordPlaying = false
-              callback()
+              finish()
             }, 750)
           }
         });
