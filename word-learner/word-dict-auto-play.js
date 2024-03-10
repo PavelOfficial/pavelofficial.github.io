@@ -297,8 +297,16 @@
 
       playAWord = (callback) => {
         isWordPlaying = true
+        let finished = false
 
         const finish = () => {
+          if (finished) {
+            return
+          }
+
+          finished = true
+          clearTimeout(translationDescriptor)
+          translationDescriptor = null
           skipTranslation = false
           isWordPlaying = false
           callback()
