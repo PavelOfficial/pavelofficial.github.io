@@ -332,6 +332,11 @@
           volume: 1,
           speed: 2,
           onend: function() {
+            if (skipTranslation) {
+              finish()
+              return
+            }
+
             translationDescriptor = setTimeout(() => {
               translationDescriptor = null
 
