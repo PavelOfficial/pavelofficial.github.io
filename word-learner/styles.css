@@ -19,14 +19,38 @@ html, body {
 
 .sidebar {
     padding: 0 10px 0 0;
-    width: 200px;
+    width: 300px;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .sidebar select {
+    font-size: 22px;
     width: 100%;
+}
+
+.sidebar input[type=number] {
+    font-size: 22px;
+}
+
+.sidebar input[type=checkbox] {
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+}
+
+.sidebar label {
+    font-size: 22px;
+    padding-left: 5px;
+}
+
+.sidebar label div.text {
+    display: inline-block;
+    vertical-align: super;
+    padding-top: 2px;
+    position: relative;
+    top: 4px;
 }
 
 .controls {
@@ -71,6 +95,14 @@ ul li {
     margin: 0;
     padding: 2px 5px;
     user-select: none;
+    display: flex;
+    flex-direction: row;
+}
+
+ul li input[type=checkbox] {
+    width: 25px;
+    height: 25px;
+    margin: 5px;
 }
 
 .playlist-item-selected {

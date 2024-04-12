@@ -90,6 +90,13 @@
   let isPlaying = false
   let handleAudioPlay = () => {}
 
+  let storedWordIndexes = []
+
+  try {
+    storedWordIndexes = JSON.parse(localStorage.getItem("checked-words"))
+  } catch (error) {}
+  let checkedWords = new Set(storedWordIndexes)
+
   let firstAudioReady = false
   let secondAudioReady = false
 
@@ -138,7 +145,61 @@
   }
 
 
+  const saveWordCheckboxes = () => {
+    let storedWordIndexes = []
+
+    try {
+      storedWordIndexes = JSON.parse(localStorage.getItem("checked-words"))
+    } catch (error) {}
+
+    const storedWordIndexesSet = new Set(storedWordIndexes)
+    currentList.dict.forEach((item) => {
+      storedWordIndexesSet.delete(item[1])
+    })
+
+    localStorage.setItem("checked-words", JSON.stringify([...Array.from(checkedWords), ...Array.from(storedWordIndexesSet)]))
+  }
+
   window.handleSelectDictItem = handleSelectDictItem
+
+  function handleChangeWordCheckbox(event, index) {
+    const checked = !!event.target.checked
+
+    if (checked) {
+      checkedWords.add(index)
+    } else {
+      checkedWords.delete(index)
+    }
+
+    saveWordCheckboxes()
+  }
+
+  window.handleChangeWordCheckbox = handleChangeWordCheckbox
+
+  const handleCheckAllWords = (event) => {
+    const target = event.target
+    const allChecked = !!target.checked
+
+    if (allChecked) {
+      currentList.dict.forEach((item) => {
+        checkedWords.add(item[1])
+
+        document.querySelector(`#word-checkbox-${item[1]}`).checked = 'checked'
+        document.querySelector(`#word-checkbox-${item[1]}`).setAttribute("checked", true)
+      })
+    } else {
+      currentList.dict.forEach((item) => {
+        checkedWords.delete(item[1])
+
+        document.querySelector(`#word-checkbox-${item[1]}`).checked = ''
+        document.querySelector(`#word-checkbox-${item[1]}`).removeAttribute("checked")
+      })
+    }
+
+    saveWordCheckboxes()
+  }
+
+  window.handleCheckAllWords = handleCheckAllWords
 
   function afterPlayAudio() {
     if (isPlaying) {
@@ -265,7 +326,7 @@
   
           word = dict[index]
       
-          return `<li onclick="handleSelectDictItem('${pack}', ${index})">${leadingZeros(arrayIndex + 1)}. ${word}</li>`
+          return `<li><div><input id="word-checkbox-${index}" ${checkedWords.has(index) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index})" /></div><div onclick="handleSelectDictItem('${pack}', ${index})">${leadingZeros(arrayIndex + 1)}. ${word}</div></li>`
         }).join('')}
       </ul>
     ` : ''
@@ -431,6 +492,13 @@
 
     const localStorageCurrentSelection = localStorage.getItem("current-list")
 
+    currentList = getListByName(localStorageCurrentSelection) || null
+    const currentListSet = currentList ? new Set(currentList.dict.map((item) => item[1])) : null
+    const allChecked = currentListSet ? Array.from(currentListSet).every((index) => {
+      return checkedWords.has(index)
+    }) : false
+
+
     const content = `
       <div>
         <select onchange="handleSelectDictChange(event)">
@@ -457,14 +525,17 @@
         <div>
           <label>
             Индекс от:
-            <input style="width: 50px" type="number" value="${indexFrom !== null ? indexFrom + 1 : ""}" onblur="handleFromIndexBlur(event)" />
+            <input style="width: 100px" type="number" value="${indexFrom !== null ? indexFrom + 1 : ""}" onblur="handleFromIndexBlur(event)" />
           </label>
         </div>
         <div>
           <label>
             Индекс до:
-            <input style="width: 50px" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
+            <input style="width: 100px" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
           </label>
+        </div>
+        <div>
+          <label><input id="word-all" type="checkbox" onchange="handleCheckAllWords(event)" ${allChecked ? 'checked="checked"' : ''} /><div class="text">Все</div></label>
         </div>
       </div>
     `
