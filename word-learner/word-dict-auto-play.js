@@ -216,10 +216,36 @@
         }
 
         let nextItem
+
+        const findNextIndex = (startSearchIndex) => {
+          let nextIndex = startSearchIndex
+
+          while(nextIndex < currentList.dict.length) {
+            const item = currentList.dict[nextIndex]
+
+            if (!checkedWords.has(item[1])) {
+              break
+            }
+
+            nextIndex++
+          }
+
+          if (nextIndex === currentList.dict.length) {
+            return null
+          }
+
+          return nextIndex
+        }
+
+
         if (switchToNext) {
-          nextItem = currentList.dict[index + 1]
+          const nextIndex = findNextIndex(index + 1)
+
+          nextItem = currentList.dict[nextIndex]
         } else {
-          nextItem = currentList.dict[index]
+          const nextIndex = findNextIndex(index)
+
+          nextItem = currentList.dict[nextIndex]
           switchToNext = true
         }
 
