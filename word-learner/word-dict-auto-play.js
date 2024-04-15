@@ -423,44 +423,42 @@
 
         lastFinishWordPlaying = finish
 
-        loadSounds(currentList, currentSelection)
-
-        audioEng = soundCollection.get(engSrc)
-        // audioEng._volume = soundValue
-
-        audioEng.on("end", () => {
-          if (skipTranslation) {
-            finish()
-            return
-          }
-
-          translationDescriptor = setTimeout(() => {
-            translationDescriptor = null
+        audioEng = new Howl({
+          src: [engSrc],
+          volume: 1,
+          onend: function() {
             if (skipTranslation) {
               finish()
-            } else {
-              audioRu.play()
+              return
             }
-          }, TRANSLATION_DELAY)
-        })
 
-        console.log("audioEng: ", audioEng)
-
-        audioRu = soundCollection.get(ruSrc)
-        // audioRu._volume = soundValue
-
-        audioRu.on("end", () => {
-          if (skipTranslation) {
-            finish()
-            return
+            translationDescriptor = setTimeout(() => {
+              translationDescriptor = null
+              if (skipTranslation) {
+                finish()
+              } else {
+                audioRu.play()
+              }
+            }, TRANSLATION_DELAY)
           }
+        });
 
-          translationDescriptor = setTimeout(() => {
-            translationDescriptor = null
+        audioRu = new Howl({
+          src: [ruSrc],
+          volume: 1,
+          onend: function() {
+            if (skipTranslation) {
+              finish()
+              return
+            }
 
-            finish()
-          }, 750)
-        })
+            translationDescriptor = setTimeout(() => {
+              translationDescriptor = null
+
+              finish()
+            }, 750)
+          }
+        });
 
         audioEng.play()
       }
