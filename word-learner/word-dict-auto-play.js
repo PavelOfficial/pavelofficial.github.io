@@ -88,6 +88,8 @@
   let indexFrom = localStorage.getItem("indexFrom") ? parseInt(localStorage.getItem("indexFrom"), 10) - 1 : null
   let indexTo = localStorage.getItem("indexTo") ? parseInt(localStorage.getItem("indexTo") - 1, 10) : null
   let isPlaying = false
+  let soundCollection = null
+  let soundValue = 3
   let handleAudioPlay = () => {}
 
   let storedWordIndexes = []
@@ -266,6 +268,7 @@
   const playlistBox = document.querySelector(".playlist-controls")
   const currentPlaylist = document.querySelector(".current-playlist")
   const currentAudioBox = document.querySelector(".audio-box")
+  const loaderLayer = document.querySelector(".loader-layer")
 
   function switchPlaying(nextIsPlaying, noInit) {
     if (!noInit && indexFrom !== null) {
@@ -401,44 +404,44 @@
 
         lastFinishWordPlaying = finish
 
-        audioEng = new Howl({
-          src: [engSrc],
-          volume: 1,
-          speed: 2,
-          onend: function() {
+        loadSounds(currentList, currentSelection)
+
+        audioEng = soundCollection.get(engSrc)
+        audioEng._volume = soundValue
+
+        audioEng.on("end", () => {
+          if (skipTranslation) {
+            finish()
+            return
+          }
+
+          translationDescriptor = setTimeout(() => {
+            translationDescriptor = null
             if (skipTranslation) {
               finish()
-              return
+            } else {
+              audioRu.play()
             }
+          }, TRANSLATION_DELAY)
+        })
 
-            translationDescriptor = setTimeout(() => {
-              translationDescriptor = null
-              if (skipTranslation) {
-                finish()
-              } else {
-                audioRu.play()
-              }
-            }, TRANSLATION_DELAY)
+        console.log("audioEng: ", audioEng)
+
+        audioRu = soundCollection.get(ruSrc)
+        audioRu._volume = soundValue
+
+        audioRu.on("end", () => {
+          if (skipTranslation) {
+            finish()
+            return
           }
-        });
 
-        audioRu = new Howl({
-          src: [ruSrc],
-          volume: 1,
-          speed: 2,
-          onend: function() {
-            if (skipTranslation) {
-              finish()
-              return
-            }
+          translationDescriptor = setTimeout(() => {
+            translationDescriptor = null
 
-            translationDescriptor = setTimeout(() => {
-              translationDescriptor = null
-
-              finish()
-            }, 750)
-          }
-        });
+            finish()
+          }, 750)
+        })
 
         audioEng.play()
       }
@@ -450,11 +453,55 @@
     renderAudio()
   }
 
-  window.handleSelectDict = (listName) => {
+  const loadSounds = async (currentList, targetItem) => {
+    loaderLayer.setAttribute("style", "display: block")
+    const promises = []
+
+    const indexStart = currentList.dict.findIndex((item) => item[0] === targetItem[0] && item[1] === targetItem[1])
+    const removeOldIndexStart = indexStart - 50
+
+    soundCollection = new Map()
+    currentList.dict.slice(indexStart, indexStart + 50).forEach((item) => {
+      const engSrc = `./${item[0]}/eng-sounds/${leadingZeros(item[1])}.mp3`
+      const ruSrc = `./${item[0]}/ru-sounds/${leadingZeros(item[1])}.mp3`
+
+      if (!soundCollection.has(engSrc)) {
+        const sound1 = new Howl({
+          src: [engSrc],
+        });
+
+        soundCollection.set(engSrc, sound1)
+      }
+
+      if (!soundCollection.has(ruSrc)) {
+        const sound2 = new Howl({
+          src: [ruSrc],
+        });
+
+        soundCollection.set(ruSrc, sound2)
+      }
+
+    })
+
+    currentList.dict.slice(removeOldIndexStart, removeOldIndexStart + 40).reduce((result, item) => {
+      const engSrc = `./${item[0]}/eng-sounds/${leadingZeros(item[1])}.mp3`
+      const ruSrc = `./${item[0]}/ru-sounds/${leadingZeros(item[1])}.mp3`
+
+      soundCollection.delete(engSrc)
+      soundCollection.delete(ruSrc)
+    }, new Map())
+
+    await Promise.allSettled(promises)
+
+    loaderLayer.setAttribute("style", "display: none")
+  }
+
+  window.handleSelectDict = async (listName) => {
     isPlaying = false
     currentSelection = null
 
     currentList = getListByName(listName)
+
     localStorage.setItem("current-list", currentList.name)
 
     renderAll()
@@ -586,4 +633,29 @@
       handleSelectDictItem(item[0], item[1], true)
     }
   }
+
+  Array.from(document.querySelectorAll(".volume-button")).forEach((button) => {
+    button.onclick = () => {
+      const value = parseFloat(button.getAttribute("data-value"), 10)
+
+      soundValue = value
+    }
+  })
 })()
+
+
+/*
+
+  let text = JSON.stringify({hello:'example'});
+  downloadAsFile(text);
+
+  function downloadAsFile(data) {
+    let a = document.createElement("a");
+    let file = new Blob([data], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = "example.txt";
+    a.click();
+  }
+
+ */
+

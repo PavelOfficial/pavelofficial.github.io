@@ -14,6 +14,8 @@ html, body {
 }
 
 .content {
+    flex-direction: column;
+    display: flex;
     flex-grow: 1;
 }
 
@@ -140,4 +142,39 @@ ul li input[type=checkbox] {
     max-width: 450px;
     margin: 0 auto;
     color: #4b4b4b;
+}
+
+.loader-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #666666;
+    opacity: 0.8;
+    z-index: 1000000;
+}
+
+.volume-button {
+    font-size: 1em;
+    margin: 0.5em;
+}
+
+.volume {
+    flex: 1;
+    opacity: 0.3;
+    margin-top: 15px;
+    text-align: center;
+    flex-direction: column;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.volume-box {
+    padding-bottom: 15px;
+}
+
+.volume-header {
+    font-size: 1.5em;
+    text-align: center;
 }
