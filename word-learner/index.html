@@ -49,33 +49,17 @@
     <div class="volume">
       <div class="volume-box">
         <div class="volume-header">Volume</div>
-        <button data-value="0.125" class="volume-button">
-          0.125
-        </button>
-        <button data-value="0.25" class="volume-button">
-          0.25
-        </button>
-        <button data-value="0.5" class="volume-button">
-          0.5
-        </button>
-        <button data-value="1" class="volume-button">
-          1
-        </button>
-        <button data-value="1.5" class="volume-button">
-          1.5
-        </button>
-        <button data-value="3" class="volume-button">
-          3
-        </button>
-        <button data-value="6" class="volume-button">
-          6
-        </button>
-        <button data-value="12" class="volume-button">
-          12
-        </button>
-        <button data-value="24" class="volume-button">
-          24
-        </button>
+        <select class="sound-volume" onchange="handleSelectSoundVolume(event)">
+          <option value="0.125">0.125</option>
+          <option value="0.25">0.25</option>
+          <option value="0.5">0.5</option>
+          <option value="1">1</option>
+          <option value="1.5">1.5</option>
+          <option value="3">3</option>
+          <option value="6">6</option>
+          <option value="12">12</option>
+          <option value="24">24</option>
+        </select>
       </div>
     </div>
   </div>

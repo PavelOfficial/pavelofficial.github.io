@@ -89,7 +89,14 @@
   let indexTo = localStorage.getItem("indexTo") ? parseInt(localStorage.getItem("indexTo") - 1, 10) : null
   let isPlaying = false
   let soundCollection = null
-  let soundValue = 3
+
+  let soundValueStoraged
+  if (localStorage.getItem("sound-value")) {
+    soundValueStoraged = parseFloat(localStorage.getItem("sound-value"))
+  }
+
+  let soundValue = soundValueStoraged || 3
+
   let handleAudioPlay = () => {}
 
   let storedWordIndexes = []
@@ -202,6 +209,16 @@
   }
 
   window.handleCheckAllWords = handleCheckAllWords
+
+  const handleSelectSoundVolume = (event) => {
+    const value = parseFloat(event.target.value)
+
+    soundValue = value
+
+    localStorage.setItem("sound-value", String(soundValue))
+  }
+
+  window.handleSelectSoundVolume = handleSelectSoundVolume
 
   function afterPlayAudio() {
     if (isPlaying) {
@@ -458,10 +475,10 @@
     const promises = []
 
     const indexStart = currentList.dict.findIndex((item) => item[0] === targetItem[0] && item[1] === targetItem[1])
-    const removeOldIndexStart = indexStart - 50
+    const removeOldIndexStart = indexStart - 40
 
     soundCollection = new Map()
-    currentList.dict.slice(indexStart, indexStart + 50).forEach((item) => {
+    currentList.dict.slice(indexStart, indexStart + 15).forEach((item) => {
       const engSrc = `./${item[0]}/eng-sounds/${leadingZeros(item[1])}.mp3`
       const ruSrc = `./${item[0]}/ru-sounds/${leadingZeros(item[1])}.mp3`
 
@@ -483,7 +500,7 @@
 
     })
 
-    currentList.dict.slice(removeOldIndexStart, removeOldIndexStart + 40).reduce((result, item) => {
+    currentList.dict.slice(removeOldIndexStart, removeOldIndexStart + 39).reduce((result, item) => {
       const engSrc = `./${item[0]}/eng-sounds/${leadingZeros(item[1])}.mp3`
       const ruSrc = `./${item[0]}/ru-sounds/${leadingZeros(item[1])}.mp3`
 
@@ -634,13 +651,6 @@
     }
   }
 
-  Array.from(document.querySelectorAll(".volume-button")).forEach((button) => {
-    button.onclick = () => {
-      const value = parseFloat(button.getAttribute("data-value"), 10)
-
-      soundValue = value
-    }
-  })
 })()
 
 
