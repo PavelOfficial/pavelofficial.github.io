@@ -95,7 +95,7 @@
     soundValueStoraged = parseFloat(localStorage.getItem("sound-value"))
   }
 
-  let soundValue = soundValueStoraged || 3
+  let soundValue = soundValueStoraged || 1
 
   let handleAudioPlay = () => {}
 
@@ -210,31 +210,22 @@
 
   window.handleCheckAllWords = handleCheckAllWords
 
-  /*
-    const handleSelectSoundVolume = (event) => {
-      const value = parseFloat(event.target.value)
+  const handleSelectSoundVolume = (event) => {
+    const value = parseFloat(event.target.value)
 
-      soundValue = value
+    soundValue = value
 
-      localStorage.setItem("sound-value", String(soundValue))
-    }
+    localStorage.setItem("sound-value", String(soundValue))
+  }
 
-    window.handleSelectSoundVolume = handleSelectSoundVolume
-   */
+  window.handleSelectSoundVolume = handleSelectSoundVolume
 
-  function afterPlayAudio() {
+  function afterPlayAudio(startFromCurrent) {
     if (isPlaying) {
       if (currentList && currentSelection) {
         const index = currentList.dict.findIndex((item) => {
           return item[0] === currentSelection[0] && item[1] === currentSelection[1]
         })
-
-        if (indexTo !== null && index + 1 > indexTo) {
-          switchToNext = true
-          switchPlaying(false, true)
-
-          return
-        }
 
         let nextItem
 
@@ -259,12 +250,26 @@
         }
 
 
-        if (switchToNext) {
+        if (switchToNext && !startFromCurrent) {
           const nextIndex = findNextIndex(index + 1)
+
+          if (indexTo !== null && index + 1 > nextIndex) {
+            switchToNext = true
+            switchPlaying(false, true)
+
+            return
+          }
 
           nextItem = currentList.dict[nextIndex]
         } else {
           const nextIndex = findNextIndex(index)
+
+          if (indexTo !== null && index + 1 > nextIndex) {
+            switchToNext = true
+            switchPlaying(false, true)
+
+            return
+          }
 
           nextItem = currentList.dict[nextIndex]
           switchToNext = true
@@ -323,7 +328,6 @@
   function handleSelectDictItem(packName, index, nextSwitchToNext) {
     currentSelection = [packName, index]
 
-
     switchToNext = nextSwitchToNext !== undefined ? nextSwitchToNext : false
     const dict = dictMap[packName]
 
@@ -360,6 +364,7 @@
     }
 
     renderAll()
+
     playAudio(afterPlayAudio)
   }
 
@@ -425,7 +430,7 @@
 
         audioEng = new Howl({
           src: [engSrc],
-          volume: 1,
+          volume: soundValue,
           onend: function() {
             if (skipTranslation) {
               finish()
@@ -445,7 +450,7 @@
 
         audioRu = new Howl({
           src: [ruSrc],
-          volume: 1,
+          volume: soundValue,
           onend: function() {
             if (skipTranslation) {
               finish()
@@ -588,7 +593,6 @@
       return checkedWords.has(index)
     }) : false
 
-
     const content = `
       <div>
         <select onchange="handleSelectDictChange(event)">
@@ -650,6 +654,8 @@
       handleSelectDictItem(item[0], item[1], true)
     }
   }
+
+  document.querySelector(".sound-volume").value = soundValue
 
 })()
 
