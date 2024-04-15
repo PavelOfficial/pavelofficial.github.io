@@ -210,15 +210,17 @@
 
   window.handleCheckAllWords = handleCheckAllWords
 
-  const handleSelectSoundVolume = (event) => {
-    const value = parseFloat(event.target.value)
+  /*
+    const handleSelectSoundVolume = (event) => {
+      const value = parseFloat(event.target.value)
 
-    soundValue = value
+      soundValue = value
 
-    localStorage.setItem("sound-value", String(soundValue))
-  }
+      localStorage.setItem("sound-value", String(soundValue))
+    }
 
-  window.handleSelectSoundVolume = handleSelectSoundVolume
+    window.handleSelectSoundVolume = handleSelectSoundVolume
+   */
 
   function afterPlayAudio() {
     if (isPlaying) {
@@ -424,7 +426,7 @@
         loadSounds(currentList, currentSelection)
 
         audioEng = soundCollection.get(engSrc)
-        audioEng._volume = soundValue
+        // audioEng._volume = soundValue
 
         audioEng.on("end", () => {
           if (skipTranslation) {
@@ -445,7 +447,7 @@
         console.log("audioEng: ", audioEng)
 
         audioRu = soundCollection.get(ruSrc)
-        audioRu._volume = soundValue
+        // audioRu._volume = soundValue
 
         audioRu.on("end", () => {
           if (skipTranslation) {
