@@ -185,6 +185,24 @@
 
   window.handleChangeWordCheckbox = handleChangeWordCheckbox
 
+  let backwardTranslationStored
+  try {
+    backwardTranslationStored = JSON.parse(localStorage.getItem("backwardTranslation"))
+  } catch (error) {}
+
+  let backwardTranslationDirection = backwardTranslationStored || false
+  document.querySelector('.backward-direction').checked = backwardTranslationDirection
+
+  function handleChangeTranslationDirection(event) {
+    const checked = !!event.target.checked
+
+    backwardTranslationDirection = checked
+
+    localStorage.setItem("backwardTranslation", JSON.stringify(backwardTranslationDirection))
+  }
+
+  window.handleChangeTranslationDirection = handleChangeTranslationDirection
+
   const handleCheckAllWords = (event) => {
     const target = event.target
     const allChecked = !!target.checked
@@ -253,7 +271,7 @@
         if (switchToNext && !startFromCurrent) {
           const nextIndex = findNextIndex(index + 1)
 
-          if (indexTo !== null && index + 1 > nextIndex) {
+          if (indexTo !== null && nextIndex > indexTo) {
             switchToNext = true
             switchPlaying(false, true)
 
@@ -264,7 +282,7 @@
         } else {
           const nextIndex = findNextIndex(index)
 
-          if (indexTo !== null && index + 1 > nextIndex) {
+          if (indexTo !== null && nextIndex > indexTo) {
             switchToNext = true
             switchPlaying(false, true)
 
@@ -287,6 +305,7 @@
 
   const skipButton = document.querySelector(".skip-button")
   const displayTranslationButton = document.querySelector(".display-translation-button")
+  const displayWordButton = document.querySelector(".display-word-button")
   const playPauseButton = document.querySelector(".play-pause-button")
   const wordBox = document.querySelector(".word-box")
   const playlistBox = document.querySelector(".playlist-controls")
@@ -314,6 +333,14 @@
     translationDisplaied = !translationDisplaied
 
     wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
+  }
+
+  let wordDisplaied = false
+  displayWordButton.onclick = () => {
+    wordDisplaied = !wordDisplaied
+
+    wordBox.querySelector(".word-value").style.visibility = wordDisplaied ? "visible" : "hidden"
+    wordBox.querySelector(".word-transcription").style.visibility = wordDisplaied ? "visible" : "hidden"
   }
 
   skipButton.onclick = () => {
@@ -428,10 +455,8 @@
 
         lastFinishWordPlaying = finish
 
-        audioEng = new Howl({
-          src: [engSrc],
-          volume: soundValue,
-          onend: function() {
+        const play = () => {
+          const firstEnd = () => {
             if (skipTranslation) {
               finish()
               return
@@ -442,16 +467,12 @@
               if (skipTranslation) {
                 finish()
               } else {
-                audioRu.play()
+                (backwardTranslationDirection ? audioEng : audioRu).play()
               }
             }, TRANSLATION_DELAY)
           }
-        });
 
-        audioRu = new Howl({
-          src: [ruSrc],
-          volume: soundValue,
-          onend: function() {
+          const secondEnd = () => {
             if (skipTranslation) {
               finish()
               return
@@ -463,9 +484,23 @@
               finish()
             }, 750)
           }
-        });
 
-        audioEng.play()
+          audioEng = new Howl({
+            src: [engSrc],
+            volume: soundValue,
+            onend: backwardTranslationDirection ? secondEnd : firstEnd,
+          });
+
+          audioRu = new Howl({
+            src: [ruSrc],
+            volume: soundValue,
+            onend: backwardTranslationDirection ? firstEnd : secondEnd,
+          });
+
+          (backwardTranslationDirection ? audioRu : audioEng).play()
+        }
+
+        play()
       }
     }
   }

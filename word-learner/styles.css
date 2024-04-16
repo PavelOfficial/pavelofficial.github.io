@@ -63,14 +63,14 @@ html, body {
 }
 
 .controls button {
-    margin: 0 25px;
+    margin: 0 15px;
 }
 
 button {
-    font-size: 25px;
+    font-size: 20px;
     background: #7eabff;
     color: #ffffff;
-    padding: 10px;
+    padding: 15px;
     border-radius: 5px;
     border: none;
 }
@@ -177,4 +177,13 @@ ul li input[type=checkbox] {
 .volume-header {
     font-size: 1.5em;
     text-align: center;
+}
+
+.backward-direction-label {
+    font-size: 24px;
+}
+
+input.backward-direction {
+    width: 18px;
+    height: 18px;
 }

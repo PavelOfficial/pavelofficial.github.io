@@ -33,6 +33,9 @@
 <div class="app">
   <div class="content">
     <div class="controls">
+      <button class="display-word-button">
+        display word
+      </button>
       <button class="display-translation-button">
         display translation
       </button>
@@ -47,6 +50,11 @@
 
     </div>
     <div class="volume">
+      <div>
+        <label class="backward-direction-label">
+          <input class="backward-direction" type="checkbox" onchange="handleChangeTranslationDirection(event)" /> Обратное направление перевода
+        </label>
+      </div>
       <div class="volume-box">
         <div class="volume-header">Volume</div>
         <select class="sound-volume" onchange="handleSelectSoundVolume(event)">
