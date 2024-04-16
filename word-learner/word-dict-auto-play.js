@@ -335,12 +335,12 @@
     wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
   }
 
-  let wordDisplaied = false
+  let wordDisplayed = false
   displayWordButton.onclick = () => {
-    wordDisplaied = !wordDisplaied
+    wordDisplayed = !wordDisplayed
 
-    wordBox.querySelector(".word-value").style.visibility = wordDisplaied ? "visible" : "hidden"
-    wordBox.querySelector(".word-transcription").style.visibility = wordDisplaied ? "visible" : "hidden"
+    wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden"
+    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed ? "visible" : "hidden"
   }
 
   skipButton.onclick = () => {
@@ -418,8 +418,8 @@
     let content
     if (currentDescription) {
       content = `
-        <div class="word-value">${currentDescription.en}</div>
-        <div class="word-transcription">${currentDescription.transcription}</div>
+        <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
+        <div class="word-transcription" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
         <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
           return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
         })}</div>
