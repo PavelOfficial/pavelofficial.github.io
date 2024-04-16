@@ -335,7 +335,7 @@
     wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
   }
 
-  let wordDisplayed = false
+  let wordDisplayed = true
   displayWordButton.onclick = () => {
     wordDisplayed = !wordDisplayed
 
