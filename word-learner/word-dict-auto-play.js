@@ -648,6 +648,11 @@
           <option ${selectDelayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
           <option ${selectDelayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
           <option ${selectDelayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
+          <option ${selectDelayValue === "7" ? "selected=\"selected\"" : ""} value="7">7</option>
+          <option ${selectDelayValue === "10" ? "selected=\"selected\"" : ""} value="10">10</option>
+          <option ${selectDelayValue === "15" ? "selected=\"selected\"" : ""} value="15">15</option>
+          <option ${selectDelayValue === "20" ? "selected=\"selected\"" : ""} value="20">20</option>
+          <option ${selectDelayValue === "30" ? "selected=\"selected\"" : ""} value="30">30</option>
         </select>
       </div>
       <div>
