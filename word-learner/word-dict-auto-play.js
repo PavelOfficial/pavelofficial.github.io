@@ -27,6 +27,8 @@
   const dictMap = {
     8000: enWords8000,
     2700: engWords2700,
+    170: engWords170,
+    900: engWords900,
   }
 
   // enWords8000
@@ -76,6 +78,12 @@
   }, {
     name: "Популярные простые остаток",
     dict: excludePopular(engDictAllIndexesAll),
+  }, {
+    name: "Фразовые глаголы",
+    dict: engDictAllIndexes170,
+  }, {
+    name: "Словосочетания",
+    dict: engDictAllIndexes900,
   },]
 
   const DEFAULT_TRANSLATION_DELAY = 350
