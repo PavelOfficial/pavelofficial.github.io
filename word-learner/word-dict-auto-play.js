@@ -315,6 +315,7 @@
   const displayTranslationButton = document.querySelector(".display-translation-button")
   const displayWordButton = document.querySelector(".display-word-button")
   const playPauseButton = document.querySelector(".play-pause-button")
+  const playListButton = document.querySelector(".play-list-button")
   const wordBox = document.querySelector(".word-box")
   const playlistBox = document.querySelector(".playlist-controls")
   const currentPlaylist = document.querySelector(".current-playlist")
@@ -335,7 +336,9 @@
     playAudio(afterPlayAudio)
   }
 
-  playPauseButton.onclick = () => switchPlaying()
+  playPauseButton.onclick = () => switchPlaying(undefined, true)
+
+  playListButton.onclick = () => switchPlaying()
 
   displayTranslationButton.onclick = () => {
     translationDisplaied = !translationDisplaied
@@ -445,6 +448,8 @@
       const ruSrc = `./${currentSelection[0]}/ru-sounds/${leadingZeros(currentSelection[1])}.mp3`
 
       playAWord = (callback) => {
+        const currentAudioBackwardTranslationDirection = backwardTranslationDirection
+
         isWordPlaying = true
         let finished = false
 
@@ -475,7 +480,7 @@
               if (skipTranslation) {
                 finish()
               } else {
-                (backwardTranslationDirection ? audioEng : audioRu).play()
+                (currentAudioBackwardTranslationDirection ? audioEng : audioRu).play()
               }
             }, TRANSLATION_DELAY)
           }
@@ -496,16 +501,16 @@
           audioEng = new Howl({
             src: [engSrc],
             volume: soundValue,
-            onend: backwardTranslationDirection ? secondEnd : firstEnd,
+            onend: currentAudioBackwardTranslationDirection ? secondEnd : firstEnd,
           });
 
           audioRu = new Howl({
             src: [ruSrc],
             volume: soundValue,
-            onend: backwardTranslationDirection ? firstEnd : secondEnd,
+            onend: currentAudioBackwardTranslationDirection ? firstEnd : secondEnd,
           });
 
-          (backwardTranslationDirection ? audioRu : audioEng).play()
+          (currentAudioBackwardTranslationDirection ? audioRu : audioEng).play()
         }
 
         play()
