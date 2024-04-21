@@ -15,7 +15,7 @@ var getFiles = function (dir, files_) {
   return files_;
 };
 
-const list = getFiles('./170/texts').map((name) => {
+const list = getFiles('./900/texts').map((name) => {
   return {
     name: name,
     text: fs.readFileSync(name, {encoding: "utf8"}),
