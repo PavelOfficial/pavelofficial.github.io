@@ -187,3 +187,7 @@ input.backward-direction {
     width: 18px;
     height: 18px;
 }
+
+.list-item-caption {
+    flex: 1;
+}
