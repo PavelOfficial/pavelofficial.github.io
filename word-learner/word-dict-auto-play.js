@@ -125,6 +125,7 @@
   let translationDisplaied = true
   let skipTranslation = false
   let translationDescriptor = null
+  let loopPlayback = true
   let lastFinishWordPlaying = () => {}
 
   function getListByName(name) {
@@ -255,6 +256,35 @@
 
         let nextItem
 
+        const finish = (nextItem, switchToNext) => {
+          if (nextItem) {
+            handleSelectDictItem(nextItem[0], nextItem[1], switchToNext)
+            playAudio(afterPlayAudio)
+          } else {
+            switchPlaying(false, true)
+          }
+        }
+
+        const tryToStop = (nextIndex) => {
+          if (indexTo !== null && nextIndex > indexTo) {
+            if (loopPlayback) {
+              const loopNextIndex = findNextIndex(indexFrom)
+
+              nextItem = currentList.dict[loopNextIndex]
+              switchToNext = true
+
+              finish(nextItem, switchToNext)
+
+              return true
+            }
+
+            switchToNext = true
+            switchPlaying(false, true)
+
+            return true
+          }
+        }
+
         const findNextIndex = (startSearchIndex) => {
           let nextIndex = startSearchIndex
 
@@ -279,10 +309,7 @@
         if (switchToNext && !startFromCurrent) {
           const nextIndex = findNextIndex(index + 1)
 
-          if (indexTo !== null && nextIndex > indexTo) {
-            switchToNext = true
-            switchPlaying(false, true)
-
+          if (tryToStop(nextIndex)) {
             return
           }
 
@@ -290,10 +317,7 @@
         } else {
           const nextIndex = findNextIndex(index)
 
-          if (indexTo !== null && nextIndex > indexTo) {
-            switchToNext = true
-            switchPlaying(false, true)
-
+          if (tryToStop(nextIndex)) {
             return
           }
 
@@ -301,12 +325,7 @@
           switchToNext = true
         }
 
-        if (nextItem) {
-          handleSelectDictItem(nextItem[0], nextItem[1], switchToNext)
-          playAudio(afterPlayAudio)
-        } else {
-          switchPlaying(false, true)
-        }
+        finish(nextItem, switchToNext)
       }
     }
   }
