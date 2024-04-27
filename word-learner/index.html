@@ -65,18 +65,21 @@
         </label>
       </div>
       <div class="volume-box">
-        <div class="volume-header">Volume</div>
-        <select class="sound-volume" onchange="handleSelectSoundVolume(event)">
-          <option value="0.125">0.125</option>
-          <option value="0.25">0.25</option>
-          <option value="0.5">0.5</option>
-          <option value="1">1</option>
-          <option value="1.5">1.5</option>
-          <option value="3">3</option>
-          <option value="6">6</option>
-          <option value="12">12</option>
-          <option value="24">24</option>
-        </select>
+        <div>
+          <div class="volume-header">Volume</div>
+          <select class="sound-volume" onchange="handleSelectSoundVolume(event)">
+            <option value="0.125">0.125</option>
+            <option value="0.25">0.25</option>
+            <option value="0.5">0.5</option>
+            <option value="1">1</option>
+            <option value="1.5">1.5</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="24">24</option>
+          </select>
+        </div>
+        <button class="small-btt" onclick="handleSaveChecked()">Save checked</button>
       </div>
     </div>
   </div>

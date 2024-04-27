@@ -75,6 +75,10 @@ button {
     border: none;
 }
 
+button.small-btt {
+    padding: 5px;
+}
+
 select {
     font-size: 18px;
 }
@@ -171,7 +175,13 @@ ul li input[type=checkbox] {
 }
 
 .volume-box {
+    display: flex;
     padding: 20px;
+    justify-content: center;
+}
+
+.volume-box div {
+    margin: 0 10px;
 }
 
 .volume-header {

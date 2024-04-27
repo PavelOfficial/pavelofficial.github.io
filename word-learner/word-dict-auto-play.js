@@ -51,13 +51,13 @@
   }, {
     name: "Популярные сокращенный 2000",
     dict: engDictNotKnownIndexes2000,
-  },{
+  }, {
     name: "Популярные сокращенный 3000",
     dict: engDictNotKnownIndexes3000,
-  },{
+  }, {
     name: "Популярные сокращенный 5000",
     dict: engDictNotKnownIndexes5000,
-  },{
+  }, {
     name: "Популярные сокращенный 7000",
     dict: engDictNotKnownIndexes7000,
   }, {
@@ -105,14 +105,18 @@
 
   let soundValue = soundValueStoraged || 1
 
-  let handleAudioPlay = () => {}
+  let handleAudioPlay = () => {
+  }
 
   let storedWordIndexes = []
 
   try {
-    storedWordIndexes = JSON.parse(localStorage.getItem("checked-words"))
+    storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
   } catch (error) {}
-  let checkedWords = new Set(storedWordIndexes)
+
+  let checkedWords = new Map(storedWordIndexes.map((item) => {
+    return [`${item[0]}-${item[1]}`, item]
+  }))
 
   let firstAudioReady = false
   let secondAudioReady = false
@@ -126,7 +130,8 @@
   let skipTranslation = false
   let translationDescriptor = null
   let loopPlayback = true
-  let lastFinishWordPlaying = () => {}
+  let lastFinishWordPlaying = () => {
+  }
 
   function getListByName(name) {
     return playLists.find((list) => {
@@ -134,7 +139,8 @@
     })
   }
 
-  let playAWord = () => {}
+  let playAWord = () => {
+  }
 
   function playAudio(callback) {
     if (isPlaying && !isWordPlaying) {
@@ -167,29 +173,36 @@
     let storedWordIndexes = []
 
     try {
-      storedWordIndexes = JSON.parse(localStorage.getItem("checked-words"))
+      storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
     } catch (error) {}
 
-    const storedWordIndexesSet = new Set(storedWordIndexes)
+    const storedWordIndexesMap = new Map(storedWordIndexes.map((item) => {
+      return [`${item[0]}-${item[1]}`, item]
+    }))
+
     currentList.dict.forEach((item) => {
-      storedWordIndexesSet.delete(item[1])
+      storedWordIndexesMap.delete(`${item[0]}-${item[1]}`)
     })
 
-    localStorage.setItem("checked-words", JSON.stringify([...Array.from(checkedWords), ...Array.from(storedWordIndexesSet)]))
+    localStorage.setItem("checked-words-tuples", JSON.stringify([
+      ...Array.from(checkedWords).map(item => item[1]).filter(item => item),
+      ...Array.from(storedWordIndexesMap).map((item) => item[1]).filter(item => item),
+    ]))
   }
 
   window.handleSelectDictItem = handleSelectDictItem
 
-  function handleChangeWordCheckbox(event, index) {
+  function handleChangeWordCheckbox(event, index, pack) {
     const checked = !!event.target.checked
 
     if (checked) {
-      checkedWords.add(index)
+      checkedWords.set(`${pack}-${index}`, [pack, index])
     } else {
-      checkedWords.delete(index)
+      checkedWords.delete(`${pack}-${index}`)
     }
 
     saveWordCheckboxes()
+    updateCurrentAllCheckbox()
   }
 
   window.handleChangeWordCheckbox = handleChangeWordCheckbox
@@ -197,7 +210,8 @@
   let backwardTranslationStored
   try {
     backwardTranslationStored = JSON.parse(localStorage.getItem("backwardTranslation"))
-  } catch (error) {}
+  } catch (error) {
+  }
 
   let backwardTranslationDirection = backwardTranslationStored || false
   document.querySelector('.backward-direction').checked = backwardTranslationDirection
@@ -218,17 +232,15 @@
 
     if (allChecked) {
       currentList.dict.forEach((item) => {
-        checkedWords.add(item[1])
+        checkedWords.set(`${item[0]}-${item[1]}`, item)
 
-        document.querySelector(`#word-checkbox-${item[1]}`).checked = 'checked'
-        document.querySelector(`#word-checkbox-${item[1]}`).setAttribute("checked", true)
+        document.querySelector(`#word-checkbox-${item[0]}-${item[1]}`).checked = 'checked'
       })
     } else {
       currentList.dict.forEach((item) => {
-        checkedWords.delete(item[1])
+        checkedWords.delete(`${item[0]}-${item[1]}`)
 
-        document.querySelector(`#word-checkbox-${item[1]}`).checked = ''
-        document.querySelector(`#word-checkbox-${item[1]}`).removeAttribute("checked")
+        document.querySelector(`#word-checkbox-${item[0]}-${item[1]}`).checked = ''
       })
     }
 
@@ -288,10 +300,10 @@
         const findNextIndex = (startSearchIndex) => {
           let nextIndex = startSearchIndex
 
-          while(nextIndex < currentList.dict.length) {
+          while (nextIndex < currentList.dict.length) {
             const item = currentList.dict[nextIndex]
 
-            if (!checkedWords.has(item[1])) {
+            if (!checkedWords.has(`${item[0]}-${item[1]}`)) {
               break
             }
 
@@ -429,15 +441,15 @@
     const content = currentList ? `
       <ul>
         ${currentList.dict.map((item, arrayIndex) => {
-          const pack = item[0]
-          const index = item[1]
-          const dict = dictMap[pack]
-          let word = ""
-  
-          word = dict[index]
-      
-          return `<li><div><input id="word-checkbox-${index}" ${checkedWords.has(index) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index})" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})">${leadingZeros(arrayIndex + 1)}. ${word}</div></li>`
-        }).join('')}
+      const pack = item[0]
+      const index = item[1]
+      const dict = dictMap[pack]
+      let word = ""
+
+      word = dict[index]
+
+      return `<li><div><input id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})">${leadingZeros(arrayIndex + 1)}. ${word}</div></li>`
+    }).join('')}
       </ul>
     ` : ''
 
@@ -451,8 +463,8 @@
         <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
         <div class="word-transcription" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
         <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-          return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-        })}</div>
+        return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+      })}</div>
       `
     } else {
       content = ''
@@ -585,6 +597,16 @@
     loaderLayer.setAttribute("style", "display: none")
   }
 
+  const updateCurrentAllCheckbox = () => {
+    const currentListSet = currentList ? new Set(currentList.dict) : null
+    const allChecked = currentListSet ? Array.from(currentListSet).every((item) => {
+      return checkedWords.has(`${item[0]}-${item[1]}`)
+    }) : false
+
+    document.querySelector("#word-all").checked = !!allChecked
+
+  }
+
   window.handleSelectDict = async (listName) => {
     isPlaying = false
     currentSelection = null
@@ -593,6 +615,7 @@
 
     localStorage.setItem("current-list", currentList.name)
 
+    updateCurrentAllCheckbox()
     renderAll()
     renderСurrentPlaylist()
 
@@ -625,7 +648,7 @@
     }
 
     if (selectDelayValue !== undefined) {
-      handleSelectDelayChange({ target: { value: selectDelayValue } })
+      handleSelectDelayChange({target: {value: selectDelayValue}})
     }
 
     window.handleFromIndexBlur = (event) => {
@@ -655,9 +678,9 @@
     const localStorageCurrentSelection = localStorage.getItem("current-list")
 
     currentList = getListByName(localStorageCurrentSelection) || null
-    const currentListSet = currentList ? new Set(currentList.dict.map((item) => item[1])) : null
-    const allChecked = currentListSet ? Array.from(currentListSet).every((index) => {
-      return checkedWords.has(index)
+    const currentListSet = currentList ? new Set(currentList.dict) : null
+    const allChecked = currentListSet ? Array.from(currentListSet).every((item) => {
+      return checkedWords.has(`${item[0]}-${item[1]}`)
     }) : false
 
     const content = `
@@ -665,10 +688,10 @@
         <select onchange="handleSelectDictChange(event)">
           <option value="">NONE</option>
           ${playLists.map((list) => {
-            const selected = list.name === localStorageCurrentSelection
-  
-            return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
-          }).join('')}  
+      const selected = list.name === localStorageCurrentSelection
+
+      return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
+    }).join('')}
         </select>
       </div>
       <div>
@@ -729,11 +752,24 @@
 
   document.querySelector(".sound-volume").value = soundValue
 
+  function downloadAsFile(data) {
+    let a = document.createElement("a");
+    let file = new Blob([data], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = "checked-words-tuples.json";
+    a.click();
+  }
+
+  window.handleSaveChecked = () => {
+    const checkedWords = localStorage.getItem("checked-words-tuples") ?? []
+
+    downloadAsFile(checkedWords)
+  }
+
 })()
 
 
 /*
-
   let text = JSON.stringify({hello:'example'});
   downloadAsFile(text);
 
@@ -744,6 +780,4 @@
     a.download = "example.txt";
     a.click();
   }
-
  */
-
