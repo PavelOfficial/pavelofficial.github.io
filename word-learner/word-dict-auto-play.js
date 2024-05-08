@@ -84,7 +84,10 @@
   }, {
     name: "Словосочетания",
     dict: engDictAllIndexes900,
-  },]
+  }, {
+    name: "Выборка из 2000 сокращеных тяжелых",
+    dict: engDict2000unlearned
+  }]
 
   const DEFAULT_TRANSLATION_DELAY = 350
   let TRANSLATION_DELAY = 350
