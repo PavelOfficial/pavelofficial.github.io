@@ -1,4 +1,20 @@
 (() => {
+  const cleanDuplications = (words) => {
+    const nextWords = []
+
+    words.forEach((word) => {
+      const foundItem = nextWords.find((item) => {
+        return item[0] === word[0] && item[1] === word[1]
+      })
+
+      if (!foundItem) {
+        nextWords.push(word)
+      }
+    })
+
+    return nextWords
+  }
+
   const leadingZeros = (num) => {
     return String('0000000000000' + num).slice(-5)
   }
@@ -85,8 +101,8 @@
     name: "Словосочетания",
     dict: engDictAllIndexes900,
   }, {
-    name: "Выборка из 2000 сокращеных тяжелых",
-    dict: engDict2000unlearned
+    name: "Выборка из 2000 сокращенных тяжелых",
+    dict: cleanDuplications(engDict2000unlearned),
   }]
 
   const DEFAULT_TRANSLATION_DELAY = 350
