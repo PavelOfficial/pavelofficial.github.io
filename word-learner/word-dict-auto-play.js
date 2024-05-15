@@ -103,6 +103,9 @@
   }, {
     name: "Выборка из 2000 сокращенных тяжелых",
     dict: cleanDuplications(engDict2000unlearned),
+  }, {
+    name: "Самые сложные",
+    dict: cleanDuplications(mostDifficult),
   }]
 
   const DEFAULT_TRANSLATION_DELAY = 350
