@@ -47,6 +47,11 @@
     900: engWords900,
   }
 
+  const playlistSeparator = {
+    name: "----------------------",
+    dict: [],
+  }
+
   // enWords8000
   // engWords2700
   const playLists = [{
@@ -64,7 +69,7 @@
   }, {
     name: "Популярные остаток",
     dict: engDictAllIndexesAll,
-  }, {
+  }, playlistSeparator, {
     name: "Популярные сокращенный 2000",
     dict: engDictNotKnownIndexes2000,
   }, {
@@ -79,7 +84,7 @@
   }, {
     name: "Популярные сокращенный все",
     dict: engDictNotKnownIndexesAll,
-  }, {
+  }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
   }, {
@@ -94,15 +99,18 @@
   }, {
     name: "Популярные простые остаток",
     dict: excludePopular(engDictAllIndexesAll),
-  }, {
+  }, playlistSeparator, {
     name: "Фразовые глаголы",
     dict: engDictAllIndexes170,
   }, {
     name: "Словосочетания",
     dict: engDictAllIndexes900,
-  }, {
+  }, playlistSeparator, {
     name: "Выборка из 2000 сокращенных тяжелых",
     dict: cleanDuplications(engDict2000unlearned),
+  }, {
+    name: "Выборка из 2000 сокращенных тяжелых 2",
+    dict: cleanDuplications(engDict2000unlearned2),
   }, {
     name: "Самые сложные",
     dict: cleanDuplications(mostDifficult),
