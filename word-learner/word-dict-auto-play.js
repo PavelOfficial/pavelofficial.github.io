@@ -243,8 +243,17 @@
   } catch (error) {
   }
 
+  let autoChangeTranslationDirectionStored
+  try {
+    autoChangeTranslationDirectionStored = JSON.parse(localStorage.getItem("autoChangeTranslationDirection"))
+  } catch (error) {
+  }
+
   let backwardTranslationDirection = backwardTranslationStored || false
   document.querySelector('.backward-direction').checked = backwardTranslationDirection
+
+  let autoChangeTranslationDirection = autoChangeTranslationDirectionStored || false
+  document.querySelector('.auto-play-direction').checked = autoChangeTranslationDirection
 
   function handleChangeTranslationDirection(event) {
     const checked = !!event.target.checked
@@ -255,6 +264,16 @@
   }
 
   window.handleChangeTranslationDirection = handleChangeTranslationDirection
+
+  function handleChangeAutoTranslationDirection(event) {
+    const checked = !!event.target.checked
+
+    autoChangeTranslationDirection = checked
+
+    localStorage.setItem("autoChangeTranslationDirection", JSON.stringify(autoChangeTranslationDirection))
+  }
+
+  window.handleChangeAutoTranslationDirection = handleChangeAutoTranslationDirection
 
   const handleCheckAllWords = (event) => {
     const target = event.target
@@ -314,6 +333,13 @@
 
               nextItem = currentList.dict[loopNextIndex]
               switchToNext = true
+
+              if (autoChangeTranslationDirection) {
+                document.querySelector(".backward-direction").checked = !document.querySelector(".backward-direction").checked
+                handleChangeTranslationDirection({
+                  target: document.querySelector(".backward-direction")
+                })
+              }
 
               finish(nextItem, switchToNext)
 
