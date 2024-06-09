@@ -119,6 +119,7 @@
   const DEFAULT_TRANSLATION_DELAY = 350
   let TRANSLATION_DELAY = 350
   let selectDelayValue = localStorage.getItem("selectDelayValue")
+  let currentPayingAudio = null
   let currentList = null
   let currentWord = null
   let currentDescription = null
@@ -443,9 +444,19 @@
 
   skipButton.onclick = () => {
     skipTranslation = true
+    let interrupted = false
+
+    if (currentPayingAudio !== null && currentPayingAudio.playing()) {
+      currentPayingAudio.stop()
+      interrupted = true
+    }
 
     if (translationDescriptor !== null) {
       clearTimeout(translationDescriptor)
+      interrupted = true
+    }
+
+    if (interrupted) {
       lastFinishWordPlaying()
     }
   }
@@ -567,7 +578,9 @@
               if (skipTranslation) {
                 finish()
               } else {
-                (currentAudioBackwardTranslationDirection ? audioEng : audioRu).play()
+                currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioEng : audioRu)
+
+                currentPayingAudio.play()
               }
             }, TRANSLATION_DELAY)
           }
@@ -597,7 +610,9 @@
             onend: currentAudioBackwardTranslationDirection ? firstEnd : secondEnd,
           });
 
-          (currentAudioBackwardTranslationDirection ? audioRu : audioEng).play()
+          currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioRu : audioEng)
+
+          currentPayingAudio.play()
         }
 
         play()
