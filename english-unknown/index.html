@@ -83,19 +83,39 @@
     }, new Map())
 
     const knownWordSet = new Set(knownWords)
+    const targetIndexes = []
     const finalEnWords = enWords.filter((item, index) => {
       if (knownWordSet.has(item)) {
         return false
       }
 
+      let result
+
       if (index <= 460) {
-        return includeIndexes.includes(index)
+        result = includeIndexes.includes(index)
+      } else {
+        result = !excludeIndexes.includes(index)
       }
 
-      return !excludeIndexes.includes(index)
+      if (result) {
+        targetIndexes.push(index)
+      }
+
+      return result
     })
 
-    console.log("finalEnWords", finalEnWords)
+    // 18 - activate. 19
+    /*
+      Переделать индексы, прежде исключения.
+      - Переисключить из оксфорда.
+      - Переделать для предыдущих слов.
+      - Составить новый список для предыдущих слов.
+      - Составить новый список для оксфорда.
+
+     */
+
+    console.log("JSON.stringify(targetIndexes): ", JSON.stringify(targetIndexes))
+    // console.log("JSON.stringify(finalEnWords): ", JSON.stringify(finalEnWords))
     console.log("finalEnWords.length: ", finalEnWords.length)
 
     let pageNum = parseInt(localStorage.getItem("page"), 10) || 0
