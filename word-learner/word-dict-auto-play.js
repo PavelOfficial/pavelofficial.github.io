@@ -117,6 +117,9 @@
   }, {
     name: "Выборка из 5000 сокращенных тяжелых",
     dict: cleanDuplications(engDict5000unlearned),
+  }, {
+    name: "Выборка из 5000 сокращенных тяжелых 2",
+    dict: cleanDuplications(engDict5000unlearned2),
   }]
 
   const DEFAULT_TRANSLATION_DELAY = 350
