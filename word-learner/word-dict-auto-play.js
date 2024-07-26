@@ -112,6 +112,9 @@
     name: "Выборка из 2000 сокращенных тяжелых 2",
     dict: cleanDuplications(engDict2000unlearned2),
   }, {
+    name: "Выборка из 2000 сокращенных тяжелых 3 (круг 2)",
+    dict: cleanDuplications(engDict2000unlearned3),
+  }, {
     name: "Самые сложные из 2000",
     dict: cleanDuplications(mostDifficult),
   }, {
