@@ -126,8 +126,11 @@
   }]
 
   const DEFAULT_TRANSLATION_DELAY = 350
+  const DEFAULT_PLAYING_TIME = null
+  let playTime = null
   let TRANSLATION_DELAY = 350
   let selectDelayValue = localStorage.getItem("selectDelayValue")
+  let selectPlayValue = localStorage.getItem("selectPlayValue")
   let currentPayingAudio = null
   let currentList = null
   let currentWord = null
@@ -419,6 +422,11 @@
   const currentAudioBox = document.querySelector(".audio-box")
   const loaderLayer = document.querySelector(".loader-layer")
 
+  const playIcon = document.querySelector(".play-icon")
+  const pauseIcon = document.querySelector(".pause-icon")
+
+  playIcon.style.display = "none"
+
   function switchPlaying(nextIsPlaying, noInit) {
     if (!noInit && indexFrom !== null) {
       const firstItem = currentList.dict[indexFrom]
@@ -429,6 +437,16 @@
     }
 
     isPlaying = nextIsPlaying !== undefined ? nextIsPlaying : !isPlaying
+
+    if (isPlaying) {
+      playIcon.style.display = ""
+      pauseIcon.style.display = "none"
+      playPauseButton.innerHTML = "pause"
+    } else {
+      playIcon.style.display = "none"
+      pauseIcon.style.display = ""
+      playPauseButton.innerHTML = "play"
+    }
 
     playAudio(afterPlayAudio)
   }
@@ -555,6 +573,7 @@
       const ruSrc = `./${currentSelection[0]}/ru-sounds/${leadingZeros(currentSelection[1])}.mp3`
 
       playAWord = (callback) => {
+        /// !!! playTime
         const currentAudioBackwardTranslationDirection = backwardTranslationDirection
 
         isWordPlaying = true
@@ -576,6 +595,19 @@
         lastFinishWordPlaying = finish
 
         const play = () => {
+          const stopOnPlayTime = (currentAudio, handler) => {
+            if (playTime === null) {
+              return
+            }
+
+            setTimeout(() => {
+              if (!finished && currentAudio.playing()) {
+                currentPayingAudio.stop()
+                handler()
+              }
+            }, playTime)
+          }
+
           const firstEnd = () => {
             if (skipTranslation) {
               finish()
@@ -590,6 +622,7 @@
                 currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioEng : audioRu)
 
                 currentPayingAudio.play()
+                stopOnPlayTime(currentPayingAudio, secondEnd)
               }
             }, TRANSLATION_DELAY)
           }
@@ -622,6 +655,7 @@
           currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioRu : audioEng)
 
           currentPayingAudio.play()
+          stopOnPlayTime(currentPayingAudio, firstEnd)
         }
 
         play()
@@ -718,7 +752,7 @@
     window.handleSelectDelayChange = (event) => {
       const value = event.target.value
 
-      if (value === "DEFAULT DELAY") {
+      if (value === "DEFAULT") {
         TRANSLATION_DELAY = DEFAULT_TRANSLATION_DELAY
       } else {
         TRANSLATION_DELAY = parseFloat(value) * 1000
@@ -729,6 +763,22 @@
 
     if (selectDelayValue !== undefined) {
       handleSelectDelayChange({target: {value: selectDelayValue}})
+    }
+
+    window.handleSelectPlayTimeChange = (event) => {
+      const value = event.target.value
+
+      if (value === "DEFAULT") {
+        playTime = DEFAULT_PLAYING_TIME
+      } else {
+        playTime = parseFloat(value) * 1000
+      }
+
+      localStorage.setItem("selectPlayValue", value)
+    }
+
+    if (selectPlayValue !== undefined) {
+      handleSelectPlayTimeChange({ target: { value: selectPlayValue } })
     }
 
     window.handleFromIndexBlur = (event) => {
@@ -766,6 +816,7 @@
     const content = `
       <div>
         <select onchange="handleSelectDictChange(event)">
+          <option disabled>Плейлисты</option>
           <option value="">NONE</option>
           ${playLists.map((list) => {
       const selected = list.name === localStorageCurrentSelection
@@ -776,6 +827,7 @@
       </div>
       <div>
         <select onchange="handleSelectDelayChange(event)">
+          <option disabled value="">Задержка до перевода</option>
           <option ${selectDelayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
           <option ${selectDelayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
           <option ${selectDelayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
@@ -788,6 +840,24 @@
           <option ${selectDelayValue === "15" ? "selected=\"selected\"" : ""} value="15">15</option>
           <option ${selectDelayValue === "20" ? "selected=\"selected\"" : ""} value="20">20</option>
           <option ${selectDelayValue === "30" ? "selected=\"selected\"" : ""} value="30">30</option>
+        </select>
+      </div>
+      <div>
+        <select onchange="handleSelectPlayTimeChange(event)">
+          <option disabled value="">Время проигрывания</option>
+          <option ${selectPlayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
+          <option ${selectPlayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
+          <option ${selectPlayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
+          <option ${selectPlayValue === "1.5" ? "selected=\"selected\"" : ""} value="1.5">1.5</option>
+          <option ${selectPlayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
+          <option ${selectPlayValue === "2.5" ? "selected=\"selected\"" : ""} value="2.5">2.5</option>
+          <option ${selectPlayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
+          <option ${selectPlayValue === "3.5" ? "selected=\"selected\"" : ""} value="3.5">3.5</option>
+          <option ${selectPlayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
+          <option ${selectPlayValue === "4.5" ? "selected=\"selected\"" : ""} value="4.5">4.5</option>
+          <option ${selectPlayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
+          <option ${selectPlayValue === "5.5" ? "selected=\"selected\"" : ""} value="5.5">5.5</option>
+          <option ${selectPlayValue === "6" ? "selected=\"selected\"" : ""} value="6">6</option>
         </select>
       </div>
       <div>
