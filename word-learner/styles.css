@@ -84,10 +84,11 @@ select {
 }
 
 .word-box {
-    margin-top: 75px;
+    margin-top: 20px;
     text-align: center;
     line-height: 1.5;
     font-size: 16px;
+    flex-grow: 1;
 }
 
 ul {
@@ -106,8 +107,8 @@ ul li {
 }
 
 ul li input[type=checkbox] {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     margin: 5px;
 }
 
@@ -120,19 +121,29 @@ ul li input[type=checkbox] {
     flex-grow: 0;
 }
 
+.current-playlist-box {
+    position: relative;
+    height: 100%;
+    flex-grow: 1;
+    max-width: 250px;
+    min-width: 160px;
+}
+
 .current-playlist {
-    margin-top: 5px;
     flex-grow: 1;
     font-size: 18px;
     line-height: 34px;
     width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    position: absolute;
+    height: 100%;
 }
 
 .word-value {
-    font-size: 45px;
-    line-height: 55px;
+    font-size: 38px;
+    line-height: 48px;
+    word-break: break-word;
 }
 
 .word-transcription {
@@ -201,13 +212,19 @@ input.auto-play-direction {
 
 .list-item-caption {
     flex: 1;
+    font-size: 14px;
+    line-height: 1em;
+    margin-top: 7px;
 }
 
 .playing-status {
     font-size: 50px;
+    height: 35px;
+    padding: 5px;
 }
 
-.playing-status > div {
-    width: 50px;
+.playing-status > span {
+    display: block;
+    width: 24px;
     margin: 0 auto;
 }

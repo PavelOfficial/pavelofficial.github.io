@@ -4,11 +4,16 @@
   <title>Словарь слов eng/ru</title>
 
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
   <link href="./styles.css" rel="stylesheet" />
+  <link href="./assets/bootstrap.min.css" rel="stylesheet" />
+  <link href="./assets/bootstrap-styles.css" rel="stylesheet" />
 
 </head>
 <body>
+
+<script src="./assets/bootstrap.bundle.min.js" type="text/javascript"></script>
 
 <script src="./dist/howler.core.min.js" type="text/javascript"></script>
 <script src="./dist/howler.min.js" type="text/javascript"></script>
@@ -36,7 +41,52 @@
 
 <script src="./all-words-map.js" type="text/javascript"></script>
 
-<div class="app">
+<div class="bootstrap-app">
+  <div class="word-switcher">
+    <div class="current-word-item">
+      <div class="word-box">
+
+      </div>
+      <div class="playing-status">
+        <span class="play-icon">
+          <img src="./assets/bootstrap-icons/icons/play-fill.svg" alt="Settings" width="24" height="24" />
+        </span>
+        <span class="pause-icon">
+          <img src="./assets/bootstrap-icons/icons/pause-fill.svg" alt="Settings" width="24" height="24" />
+        </span>
+      </div>
+    </div>
+    <div class="current-playlist-box">
+      <div class="current-playlist">
+      </div>
+    </div>
+  </div>
+  <div class="app-controls">
+    <div class="app-controls__secondary padded">
+      <div class="top-panel">
+        123 123
+      </div>
+      <div class="bottom-panel">
+        <button type="button" class="btn btn-outline-secondary open-settings-button">
+          <img src="./assets/bootstrap-icons/icons/gear-fill.svg" alt="Settings" width="24" height="24" />
+        </button>
+      <div>
+    </div>
+    <div class="app-controls__main padded"></div>
+  </div>
+</div>
+<div style="display: none" class="settings-popup padded">
+  <div class="top-panel">
+    123 123
+  </div>
+  <div class="bottom-panel">
+    <button type="button" class="btn btn-outline-secondary close-settings-button">
+      <img src="./assets/bootstrap-icons/icons/x-lg.svg" alt="Settings" width="24" height="24" />
+    </button>
+  </div>
+</div>
+
+<div class="app" style="display:none;">
   <div class="content">
     <div class="controls">
       <button class="display-word-button">
@@ -101,7 +151,9 @@
 
 <div class="loader-layer" style="display: none">LOADING</div>
 
+<script src="./assets/scripts/lib.js" type="text/javascript"></script>
 <script src="./word-dict-auto-play.js" type="text/javascript"></script>
+<script src="./assets/scripts/main.js" type="text/javascript"></script>
 
 </body>
 </html>

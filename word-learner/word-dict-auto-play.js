@@ -16,7 +16,7 @@
   }
 
   const leadingZeros = (num) => {
-    return String('0000000000000' + num).slice(-5)
+    return String('0000000000000' + num).slice(-4)
   }
 
   const allNotKnownIndexesAll = [

@@ -1,0 +1,99 @@
+/* general */
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background: #eff6fa;
+    font-family: Arial, Verdana, sans-serif;
+    height: 100vh;
+}
+
+.padded {
+    padding: 10px;
+}
+
+ul {
+    padding: 0;
+}
+
+/* END general */
+
+
+/* root layout */
+
+.bootstrap-app {
+    height: 100dvh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.word-switcher {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.app-controls {
+    display: flex;
+    flex-direction: row;
+    height: 220px;
+}
+
+/* END root layout  */
+
+
+/* app controls */
+
+.app-controls__secondary {
+    flex-grow: 1;
+    flex-basis: 50%;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-controls__main {
+    flex-grow: 1;
+    flex-basis: 50%;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-panel {
+    flex-grow: 1;
+}
+
+.bottom-panel {
+    height: 38px;
+    flex-grow: 0;
+}
+
+/* END app controls */
+
+/* settings */
+
+.settings-popup {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100dvh;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* END settings */
+
+/* current word item */
+.current-word-item {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+/* END current word item */
