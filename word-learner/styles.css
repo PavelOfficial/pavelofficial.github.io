@@ -83,19 +83,27 @@ select {
     font-size: 18px;
 }
 
-.word-box {
+.word-box-container {
+    display: flex;
     margin-top: 20px;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.word-box {
     text-align: center;
     line-height: 1.5;
     font-size: 16px;
-    flex-grow: 1;
 }
 
-ul {
+ul,
+.current-playlist-box ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 
 ul li {
     cursor: pointer;

@@ -161,7 +161,8 @@
 
   try {
     storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
-  } catch (error) {}
+  } catch (error) {
+  }
 
   let checkedWords = new Map(storedWordIndexes.map((item) => {
     return [`${item[0]}-${item[1]}`, item]
@@ -223,7 +224,8 @@
 
     try {
       storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
-    } catch (error) {}
+    } catch (error) {
+    }
 
     const storedWordIndexesMap = new Map(storedWordIndexes.map((item) => {
       return [`${item[0]}-${item[1]}`, item]
@@ -784,7 +786,7 @@
     }
 
     if (selectPlayValue !== undefined) {
-      handleSelectPlayTimeChange({ target: { value: selectPlayValue } })
+      handleSelectPlayTimeChange({target: {value: selectPlayValue}})
     }
 
     window.handleFromIndexBlur = (event) => {
@@ -879,13 +881,16 @@
             <input style="width: 100px" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
           </label>
         </div>
-        <div>
-          <label><input id="word-all" type="checkbox" onchange="handleCheckAllWords(event)" ${allChecked ? 'checked="checked"' : ''} /><div class="text">Все</div></label>
-        </div>
       </div>
     `
 
     playlistBox.innerHTML = content
+
+    document.querySelector(".word-all-container").innerHTML = `
+      <ul>
+        <li><div><input id="word-all" type="checkbox" onchange="handleCheckAllWords(event)" ${allChecked ? 'checked="checked"' : ''} /></div><div class="list-item-caption">Все</div></li>
+      </ul>
+    `
 
     if (localStorageCurrentSelection) {
       handleSelectDict(localStorageCurrentSelection)
