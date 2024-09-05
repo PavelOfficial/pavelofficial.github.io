@@ -16,8 +16,18 @@ ul {
     padding: 0;
 }
 
-.container.no-pads .col {
+.container.no-pads .col,
+.container.no-pads .row>* {
     padding: 0;
+}
+
+.col-form-label {
+    margin-top: 5px;
+}
+
+.form-check-label {
+    margin-top: 5px;
+    line-height: 1em;
 }
 
 .form-check-input {
@@ -58,7 +68,7 @@ ul {
 .app-controls {
     display: flex;
     flex-direction: row;
-    height: 220px;
+    height: 250px;
 }
 
 /* END root layout  */
