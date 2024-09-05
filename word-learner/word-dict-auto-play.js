@@ -16,7 +16,7 @@
   }
 
   const leadingZeros = (num) => {
-    return String('0000000000000' + num).slice(-4)
+    return String('0000000000000' + num).slice(-5)
   }
 
   const allNotKnownIndexesAll = [
@@ -463,15 +463,15 @@
 
   playListButton.onclick = () => switchPlaying()
 
-  displayTranslationButton.onclick = () => {
-    translationDisplaied = !translationDisplaied
+  displayTranslationButton.onchange = (event) => {
+    translationDisplaied = !!event.target.checked
 
     wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
   }
 
   let wordDisplayed = true
-  displayWordButton.onclick = () => {
-    wordDisplayed = !wordDisplayed
+  displayWordButton.onchange = (event) => {
+    wordDisplayed = !!event.target.checked
 
     wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden"
     wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed ? "visible" : "hidden"

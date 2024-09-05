@@ -66,14 +66,16 @@ html, body {
     margin: 0 15px;
 }
 
-button {
-    font-size: 20px;
-    background: #7eabff;
-    color: #ffffff;
-    padding: 15px;
-    border-radius: 5px;
-    border: none;
-}
+/*
+    button {
+        font-size: 20px;
+        background: #7eabff;
+        color: #ffffff;
+        padding: 15px;
+        border-radius: 5px;
+        border: none;
+    }
+ */
 
 button.small-btt {
     padding: 5px;
@@ -130,6 +132,8 @@ ul li input[type=checkbox] {
 }
 
 .current-playlist-box {
+    display: flex;
+    flex-direction: column;
     position: relative;
     height: 100%;
     flex-grow: 1;
@@ -137,8 +141,12 @@ ul li input[type=checkbox] {
     min-width: 160px;
 }
 
-.current-playlist {
+.current-playlist-wrapper {
+    position: relative;
     flex-grow: 1;
+}
+
+.current-playlist {
     font-size: 18px;
     line-height: 34px;
     width: 100%;
@@ -210,12 +218,6 @@ ul li input[type=checkbox] {
 
 .backward-direction-label {
     font-size: 24px;
-}
-
-input.backward-direction,
-input.auto-play-direction {
-    width: 18px;
-    height: 18px;
 }
 
 .list-item-caption {

@@ -16,6 +16,25 @@ ul {
     padding: 0;
 }
 
+.container.no-pads .col {
+    padding: 0;
+}
+
+.form-check-input {
+    height: 2em;
+    width: 2em;
+}
+
+.form-check .form-check-input {
+    margin-left: -2.5em;
+}
+
+.form-check {
+    min-height: 2.5rem;
+    padding-left: 2.5em;
+}
+
+
 /* END general */
 
 
@@ -59,8 +78,6 @@ ul {
     flex-grow: 1;
     flex-basis: 50%;
     max-width: 50%;
-    display: flex;
-    flex-direction: column;
 }
 
 .top-panel {
