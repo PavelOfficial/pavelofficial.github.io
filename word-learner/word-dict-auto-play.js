@@ -777,7 +777,7 @@
               translationDescriptor = null
 
               finish()
-            }, delayAfter ?? 750)
+            }, delayAfter || 750)
           }
 
           audioEng = new Howl({
