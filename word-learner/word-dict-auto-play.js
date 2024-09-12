@@ -148,10 +148,13 @@
 
   const DEFAULT_TRANSLATION_DELAY = 350
   const DEFAULT_PLAYING_TIME = null
+  const DEFAULT_SELECT_DELAY_AFTER_VALUE = 0
   let playTime = null
+  let delayAfter = null
   let TRANSLATION_DELAY = 350
   let selectDelayValue = localStorage.getItem("selectDelayValue")
   let selectPlayValue = localStorage.getItem("selectPlayValue")
+  let selectDelayAfterValue = localStorage.getItem("selectDelayAfterValue")
   let currentPayingAudio = null
   let currentList = null
   let currentWord = null
@@ -660,7 +663,7 @@
               translationDescriptor = null
 
               finish()
-            }, 750)
+            }, delayAfter ?? 750)
           }
 
           audioEng = new Howl({
@@ -804,6 +807,22 @@
       handleSelectPlayTimeChange({target: {value: selectPlayValue}})
     }
 
+    window.handleSelectDelayAfterValueChange = (event) => {
+      const value = event.target.value
+
+      if (value === "DEFAULT") {
+        delayAfter = DEFAULT_SELECT_DELAY_AFTER_VALUE
+      } else {
+        delayAfter = parseFloat(value) * 1000
+      }
+
+      localStorage.setItem("selectDelayAfterValue", value)
+    }
+
+    if (selectDelayAfterValue !== undefined) {
+      handleSelectDelayAfterValueChange({ target: { value: selectDelayAfterValue } })
+    }
+
     window.handleFromIndexBlur = (event) => {
       const value = event.target.value
 
@@ -886,6 +905,25 @@
             <option ${selectPlayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
             <option ${selectPlayValue === "5.5" ? "selected=\"selected\"" : ""} value="5.5">5.5</option>
             <option ${selectPlayValue === "6" ? "selected=\"selected\"" : ""} value="6">6</option>
+          </select>
+        </div>
+      </div>
+      <div class="container no-pads mt-3">
+        <div class="row">
+          <select class="form-select sound-volume" onchange="handleSelectDelayAfterValueChange(event)">
+            <option disabled value="">Время задержки после проигрывания</option>
+            <option ${selectDelayAfterValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
+            <option ${selectDelayAfterValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
+            <option ${selectDelayAfterValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
+            <option ${selectDelayAfterValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
+            <option ${selectDelayAfterValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
+            <option ${selectDelayAfterValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
+            <option ${selectDelayAfterValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
+            <option ${selectDelayAfterValue === "7" ? "selected=\"selected\"" : ""} value="7">7</option>
+            <option ${selectDelayAfterValue === "10" ? "selected=\"selected\"" : ""} value="10">10</option>
+            <option ${selectDelayAfterValue === "15" ? "selected=\"selected\"" : ""} value="15">15</option>
+            <option ${selectDelayAfterValue === "20" ? "selected=\"selected\"" : ""} value="20">20</option>
+            <option ${selectDelayAfterValue === "30" ? "selected=\"selected\"" : ""} value="30">30</option>
           </select>
         </div>
       </div>
