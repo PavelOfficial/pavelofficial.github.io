@@ -39,6 +39,21 @@
     return result
   }
 
+  const known2_9000IndexesAll = [
+    ...known2_9000,
+  ].map(([playListIndex, wordIndex]) => {
+    return String(playListIndex) + '-' + String(wordIndex)
+  })
+
+  const known2_9000Set = new Set(known2_9000IndexesAll)
+  const excludeKnown2 = (words) => {
+    const result = words.filter((word) => {
+      return !known2_9000Set.has(String(word[0]) + '-' + String(word[1]))
+    })
+
+    return result
+  }
+
   // allWordsMap
   const dictMap = {
     8000: enWords8000,
@@ -80,10 +95,10 @@
     dict: engDictNotKnownIndexes5000,
   }, {
     name: "Популярные сокращенный 7000",
-    dict: engDictNotKnownIndexes7000,
+    dict: excludeKnown2(engDictNotKnownIndexes7000),
   }, {
     name: "Популярные сокращенный все",
-    dict: engDictNotKnownIndexesAll,
+    dict: excludeKnown2(engDictNotKnownIndexesAll),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
@@ -822,64 +837,74 @@
     }) : false
 
     const content = `
-      <div>
-        <select onchange="handleSelectDictChange(event)">
-          <option disabled>Плейлисты</option>
-          <option value="">NONE</option>
-          ${playLists.map((list) => {
-      const selected = list.name === localStorageCurrentSelection
-
-      return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
-    }).join('')}
-        </select>
-      </div>
-      <div>
-        <select onchange="handleSelectDelayChange(event)">
-          <option disabled value="">Задержка до перевода</option>
-          <option ${selectDelayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
-          <option ${selectDelayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
-          <option ${selectDelayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
-          <option ${selectDelayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
-          <option ${selectDelayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
-          <option ${selectDelayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
-          <option ${selectDelayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
-          <option ${selectDelayValue === "7" ? "selected=\"selected\"" : ""} value="7">7</option>
-          <option ${selectDelayValue === "10" ? "selected=\"selected\"" : ""} value="10">10</option>
-          <option ${selectDelayValue === "15" ? "selected=\"selected\"" : ""} value="15">15</option>
-          <option ${selectDelayValue === "20" ? "selected=\"selected\"" : ""} value="20">20</option>
-          <option ${selectDelayValue === "30" ? "selected=\"selected\"" : ""} value="30">30</option>
-        </select>
-      </div>
-      <div>
-        <select onchange="handleSelectPlayTimeChange(event)">
-          <option disabled value="">Время проигрывания</option>
-          <option ${selectPlayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
-          <option ${selectPlayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
-          <option ${selectPlayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
-          <option ${selectPlayValue === "1.5" ? "selected=\"selected\"" : ""} value="1.5">1.5</option>
-          <option ${selectPlayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
-          <option ${selectPlayValue === "2.5" ? "selected=\"selected\"" : ""} value="2.5">2.5</option>
-          <option ${selectPlayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
-          <option ${selectPlayValue === "3.5" ? "selected=\"selected\"" : ""} value="3.5">3.5</option>
-          <option ${selectPlayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
-          <option ${selectPlayValue === "4.5" ? "selected=\"selected\"" : ""} value="4.5">4.5</option>
-          <option ${selectPlayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
-          <option ${selectPlayValue === "5.5" ? "selected=\"selected\"" : ""} value="5.5">5.5</option>
-          <option ${selectPlayValue === "6" ? "selected=\"selected\"" : ""} value="6">6</option>
-        </select>
-      </div>
-      <div>
-        <div>
-          <label>
-            Индекс от:
-            <input style="width: 100px" type="number" value="${indexFrom !== null ? indexFrom + 1 : ""}" onblur="handleFromIndexBlur(event)" />
-          </label>
+      <div class="container no-pads mt-3">
+        <div class="row">
+          <select class="form-select sound-volume" onchange="handleSelectDictChange(event)">
+            <option disabled>Плейлисты</option>
+            <option value="">NONE</option>
+            ${playLists.map((list) => {
+        const selected = list.name === localStorageCurrentSelection
+  
+        return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
+      }).join('')}
+          </select>
         </div>
-        <div>
-          <label>
-            Индекс до:
-            <input style="width: 100px" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
-          </label>
+      </div>
+      <div class="container no-pads mt-3">
+        <div class="row">
+          <select class="form-select sound-volume" onchange="handleSelectDelayChange(event)">
+            <option disabled value="">Задержка до перевода</option>
+            <option ${selectDelayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
+            <option ${selectDelayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
+            <option ${selectDelayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
+            <option ${selectDelayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
+            <option ${selectDelayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
+            <option ${selectDelayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
+            <option ${selectDelayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
+            <option ${selectDelayValue === "7" ? "selected=\"selected\"" : ""} value="7">7</option>
+            <option ${selectDelayValue === "10" ? "selected=\"selected\"" : ""} value="10">10</option>
+            <option ${selectDelayValue === "15" ? "selected=\"selected\"" : ""} value="15">15</option>
+            <option ${selectDelayValue === "20" ? "selected=\"selected\"" : ""} value="20">20</option>
+            <option ${selectDelayValue === "30" ? "selected=\"selected\"" : ""} value="30">30</option>
+          </select>
+        </div>
+      </div>
+      <div class="container no-pads mt-3">
+        <div class="row">
+          <select class="form-select sound-volume" onchange="handleSelectPlayTimeChange(event)">
+            <option disabled value="">Время проигрывания</option>
+            <option ${selectPlayValue === "DEFAULT" ? "selected=\"selected\"" : ""} value="DEFAULT">DEFAULT</option>
+            <option ${selectPlayValue === "0.5" ? "selected=\"selected\"" : ""} value="0.5">0.5</option>
+            <option ${selectPlayValue === "1" ? "selected=\"selected\"" : ""} value="1">1</option>
+            <option ${selectPlayValue === "1.5" ? "selected=\"selected\"" : ""} value="1.5">1.5</option>
+            <option ${selectPlayValue === "2" ? "selected=\"selected\"" : ""} value="2">2</option>
+            <option ${selectPlayValue === "2.5" ? "selected=\"selected\"" : ""} value="2.5">2.5</option>
+            <option ${selectPlayValue === "3" ? "selected=\"selected\"" : ""} value="3">3</option>
+            <option ${selectPlayValue === "3.5" ? "selected=\"selected\"" : ""} value="3.5">3.5</option>
+            <option ${selectPlayValue === "4" ? "selected=\"selected\"" : ""} value="4">4</option>
+            <option ${selectPlayValue === "4.5" ? "selected=\"selected\"" : ""} value="4.5">4.5</option>
+            <option ${selectPlayValue === "5" ? "selected=\"selected\"" : ""} value="5">5</option>
+            <option ${selectPlayValue === "5.5" ? "selected=\"selected\"" : ""} value="5.5">5.5</option>
+            <option ${selectPlayValue === "6" ? "selected=\"selected\"" : ""} value="6">6</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="container no-pads mt-3">
+          <div class="row">
+            <label for="volumeSelect" class="col-5 col-form-label">Индекс от:</label>
+            <div class="col-7">
+              <input class="form-control form-control-lg" type="number" value="${indexFrom !== null ? indexFrom + 1 : ""}" onblur="handleFromIndexBlur(event)" />
+            </div>
+          </div>
+        </div>
+        <div class="container no-pads mt-3">
+          <div class="row">
+            <label for="volumeSelect" class="col-5 col-form-label">Индекс от:</label>
+            <div class="col-7">
+              <input class="form-control form-control-lg" type="number" value="${indexTo !== null ? indexTo + 1 : ""}" onblur="handleToIndexBlur(event)" />
+            </div>
+          </div>
         </div>
       </div>
     `

@@ -16,8 +16,8 @@ ul {
     padding: 0;
 }
 
-.container.no-pads .col,
-.container.no-pads .row>* {
+.container.no-pads > .col,
+.container.no-pads > .row>div {
     padding: 0;
 }
 
