@@ -146,9 +146,15 @@
     dict: cleanDuplications(engCollocationsUnlearned1),
   }]
 
+  let isPrevMassWord = false
+  let isPrevWord = false
+  let isNextWord = false
+  let isNextMassWord = false
+
   const DEFAULT_TRANSLATION_DELAY = 350
   const DEFAULT_PLAYING_TIME = null
   const DEFAULT_SELECT_DELAY_AFTER_VALUE = 0
+  const DEFAULT_MASS_JUMP_COUNT = 5
   let playTime = null
   let delayAfter = null
   let TRANSLATION_DELAY = 350
@@ -366,7 +372,7 @@
         }
 
         const tryToStop = (nextIndex) => {
-          if (indexTo !== null && nextIndex > indexTo) {
+          if ((indexTo !== null && nextIndex > indexTo) || (indexFrom !== null && nextIndex < indexFrom)) {
             if (loopPlayback) {
               const loopNextIndex = findNextIndex(indexFrom)
 
@@ -394,11 +400,71 @@
 
         const findNextIndex = (startSearchIndex) => {
           let nextIndex = startSearchIndex
+          let direction = "forward"
+          let counter = 0
 
-          while (nextIndex < currentList.dict.length) {
+          if (isPrevMassWord) {
+            nextIndex -= 2
+            direction = "backward"
+          }
+
+          if (isPrevWord) {
+            nextIndex -= 2
+            direction = "backward"
+          }
+
+          if (isNextWord) {
+            direction = "forward"
+          }
+
+          if (isNextMassWord) {
+            direction = "forward"
+          }
+
+
+          while (nextIndex < currentList.dict.length && nextIndex >= 0) {
             const item = currentList.dict[nextIndex]
+            const nonChecked = !checkedWords.has(`${item[0]}-${item[1]}`)
 
-            if (!checkedWords.has(`${item[0]}-${item[1]}`)) {
+            if (isPrevWord) {
+              if (nonChecked) {
+                break
+              }
+
+              nextIndex--
+
+              continue
+            }
+
+            if (isPrevMassWord) {
+              if (nonChecked) {
+                counter++
+              }
+
+              if (counter === DEFAULT_MASS_JUMP_COUNT) {
+                break
+              }
+
+              nextIndex--
+
+              continue
+            }
+
+            if (isNextMassWord) {
+              if (nonChecked) {
+                counter++
+              }
+
+              if (counter === DEFAULT_MASS_JUMP_COUNT) {
+                break
+              }
+
+              nextIndex++
+
+              continue
+            }
+
+            if (nonChecked) {
               break
             }
 
@@ -438,6 +504,12 @@
   }
 
   const skipButton = document.querySelector(".skip-button")
+
+  const prevMassWordButton = document.querySelector(".prev-mass-word-button")
+  const prevWordButton = document.querySelector(".prev-word-button")
+  const nextWordButton = document.querySelector(".next-word-button")
+  const nextMassWordButton = document.querySelector(".next-mass-word-button")
+
   const displayTranslationButton = document.querySelector(".display-translation-button")
   const displayWordButton = document.querySelector(".display-word-button")
   const playPauseButton = document.querySelector(".play-pause-button")
@@ -495,7 +567,7 @@
     wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed ? "visible" : "hidden"
   }
 
-  skipButton.onclick = () => {
+  const goToWord = () => {
     skipTranslation = true
     let interrupted = false
 
@@ -512,6 +584,34 @@
     if (interrupted) {
       lastFinishWordPlaying()
     }
+  }
+
+  skipButton.onclick = () => {
+    goToWord()
+  }
+
+  prevMassWordButton.onclick = () => {
+    isPrevMassWord = true
+    goToWord()
+    isPrevMassWord = false
+  }
+
+  prevWordButton.onclick = () => {
+    isPrevWord = true
+    goToWord()
+    isPrevWord = false
+  }
+
+  nextWordButton.onclick = () => {
+    isNextWord = true
+    goToWord()
+    isNextWord = false
+  }
+
+  nextMassWordButton.onclick = () => {
+    isNextMassWord = true
+    goToWord()
+    isNextMassWord = false
   }
 
   function handleSelectDictItem(packName, index, nextSwitchToNext) {
