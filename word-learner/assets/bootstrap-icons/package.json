@@ -101,7 +101,7 @@
     "icons-font-min": "cleancss -O1 --format breakWith=lf --with-rebase --output font/bootstrap-icons.min.css font/bootstrap-icons.css",
     "icons-main": "node build/build-svgs.mjs",
     "icons-sprite": "svg-sprite --config svg-sprite.json --log=info \"icons/*.svg\"",
-    "icons-zip": "cross-env-shell \"rm -rf bootstrap-icons-$npm_package_version bootstrap-icons-$npm_package_version.zip && cp -r icons/ bootstrap-icons-$npm_package_version && cp bootstrap-icons.svg bootstrap-icons-$npm_package_version && cp -r font/ bootstrap-icons-$npm_package_version && zip -qr9 bootstrap-icons-$npm_package_version.zip bootstrap-icons-$npm_package_version && rm -rf bootstrap-icons-$npm_package_version\"",
+    "icons-zip": "cross-env-shell \\\"rm -rf bootstrap-icons-$npm_package_version bootstrap-icons-$npm_package_version.zip && cp -r icons bootstrap-icons-$npm_package_version && cp bootstrap-icons.svg bootstrap-icons-$npm_package_version && cp -r font/ bootstrap-icons-$npm_package_version && zip -qr9 bootstrap-icons-$npm_package_version.zip bootstrap-icons-$npm_package_version && rm -rf bootstrap-icons-$npm_package_version\\\"",
     "netlify": "cross-env-shell HUGO_BASEURL=$DEPLOY_PRIME_URL npm-run-all icons docs-build",
     "pages": "node build/build-pages.mjs",
     "release": "npm-run-all icons docs-build icons-zip",
@@ -109,7 +109,7 @@
     "start": "npm run docs-serve",
     "test": "npm-run-all --parallel --aggregate-output --continue-on-error test:*",
     "test:check-icons": "node build/check-icons.mjs",
-    "test:eslint": "eslint --cache --cache-location .cache/.eslintcache --report-unused-disable-directives --ext .js,.mjs .",
+    "test:eslint": "eslint --cache --cache-location .cache/.eslintcache --report-unused-disable-directives --ext .js,.mjs ",
     "test:fusv": "fusv docs/assets/scss/",
     "test:lockfile-lint": "lockfile-lint --allowed-hosts npm --allowed-schemes https: --empty-hostname false --type npm --path package-lock.json",
     "test:stylelint": "stylelint docs/assets/scss/ --cache --cache-location .cache/.stylelintcache"
