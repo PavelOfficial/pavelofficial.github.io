@@ -69,50 +69,43 @@
       </div>
     </div>
   </div>
+  <div>
   <div class="app-controls">
     <div class="app-controls__secondary padded">
-      <div class="top-panel">
-        <button class="btn btn-primary btn-lg play-list-button">
-          play list
-        </button>
-        <div class="mt-2">
-          <div class="form-check">
-            <input class="form-check-input auto-play-direction" type="checkbox" value="" id="autoChangeTransDirection" checked onchange="handleChangeAutoTranslationDirection(event)" />
-            <label class="form-check-label" for="autoChangeTransDirection">
-              Direction auto change
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input backward-direction" type="checkbox" value="" id="reverseTransDirection" checked onchange="handleChangeTranslationDirection(event)" />
-            <label class="form-check-label" for="reverseTransDirection">
-              Reversed direction
-            </label>
-          </div>
+      <button class="btn btn-primary btn-lg play-list-button">
+        play list
+      </button>
+      <div class="mt-2">
+        <div class="form-check">
+          <input class="form-check-input auto-play-direction" type="checkbox" value="" id="autoChangeTransDirection" checked onchange="handleChangeAutoTranslationDirection(event)" />
+          <label class="form-check-label" for="autoChangeTransDirection">
+            Direction auto change
+          </label>
         </div>
-        <div class="container no-pads">
-          <div class="row">
-            <label for="volumeSelect" class="col-5 col-form-label">Volume</label>
-            <div class="col-7">
-              <select id="volumeSelect" class="form-select sound-volume" onchange="handleSelectSoundVolume(event)">
-                <option value="0.125">0.125</option>
-                <option value="0.25">0.25</option>
-                <option value="0.5">0.5</option>
-                <option value="1">1</option>
-                <option value="1.5">1.5</option>
-                <option value="3">3</option>
-                <option value="6">6</option>
-                <option value="12">12</option>
-                <option value="24">24</option>
-              </select>
-            </div>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input backward-direction" type="checkbox" value="" id="reverseTransDirection" checked onchange="handleChangeTranslationDirection(event)" />
+          <label class="form-check-label" for="reverseTransDirection">
+            Reversed direction
+          </label>
         </div>
       </div>
-      <div class="bottom-panel">
-        <button type="button" class="btn btn-outline-secondary open-settings-button">
-          <span class="bi icon-btt"></span>
-          <!--img src="../temp/bootstrap-icons/icons/gear-fill.svg" alt="Settings" width="24" height="24" /-->
-        </button>
+      <div class="container no-pads">
+        <div class="row">
+          <label for="volumeSelect" class="col-5 col-form-label">Volume</label>
+          <div class="col-7">
+            <select id="volumeSelect" class="form-select sound-volume" onchange="handleSelectSoundVolume(event)">
+              <option value="0.125">0.125</option>
+              <option value="0.25">0.25</option>
+              <option value="0.5">0.5</option>
+              <option value="1">1</option>
+              <option value="1.5">1.5</option>
+              <option value="3">3</option>
+              <option value="6">6</option>
+              <option value="12">12</option>
+              <option value="24">24</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
     <div class="app-controls__main padded">
@@ -153,6 +146,38 @@
       </button -->
     </div>
   </div>
+  <div class="bottom-panel bottom-panel-main padded">
+    <div class="container no-pads">
+      <div class="row">
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary open-settings-button">
+            <span class="bi icon-btt"></span>
+            <!--img src="../temp/bootstrap-icons/icons/gear-fill.svg" alt="Settings" width="24" height="24" /-->
+          </button>
+        </div>
+
+        <div class="col-8">
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="bi icon-btt"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="bi icon-btt"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="bi icon-btt"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="bi icon-btt"></span>
+          </button>
+        </div>
+        <div class="col-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" checked onchange="" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div style="display: none" class="settings-popup padded">
   <div class="top-panel">
@@ -164,9 +189,17 @@
     </div>
   </div>
   <div class="bottom-panel">
-    <button type="button" class="btn btn-outline-secondary close-settings-button">
-      <span class="bi icon-btt"></span>
-    </button>
+    <div class="container no-pads">
+      <div class="row">
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary close-settings-button">
+            <span class="bi icon-btt"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
 

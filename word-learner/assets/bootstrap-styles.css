@@ -103,7 +103,7 @@ ul {
 .app-controls {
     display: flex;
     flex-direction: row;
-    height: 250px;
+    height: 200px;
 }
 
 /* END root layout  */
@@ -132,6 +132,10 @@ ul {
 .bottom-panel {
     height: 38px;
     flex-grow: 0;
+}
+
+.bottom-panel-main {
+    box-sizing: content-box;
 }
 
 /* END app controls */
