@@ -509,6 +509,7 @@
   const prevWordButton = document.querySelector(".prev-word-button")
   const nextWordButton = document.querySelector(".next-word-button")
   const nextMassWordButton = document.querySelector(".next-mass-word-button")
+  const currentCheckbox = document.querySelector(".current-checkbox")
 
   const displayTranslationButton = document.querySelector(".display-translation-button")
   const displayWordButton = document.querySelector(".display-word-button")
@@ -636,6 +637,7 @@
 
     const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[listItemIndex]
     const currentSelectedLI = document.querySelector(".playlist-item-selected")
+    const currentSelectedLIChecked = li.querySelector("input").checked
 
     if (currentSelectedLI) {
       currentSelectedLI.setAttribute("class", "")
@@ -652,9 +654,21 @@
       currentPlaylist.scrollTop = currentPlaylist.scrollTop + topDelta - targetYOffset
     }
 
+    currentCheckbox.checked = currentSelectedLIChecked
+
     renderAll()
 
     playAudio(afterPlayAudio)
+  }
+
+  currentCheckbox.onclick = () => {
+    const index = currentList.dict.findIndex((item) => {
+      return item[0] === currentSelection[0] && item[1] === currentSelection[1]
+    })
+
+    const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[index]
+
+    li.querySelector("input").click()
   }
 
   function renderСurrentPlaylist() {
