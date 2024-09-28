@@ -144,6 +144,9 @@
   }, {
     name: "Выборка из cловосочетания 1",
     dict: cleanDuplications(engCollocationsUnlearned1),
+  }, {
+    name: "Выборка из 7000 сокращенных тяжелых 1",
+    dict: cleanDuplications(engDict7000unlearned1),
   }]
 
   let isPrevMassWord = false
