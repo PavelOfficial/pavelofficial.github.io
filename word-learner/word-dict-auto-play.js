@@ -685,7 +685,7 @@
 
       word = dict[index]
 
-      return `<li><div><input id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})">${leadingZeros(arrayIndex + 1)}. ${word}</div></li>`
+      return `<li><div><input id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div></li>`
     }).join('')}
       </ul>
     ` : ''

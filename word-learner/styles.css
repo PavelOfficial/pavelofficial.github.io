@@ -222,9 +222,19 @@ ul li input[type=checkbox] {
 
 .list-item-caption {
     flex: 1;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1em;
-    margin-top: 7px;
+    margin-top: 2px;
+}
+
+.list-item-caption .list-item-caption__index {
+    font-size: 9px;
+    line-height: 6px;
+    color: #000000;
+}
+
+.playlist-item-selected .list-item-caption__index {
+    color: #ffffff;
 }
 
 .playing-status {
