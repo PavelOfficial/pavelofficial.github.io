@@ -534,6 +534,31 @@
 
   playIcon.style.display = "none"
 
+  const interrupt = () => {
+    skipTranslation = true
+    let interrupted = false
+
+    if (currentPayingAudio !== null && currentPayingAudio.playing()) {
+      currentPayingAudio.stop()
+      interrupted = true
+    }
+
+    if (translationDescriptor !== null) {
+      clearTimeout(translationDescriptor)
+      interrupted = true
+    }
+
+    return interrupted
+  }
+
+  const goToWord = () => {
+    const interrupted = interrupt()
+
+    if (interrupted) {
+      lastFinishWordPlaying()
+    }
+  }
+
   function switchPlaying(nextIsPlaying, noInit) {
     if (!noInit && indexFrom !== null) {
       const firstItem = currentList.dict[indexFrom]
@@ -553,6 +578,8 @@
       playIcon.style.display = "none"
       pauseIcon.style.display = ""
       playPauseButton.innerHTML = "play"
+
+      goToWord()
     }
 
     playAudio(afterPlayAudio)
@@ -591,25 +618,6 @@
   let translationPlaying = true
   translationPlayingButton.onchange = (event) => {
     translationPlaying = !!event.target.checked
-  }
-
-  const goToWord = () => {
-    skipTranslation = true
-    let interrupted = false
-
-    if (currentPayingAudio !== null && currentPayingAudio.playing()) {
-      currentPayingAudio.stop()
-      interrupted = true
-    }
-
-    if (translationDescriptor !== null) {
-      clearTimeout(translationDescriptor)
-      interrupted = true
-    }
-
-    if (interrupted) {
-      lastFinishWordPlaying()
-    }
   }
 
   const skipPause = () => {
