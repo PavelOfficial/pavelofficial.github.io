@@ -1176,7 +1176,7 @@
 
     document.querySelector(".word-all-container").innerHTML = `
       <ul>
-        <li><div><input id="word-all" type="checkbox" onchange="handleCheckAllWords(event)" ${allChecked ? 'checked="checked"' : ''} /></div><div class="list-item-caption">Все</div></li>
+        <li><div><input id="word-all" type="checkbox" onchange="handleCheckAllWords(event)" ${allChecked ? 'checked="checked"' : ''} /></div><div class="list-item-caption"><div class="list-item-caption__index"></div>Все</div></li>
       </ul>
     `
 
