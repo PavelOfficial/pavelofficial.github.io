@@ -169,6 +169,7 @@
   let currentWord = null
   let currentDescription = null
   let currentSelection = null
+  let handleFirstAudioEnd = null
   let indexFrom = localStorage.getItem("indexFrom") ? parseInt(localStorage.getItem("indexFrom"), 10) - 1 : null
   let indexTo = localStorage.getItem("indexTo") ? parseInt(localStorage.getItem("indexTo") - 1, 10) : null
   let isPlaying = false
@@ -507,6 +508,7 @@
   }
 
   const skipButton = document.querySelector(".skip-button")
+  const skipPauseButton = document.querySelector(".skip-pause-button")
 
   const prevMassWordButton = document.querySelector(".prev-mass-word-button")
   const prevWordButton = document.querySelector(".prev-word-button")
@@ -610,8 +612,26 @@
     }
   }
 
+  const skipPause = () => {
+    if (translationDescriptor !== null) {
+      clearTimeout(translationDescriptor)
+    }
+
+    if (handleFirstAudioEnd) {
+      handleFirstAudioEnd()
+    } else {
+      goToWord()
+    }
+  }
+
   skipButton.onclick = () => {
     goToWord()
+  }
+
+  skipPauseButton.onclick = () => {
+    console.log("skipPauseButton !!!")
+
+    skipPause()
   }
 
   const switchSelection = (delta) => {
@@ -772,6 +792,8 @@
         let finished = false
 
         const finish = () => {
+          skipPauseButton.setAttribute("disabled", "disabled")
+
           if (finished) {
             return
           }
@@ -814,7 +836,11 @@
               return
             }
 
-            translationDescriptor = setTimeout(() => {
+            skipPauseButton.removeAttribute("disabled")
+            handleFirstAudioEnd = () => {
+              skipPauseButton.setAttribute("disabled", "disabled")
+
+              handleFirstAudioEnd = null
               translationDescriptor = null
               if (skipTranslation) {
                 finish()
@@ -828,7 +854,9 @@
                   secondEnd()
                 }
               }
-            }, TRANSLATION_DELAY)
+            }
+
+            translationDescriptor = setTimeout(handleFirstAudioEnd, TRANSLATION_DELAY)
           }
 
           const secondEnd = () => {
@@ -837,7 +865,9 @@
               return
             }
 
+            skipPauseButton.removeAttribute("disabled")
             translationDescriptor = setTimeout(() => {
+              skipPauseButton.setAttribute("disabled", "disabled")
               translationDescriptor = null
 
               finish()
