@@ -86,17 +86,30 @@ select {
 }
 
 .word-box-container {
+    position: relative;
     display: flex;
     margin-top: 20px;
     flex-grow: 1;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
 }
 
 .word-box {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
     text-align: center;
     line-height: 1.5;
     font-size: 16px;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    justify-content: center;
+}
+
+.word-box-inner {
+
 }
 
 ul,
@@ -173,6 +186,9 @@ ul li input[type=checkbox] {
     max-width: 450px;
     margin: 0 auto;
     color: #4b4b4b;
+    max-height: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .loader-layer {

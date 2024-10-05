@@ -147,6 +147,9 @@
   }, {
     name: "Выборка из 7000 сокращенных тяжелых 1",
     dict: cleanDuplications(engDict7000unlearned1),
+  }, {
+    name: "Выборка из 7000 сокращенных тяжелых 2",
+    dict: cleanDuplications(engDict7000unlearned2),
   }]
 
   let isPrevMassWord = false
@@ -774,11 +777,13 @@
     let content
     if (currentDescription) {
       content = `
-        <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
-        <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
-        <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-        return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-      })}</div>
+        <div class="word-box-inner">
+          <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
+          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
+          <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
+            return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+          })}</div>
+        </div>
       `
     } else {
       content = ''
