@@ -524,6 +524,8 @@
   const currentPlaylist = document.querySelector(".current-playlist")
   const currentAudioBox = document.querySelector(".audio-box")
   const loaderLayer = document.querySelector(".loader-layer")
+  const wordPlayingButton = document.querySelector(".word-playing-button")
+  const translationPlayingButton = document.querySelector(".translation-playing-button")
 
   const playIcon = document.querySelector(".play-icon")
   const pauseIcon = document.querySelector(".pause-icon")
@@ -577,6 +579,16 @@
     transcriptionDisplayed = !!event.target.checked
 
     wordBox.querySelector(".word-transcription").style.visibility = transcriptionDisplayed ? "visible" : "hidden"
+  }
+
+  let wordPlaying = true
+  wordPlayingButton.onchange = (event) => {
+    wordPlaying = !!event.target.checked
+  }
+
+  let translationPlaying = true
+  translationPlayingButton.onchange = (event) => {
+    translationPlaying = !!event.target.checked
   }
 
   const goToWord = () => {
@@ -746,6 +758,14 @@
         lastFinishWordPlaying = finish
 
         const play = () => {
+          const getIsCurrentAudioPlayingForFirstAudio = () => {
+            return (currentAudioBackwardTranslationDirection && translationPlaying) || (!currentAudioBackwardTranslationDirection && wordPlaying)
+          }
+
+          const getIsCurrentAudioPlayingForSecondAudio = () => {
+            return (!currentAudioBackwardTranslationDirection && translationPlaying) || (currentAudioBackwardTranslationDirection && wordPlaying)
+          }
+
           const stopOnPlayTime = (currentAudio, handler) => {
             if (playTime === null) {
               return
@@ -772,8 +792,12 @@
               } else {
                 currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioEng : audioRu)
 
-                currentPayingAudio.play()
-                stopOnPlayTime(currentPayingAudio, secondEnd)
+                if (getIsCurrentAudioPlayingForSecondAudio()) {
+                  currentPayingAudio.play()
+                  stopOnPlayTime(currentPayingAudio, secondEnd)
+                } else {
+                  secondEnd()
+                }
               }
             }, TRANSLATION_DELAY)
           }
@@ -805,8 +829,12 @@
 
           currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioRu : audioEng)
 
-          currentPayingAudio.play()
-          stopOnPlayTime(currentPayingAudio, firstEnd)
+          if (getIsCurrentAudioPlayingForFirstAudio()) {
+            currentPayingAudio.play()
+            stopOnPlayTime(currentPayingAudio, firstEnd)
+          } else {
+            firstEnd()
+          }
         }
 
         play()
