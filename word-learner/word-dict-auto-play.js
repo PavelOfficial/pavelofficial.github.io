@@ -614,28 +614,57 @@
     goToWord()
   }
 
+  const switchSelection = (delta) => {
+    const index = currentList.dict.findIndex((item) => {
+      return item[0] === currentSelection[0] && item[1] === currentSelection[1]
+    })
+
+    const nextIndex = index + delta
+    const nextItem = currentList.dict[nextIndex]
+
+    if (nextItem) {
+      handleSelectDictItem(nextItem[0], nextItem[1], switchToNext)
+    }
+  }
+
   prevMassWordButton.onclick = () => {
-    isPrevMassWord = true
-    goToWord()
-    isPrevMassWord = false
+    if (isPlaying) {
+      isPrevMassWord = true
+      goToWord()
+      isPrevMassWord = false
+    } else {
+      switchSelection(-DEFAULT_MASS_JUMP_COUNT)
+    }
   }
 
   prevWordButton.onclick = () => {
-    isPrevWord = true
-    goToWord()
-    isPrevWord = false
+    if (isPlaying) {
+      isPrevWord = true
+      goToWord()
+      isPrevWord = false
+    } else {
+      switchSelection(-1)
+    }
   }
 
   nextWordButton.onclick = () => {
-    isNextWord = true
-    goToWord()
-    isNextWord = false
+    if (isPlaying) {
+      isNextWord = true
+      goToWord()
+      isNextWord = false
+    } else {
+      switchSelection(1)
+    }
   }
 
   nextMassWordButton.onclick = () => {
-    isNextMassWord = true
-    goToWord()
-    isNextMassWord = false
+    if (isPlaying) {
+      isNextMassWord = true
+      goToWord()
+      isNextMassWord = false
+    } else {
+      switchSelection(DEFAULT_MASS_JUMP_COUNT)
+    }
   }
 
   function handleSelectDictItem(packName, index, nextSwitchToNext) {
