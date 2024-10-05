@@ -516,6 +516,7 @@
 
   const displayTranslationButton = document.querySelector(".display-translation-button")
   const displayWordButton = document.querySelector(".display-word-button")
+  const transcriptionButton = document.querySelector(".display-transcription-button")
   const playPauseButton = document.querySelector(".play-pause-button")
   const playListButton = document.querySelector(".play-list-button")
   const wordBox = document.querySelector(".word-box")
@@ -568,7 +569,14 @@
     wordDisplayed = !!event.target.checked
 
     wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden"
-    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed ? "visible" : "hidden"
+    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed && transcriptionDisplayed ? "visible" : "hidden"
+  }
+
+  let transcriptionDisplayed = true
+  transcriptionButton.onchange = (event) => {
+    transcriptionDisplayed = !!event.target.checked
+
+    wordBox.querySelector(".word-transcription").style.visibility = transcriptionDisplayed ? "visible" : "hidden"
   }
 
   const goToWord = () => {
@@ -698,7 +706,7 @@
     if (currentDescription) {
       content = `
         <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
-        <div class="word-transcription" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
+        <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
         <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
         return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
       })}</div>
