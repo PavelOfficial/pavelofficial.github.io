@@ -153,6 +153,9 @@
   }, {
     name: "Выборка из 7000 сокращенных тяжелых 3",
     dict: cleanDuplications(engDict7000unlearned3),
+  }, {
+    name: "Выборка из 2000 3000 5000 сокращенных тяжелых 1",
+    dict: cleanDuplications(engDict2000_3000_5000_unlearned1),
   }]
 
   let isPrevMassWord = false
@@ -279,6 +282,11 @@
 
   function handleChangeWordCheckbox(event, index, pack) {
     const checked = !!event.target.checked
+
+    // if it is current then change current checkbox
+    if (String(pack) === String(currentSelection[0]) && String(index) === String(currentSelection[1])) {
+      currentCheckbox.checked = checked
+    }
 
     if (checked) {
       checkedWords.set(`${pack}-${index}`, [pack, index])

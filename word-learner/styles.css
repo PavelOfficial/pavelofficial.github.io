@@ -109,7 +109,7 @@ select {
 }
 
 .word-box-inner {
-
+    height: 100%;
 }
 
 ul,
