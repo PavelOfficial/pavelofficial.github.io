@@ -159,6 +159,9 @@
   }, {
     name: "Выборка из 5000 сокращенных c 130 тяжелых 1",
     dict: cleanDuplications(engDict_5000_from_130_unlearned1),
+  }, {
+    name: "Словосочетания невыученные (обе пачки)",
+    dict: cleanDuplications(engCollocationsUnlearned2),
   }]
 
   let isPrevMassWord = false
