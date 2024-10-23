@@ -162,6 +162,9 @@
   }, {
     name: "Словосочетания невыученные (обе пачки)",
     dict: cleanDuplications(engCollocationsUnlearned2),
+  }, {
+    name: "Выборка из 7000 сокращенных тяжелых 4",
+    dict: cleanDuplications(engDict7000unlearned4),
   }]
 
   let isPrevMassWord = false
