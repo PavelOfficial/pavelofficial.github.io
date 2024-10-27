@@ -39,6 +39,23 @@
     return result
   }
 
+  const allKnownIndexesAll = [
+    ...engDictAllLearnedSimple5,
+    ...engDictAllLearnedSimple6,
+  ].map(([playListIndex, wordIndex]) => {
+    return String(playListIndex) + '-' + String(wordIndex)
+  })
+
+  const allKnownIndexesAllSet = new Set(allKnownIndexesAll)
+
+  const excludeKnownIndexesAll = (words) => {
+    const result = words.filter((word) => {
+      return !allKnownIndexesAllSet.has(String(word[0]) + '-' + String(word[1]))
+    })
+
+    return result
+  }
+
   const known2_9000IndexesAll = [
     ...known2_9000,
   ].map(([playListIndex, wordIndex]) => {
@@ -60,6 +77,28 @@
     2700: engWords2700,
     170: engWords170,
     900: engWords900,
+  }
+
+  const shortedListsAll = [
+    ...engDictNotKnownIndexes2000,
+    ...engDictNotKnownIndexes3000,
+    ...engDictNotKnownIndexes5000,
+    ...engDictNotKnownIndexes7000,
+  ].map(([playListIndex, wordIndex]) => {
+    const word = dictMap[playListIndex][wordIndex]
+    return word
+  })
+
+  const shortedListsAllSet = new Set(shortedListsAll)
+
+  const excludeShortedLists = (words) => {
+    const result = words.filter((word) => {
+      const engWord = dictMap[word[0]][word[1]]
+
+      return !shortedListsAllSet.has(engWord)
+    })
+
+    return result
   }
 
   const playlistSeparator = {
@@ -98,6 +137,9 @@
     dict: excludeKnown2(engDictNotKnownIndexes7000),
   }, {
     name: "Популярные сокращенный все",
+    dict: excludeKnownIndexesAll(excludeShortedLists(excludeKnown2(engDictNotKnownIndexesAll))),
+  }, {
+    name: "Популярные сокращенный все (сырой)",
     dict: excludeKnown2(engDictNotKnownIndexesAll),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
