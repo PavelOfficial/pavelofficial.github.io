@@ -77,6 +77,7 @@
     2700: engWords2700,
     170: engWords170,
     900: engWords900,
+    12000: enWords12000Delta,
   }
 
   const shortedListsAll = [
@@ -136,11 +137,14 @@
     name: "Популярные сокращенный 7000",
     dict: excludeKnown2(engDictNotKnownIndexes7000),
   }, {
-    name: "Популярные сокращенный все",
+    name: "Популярные сокращенный все после 7000",
     dict: excludeKnownIndexesAll(excludeShortedLists(excludeKnown2(engDictNotKnownIndexesAll))),
   }, {
-    name: "Популярные сокращенный все (сырой)",
+    name: "Популярные сокращенный все после 7000 (сырой)",
     dict: excludeKnown2(engDictNotKnownIndexesAll),
+  }, {
+    name: "Популярные сокращенный все 12000",
+    dict: engDictNotKnownIndexes12000,
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
@@ -843,7 +847,7 @@
           <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
           <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-            return `<div>${item.translations.map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+            return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
           })}</div>
         </div>
       `
