@@ -214,6 +214,9 @@
   }, {
     name: "Выборка из после 7000 все сокращенных тяжелых 1",
     dict: cleanDuplications(engDictAfter7000unlearned4),
+  }, {
+    name: "Выборка из после 7000 все сокращенных тяжелых 2",
+    dict: cleanDuplications(engDictAfter7000unlearned5),
   }]
 
   let isPrevMassWord = false
