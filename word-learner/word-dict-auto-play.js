@@ -217,6 +217,9 @@
   }, {
     name: "Выборка из после 7000 все сокращенных тяжелых 2",
     dict: cleanDuplications(engDictAfter7000unlearned5),
+  }, playlistSeparator, {
+    name: "Повторение 8000/пачка(1650) 1",
+    dict: cleanDuplications(engDictRecollection8000_part1650_1),
   }]
 
   let isPrevMassWord = false
