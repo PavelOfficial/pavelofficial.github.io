@@ -105,6 +105,35 @@ ul {
     flex-grow: 1;
 }
 
+.app-header {
+    padding: 4px 12px;
+    height: 35px;
+    line-height: 27px;
+    background: #e0e8ec;
+    color: #ffffff;
+    font-size: 16px;
+    vertical-align: center;
+    border-bottom: 1px solid #cdcdcd;
+}
+
+.app-header a {
+    text-decoration: none;
+}
+
+.telegram-icon {
+    display: inline-block;
+    margin-right: 0px;
+    width: 27px;
+    height: 27px;
+    border-radius: 13px;
+    background: url("icon/telegram-icon.jpg") transparent;
+    background-position: center;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    vertical-align: bottom;
+}
+
 .app-controls {
     display: flex;
     flex-direction: row;
