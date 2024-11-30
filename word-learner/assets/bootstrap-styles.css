@@ -31,6 +31,16 @@
     color: #000000;
     font-size: 1.5em;
     display: inline-block;
+    vertical-align: bottom;
+}
+
+.icon-btt_inline {
+    position: relative;
+    top: -2px;
+}
+
+.app-header-link {
+    margin-right: 15px;
 }
 
 /* general */
@@ -163,6 +173,12 @@ ul {
     flex-grow: 1;
 }
 
+.help-popup .top-panel {
+    flex-grow: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
 .bottom-panel {
     height: 38px;
     flex-grow: 0;
@@ -175,7 +191,7 @@ ul {
 /* END app controls */
 
 /* settings */
-
+.help-popup,
 .settings-popup {
     position: fixed;
     z-index: 1000;

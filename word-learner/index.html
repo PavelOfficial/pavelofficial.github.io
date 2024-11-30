@@ -68,7 +68,10 @@
 
 <div class="bootstrap-app">
   <div class="app-header">
-    <a href="https://t.me/PavelOfficial" target="_blank"><i class="telegram-icon"></i> создатель</a>
+    <a class="app-header-link open-help-button" href="javascript:void(0);">
+      <span class="bi icon-btt icon-btt_inline">&#xF4BD;</span> помощь
+    </a>
+    <a class="app-header-link" href="https://t.me/PavelOfficial" target="_blank"><i class="telegram-icon"></i> создатель</a>
   </div>
   <div class="word-switcher">
     <div class="current-word-item">
@@ -251,7 +254,45 @@
       </div>
     </div>
 
+  </div>
+</div>
 
+<div style="display: none" class="help-popup padded">
+  <div class="top-panel">
+    <h4>Советы. Как пользоваться.</h4>
+    <p>
+      Чтобы выполнить какой-либо из этих советов, нужно прежде всего закрыть попап помощи.
+      Для этого нажмите на крест в левом нижнем углу экрана.
+    </p>
+      <p>
+        - <b>Начать работать</b>. Нужно выбрать плейлист для проигрывания. Для этого нажмите на шестеренку в нижнем левом углу.
+        А затем выберите плейлист в верхнем селекте. Закройте окно настроек, нажав на крест в левом нижнем углу и нажмите play.
+      </p>
+      <p>
+        - <b>Отрегулировать время прогревания</b>. Нужно открыть попап настроек нажав на шестеренку.
+        И выбрать соответствующе настройки в трех селектах после первого.
+        Это: время паузы после первого аудио до второго аудио в паре ru/eng,
+        время прогревания каждого аудио для ru/eng, время паузы после проигрывания второго аудио для ru/eng.
+      </p>
+      <p>
+        - <b>Настроить фрагмент плейлиста для проигрывания</b>. Нужно открыть попап настроек нажав на шестеренку.
+        И заполнить соответственно Индекс от и Индекс до. Это фрагмент в рамках текущего списка прогревания.
+        Текущий список проигрывания должен быть выбран в первом селекте попапа настроек.
+        После закрыть попап настроек и нажить play list.
+        Слова будут проигрываться только в заданном диапазоне.
+      </p>
+    </ul>
+  </div>
+  <div class="bottom-panel">
+    <div class="container no-pads">
+      <div class="row">
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary close-help-button">
+            <span class="bi icon-btt"></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
