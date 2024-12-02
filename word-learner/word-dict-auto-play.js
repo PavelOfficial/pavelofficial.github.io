@@ -220,6 +220,9 @@
   }, playlistSeparator, {
     name: "Повторение 8000/пачка(1650) 1",
     dict: cleanDuplications(engDictRecollection8000_part1650_1),
+  }, {
+    name: "Повторение 8000/пачка(1650) 2",
+    dict: cleanDuplications(engDictRecollection8000_part1650_2),
   }]
 
   let isPrevMassWord = false
