@@ -71,6 +71,21 @@
     return result
   }
 
+  const _9000SetIndexesAll = [
+    ...engDictNotKnownIndexes9000,
+  ].map(([playListIndex, wordIndex]) => {
+    return String(playListIndex) + '-' + String(wordIndex)
+  })
+
+  const _9000Set = new Set(_9000SetIndexesAll)
+  const exclude9000List = (words) => {
+    const result = words.filter((word) => {
+      return !_9000Set.has(String(word[0]) + '-' + String(word[1]))
+    })
+
+    return result
+  }
+
   // allWordsMap
   const dictMap = {
     8000: enWords8000,
@@ -143,8 +158,11 @@
     name: "Популярные сокращенный все после 7000 (сырой)",
     dict: excludeKnown2(engDictNotKnownIndexesAll),
   }, {
+    name: "Популярные сокращенный все 9000",
+    dict: engDictNotKnownIndexes9000,
+  }, {
     name: "Популярные сокращенный все 12000",
-    dict: engDictNotKnownIndexes12000,
+    dict: exclude9000List(engDictNotKnownIndexes12000),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
