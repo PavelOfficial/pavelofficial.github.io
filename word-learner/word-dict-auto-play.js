@@ -241,6 +241,9 @@
   }, {
     name: "Повторение 8000/пачка(1650) 2",
     dict: cleanDuplications(engDictRecollection8000_part1650_2),
+  }, {
+    name: "Повторение 8000/пачка(1650) 3",
+    dict: cleanDuplications(engDictRecollection8000_part1650_3),
   }]
 
   let isPrevMassWord = false
