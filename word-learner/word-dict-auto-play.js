@@ -1322,6 +1322,52 @@
 
 })()
 
+// extract a word feature
+const extractAWordFeature = () => {
+  const searchInput = document.querySelector(".js-search-a-word__search")
+  const enText = document.querySelector(".js-search-a-word__en")
+  const transText = document.querySelector(".js-search-a-word__trans")
+  const transRu = document.querySelector(".js-search-a-word__ru")
+  const currentWord = document.querySelector(".js-search-a-word__current-word")
+  const getWord = document.querySelector(".js-search-a-word__get")
+
+  const fetchWordFromStore = () => {
+    const item = allWordsMap[searchInput.value]
+
+    if (!item) {
+      enText.innerHTML = "";
+      transText.innerHTML = "";
+      transRu.innerHTML = "";
+
+      return
+    }
+
+    enText.innerHTML = item.en;
+    transText.innerHTML = item.transcription;
+    transRu.innerHTML = item.ru + "; " + item.blocks.map((item) => {
+      return `${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+    }).join(";");
+  }
+
+  searchInput.onblur = () => {
+    fetchWordFromStore();
+  }
+
+  currentWord.onclick = () => {
+    const wordValue = document.querySelector(".word-value");
+
+    searchInput.value = wordValue.innerHTML;
+
+    fetchWordFromStore();
+  }
+
+  getWord.onclick = () => {
+    fetchWordFromStore();
+  }
+}
+
+extractAWordFeature();
+
 
 /*
   let text = JSON.stringify({hello:'example'});
