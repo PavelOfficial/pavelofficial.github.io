@@ -1,4 +1,18 @@
 (() => {
+  const excludeSublist = (words, exclusion) => {
+    const exclusionSet = new Set([
+      ...exclusion,
+    ].map(([playListIndex, wordIndex]) => {
+      return String(playListIndex) + '-' + String(wordIndex)
+    }))
+
+    const result = words.filter((word) => {
+      return !exclusionSet.has(String(word[0]) + '-' + String(word[1]))
+    })
+
+    return result
+  }
+
   const cleanDuplications = (words) => {
     const nextWords = []
 
@@ -250,6 +264,21 @@
   }, {
     name: "Повторение 8000/пачка(1650) 5",
     dict: cleanDuplications(engDictRecollection8000_part1650_5),
+  }, {
+    name: "Повторение 8000/пачка(1650) все",
+    dict: cleanDuplications([...engDictRecollection8000_part1650_1, ...engDictRecollection8000_part1650_2, ...engDictRecollection8000_part1650_3, ...engDictRecollection8000_part1650_4, ...engDictRecollection8000_part1650_5]),
+  }, {
+    name: "Повторение 8000/пачка(1650) все (сокращенный 1)",
+    dict: excludeSublist(
+      cleanDuplications([
+        ...engDictRecollection8000_part1650_1,
+        ...engDictRecollection8000_part1650_2,
+        ...engDictRecollection8000_part1650_3,
+        ...engDictRecollection8000_part1650_4,
+        ...engDictRecollection8000_part1650_5,
+      ]),
+      engDictRecollection8000_part1650_5_exclution_1,
+    ),
   }]
 
   let isPrevMassWord = false
@@ -886,8 +915,8 @@
           <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
           <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-            return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-          })}</div>
+        return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+      })}</div>
         </div>
       `
     } else {
@@ -1150,7 +1179,7 @@
     }
 
     if (selectDelayAfterValue !== undefined) {
-      handleSelectDelayAfterValueChange({ target: { value: selectDelayAfterValue } })
+      handleSelectDelayAfterValueChange({target: {value: selectDelayAfterValue}})
     }
 
     window.handleFromIndexBlur = (event) => {
@@ -1192,10 +1221,10 @@
             <option disabled>Плейлисты</option>
             <option value="">NONE</option>
             ${playLists.map((list) => {
-        const selected = list.name === localStorageCurrentSelection
-  
-        return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
-      }).join('')}
+      const selected = list.name === localStorageCurrentSelection
+
+      return `<option ${selected ? 'selected="selected"' : ''} value="${list.name}">${list.name}</option>`
+    }).join('')}
           </select>
         </div>
       </div>
