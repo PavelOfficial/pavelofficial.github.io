@@ -1373,7 +1373,7 @@ const extractAWordFeature = () => {
 
     enText.innerHTML = item.en;
     transText.innerHTML = item.transcription;
-    transRu.innerHTML = item.ru + "; " + item.blocks.map((item) => {
+    transRu.innerHTML = (item.ru ? item.ru + "; " : "") + item.blocks.map((item) => {
       return `${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
     }).join(";");
   }
