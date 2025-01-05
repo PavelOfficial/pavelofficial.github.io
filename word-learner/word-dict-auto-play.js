@@ -291,7 +291,10 @@
       ]),
       engDictRecollection8000_part1650_5_exclution_2,
     ),
-  }]
+  }, playlistSeparator, {
+    name: "Повторение 2ое - 8000/пачка(1650) 1",
+    dict: cleanDuplications(engDictRecollection_2_8000_part1650_1),
+  },]
 
   let isPrevMassWord = false
   let isPrevWord = false
