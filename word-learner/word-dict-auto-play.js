@@ -294,6 +294,9 @@
   }, playlistSeparator, {
     name: "Повторение 2ое - 8000/пачка(1650) 1",
     dict: cleanDuplications(engDictRecollection_2_8000_part1650_1),
+  }, {
+    name: "Повторение 2ое - 8000/пачка(1650) 2",
+    dict: cleanDuplications(engDictRecollection_2_8000_part1650_2),
   },]
 
   let isPrevMassWord = false
@@ -1223,7 +1226,7 @@
 
     const localStorageCurrentSelection = localStorage.getItem("current-list")
 
-    currentList = getListByName(localStorageCurrentSelection) || null
+    currentList = (localStorageCurrentSelection ? getListByName(localStorageCurrentSelection) : null) || null
     const currentListSet = currentList ? new Set(currentList.dict) : null
     const allChecked = currentListSet ? Array.from(currentListSet).every((item) => {
       return checkedWords.has(`${item[0]}-${item[1]}`)
@@ -1340,7 +1343,7 @@
   renderAll()
   renderPlaylistBox()
 
-  if (localStorageCurrentSelectionIndex !== undefined) {
+  if (localStorageCurrentSelectionIndex !== undefined && !!currentList) {
     const item = currentList.dict[parseInt(localStorageCurrentSelectionIndex, 10)]
 
     if (item) {
