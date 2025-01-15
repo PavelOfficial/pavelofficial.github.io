@@ -6,7 +6,7 @@
 
   // 0 25000 -
   const list = allMeanings.map((meaning, index) => {
-    if (!(index >= 0 && index <= 10000)) {
+    if (!(index >= 10001 && index <= 20000)) {
       return "";
     }
 
