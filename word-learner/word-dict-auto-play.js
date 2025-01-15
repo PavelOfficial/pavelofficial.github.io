@@ -136,31 +136,6 @@
     dict: [],
   }
 
-  ((() => {
-    const words2000 = engDictAllIndexes2000.map((item) => {
-      const word = dictMap[item[0]][item[1]]
-
-      return word
-    })
-
-    const words3000 = engDictAllIndexes3000.map((item) => {
-      const word = dictMap[item[0]][item[1]]
-
-      return word
-    })
-
-    const words5000 = engDictAllIndexes5000.map((item) => {
-      const word = dictMap[item[0]][item[1]]
-
-      return word
-    })
-
-    console.log("words2000: ", JSON.stringify(words2000))
-    console.log("words3000: ", JSON.stringify(words3000))
-    console.log("words5000: ", JSON.stringify(words5000))
-
-  })());
-
   // enWords8000
   // engWords2700
   const playLists = [{
