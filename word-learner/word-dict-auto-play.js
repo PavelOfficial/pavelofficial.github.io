@@ -300,7 +300,10 @@
   }, {
     name: "Повторение 2ое - 8000/пачка(1650) 3",
     dict: cleanDuplications(engDictRecollection_2_8000_part1650_3),
-  },]
+  }, {
+    name: "Повторение 2ое - 8000/пачка(1650) 4 (фразовые глаголы)",
+    dict: cleanDuplications(engDictRecollection_2_8000_part1650_4),
+  }]
 
   let isPrevMassWord = false
   let isPrevWord = false
