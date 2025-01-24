@@ -22,6 +22,9 @@
       <input type="checkbox" data-color="#aaffff" name="group-${index}-5" value="" />
       <input type="checkbox" data-color="#aaaaff" name="group-${index}-6" value="" />
       <input type="checkbox" data-color="#aaaaaa" name="group-${index}-7" value="" />
+      <input type="checkbox" data-color="#77aa77" name="group-${index}-8" value="" />
+      <input type="checkbox" data-color="#aa7777" name="group-${index}-9" value="" />
+      <input type="checkbox" data-color="#7777aa" name="group-${index}-10" value="" />
     </td></tr>`
   }).join("")
 
