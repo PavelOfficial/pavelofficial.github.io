@@ -309,6 +309,9 @@
   }, {
     name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 1)",
     dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_1),
+  }, {
+    name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 2)",
+    dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_2),
   }]
 
   let isPrevMassWord = false
