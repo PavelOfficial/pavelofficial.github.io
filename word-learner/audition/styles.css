@@ -50,7 +50,7 @@ ul.themes li.themes-li.selected {
 }
 
 .audio-player {
-    height: 150px;
+    height: 250px;
 }
 
 .text-container {
@@ -58,4 +58,79 @@ ul.themes li.themes-li.selected {
     width: 100%;
     overflow-y: scroll;
 }
+
+/* PROGRESS */
+.audio-player-progress {
+
+}
+
+.audio-player-progress__pad {
+    padding: 5px 30px 0 30px;
+}
+
+.audio-player-progress__captions {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.audio-player-progress__captions > * {
+    flex-grow: 1;
+    width: 33%;
+    min-width: 33%;
+}
+
+.audio-player-progress__current-seek {
+    text-align: center;
+}
+
+.audio-player-progress__total-seek {
+    text-align: right;
+}
+
+.audio-player-progress__bar {
+    height: 5px;
+    width: 100%;
+    background: #d7d7d7;
+}
+
+.audio-player-progress__bar-progress {
+    width: 50%;
+    background: #1d58ce;
+    height: 5px;
+}
+
+.audio-player-progress__handles {
+    padding-left: 10px;
+    margin-top: 5px;
+    width: 100%;
+    position: relative;
+}
+
+.audio-player-progress__direct-handle {
+    background: #1d58ce;
+    border-radius: 22px;
+    width: 41px;
+    height: 41px;
+    margin-bottom: 5px;
+}
+
+.audio-player-progress__slow-handle {
+    background: #1d58ce;
+    border-radius: 22px;
+    width: 41px;
+    height: 41px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.audio-player-progress__slow-handle-notch {
+    width: 1px;
+    background: #1d58ce;
+    height: 65px;
+    position: relative;
+    top: -65px;
+}
+
+/* END PROGRESS */
 
