@@ -28,6 +28,34 @@
     document.querySelector('.theme-list-inner').innerHTML = audioListHtml
   }
 
+  const splitText = (text) => {
+    const doublesReg = (new RegExp("", "gi"))
+    const quotesReg = (new RegExp("”", "gi"))
+    const word2 = text.trim().split(/\n+/).join('\n')
+      .split(/\.\'|\”[\s\n]?/gi).join('.\'\n\n')
+      .split(/\?\'|\”[\s\n]?/gi).join('?\'\n\n')
+      .split(/\!\'|\”[\s\n]?/gi).join('!\'\n\n')
+      .split(/\.(?:[^\'\S]|\n)/gi).join('.\n\n')
+      .split(/\?(?:[^\'\S]|\n)/gi).join('?\n\n')
+      .split(/\!(?:[^\'\S]|\n)/gi).join('!\n\n')
+      .split(/\n\n\n\n/).join('\n\n')
+      .split(/\n\n\n/).join('\n\n')
+      .split(/\n\n/).join('\n\n\n')
+      .replace(doublesReg, '')
+      .replace(doublesReg, '')
+      .replace(doublesReg, '')
+      .replace(doublesReg, '')
+      .replace(quotesReg, '')
+      .replace(quotesReg, '')
+      .replace(quotesReg, '')
+      .replace(quotesReg, '')
+
+    const word3 = word2.split(/\n+/)
+
+    return word3
+  }
+
+
   const selectThemeItem = (item, index) => {
     const prevSelected = document.querySelector(".themes-li.selected")
 
@@ -55,6 +83,28 @@
       },
     });
 
+    const enList = splitText(auditionItem.en)
+    const ruList = splitText(auditionItem.ru)
+
+    const html = enList.map((enItem, index) => {
+      const ruItem = ruList[index]
+
+      return `
+        <div class="text-container_item">
+          <div class="text-container_en">
+            ${enItem}
+          </div>
+          <div class="text-container_ru">
+            ${ruItem}
+          </div>
+        </div>
+      `
+    }).join("")
+
+    document.querySelector(".text-container").innerHTML = html
+
+    console.log(enList)
+    console.log(ruList)
   }
 
   const applyProgressToUI = (value) => {
@@ -231,7 +281,7 @@
       const progressSlowHandle = event.target.closest(".audio-player-progress__slow-handle")
 
       if (progressSlowHandle) {
-        const slowingRate = 0.1
+        const slowingRate = 0.25
         startDrag(event, ".audio-player-progress__slow-handle", (deltaX) => {
           applyProgressToUI(calcProgress(deltaX * slowingRate))
         }, (deltaX) => {

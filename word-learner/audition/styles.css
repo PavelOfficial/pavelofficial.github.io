@@ -159,3 +159,27 @@ ul.themes li.themes-li.selected {
 .btt-icon.btt-icon.btt-icon {
     font-size: 20px;
 }
+
+.text-container {
+    padding: 7px;
+    font-size: 12px;
+}
+
+
+.text-container_item {
+    display: flex;
+    flex-direction: row;
+    padding: 3px 0;
+}
+
+.text-container_en {
+    width: 50%;
+    min-width: 50%;
+    padding-right: 5px;
+}
+
+.text-container_ru {
+    width: 50%;
+    min-width: 50%;
+    padding-left: 5px;
+}
