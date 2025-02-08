@@ -14,8 +14,13 @@ body, html {
 
 .theme-list,
 .theme-list-inner {
-    width: 165px;
-    max-width: 165px;
+    font-size: 12px;
+    width: 125px;
+    max-width: 125px;
+}
+
+.audio-player__controls {
+    padding: 10px;
 }
 
 .theme-list {
@@ -34,7 +39,7 @@ ul.themes {
 }
 
 ul.themes li.themes-li {
-    padding: 15px;
+    padding: 5px;
     cursor: pointer;
 }
 
@@ -50,7 +55,7 @@ ul.themes li.themes-li.selected {
 }
 
 .audio-player {
-    height: 250px;
+    height: 275px;
 }
 
 .text-container {
@@ -61,7 +66,7 @@ ul.themes li.themes-li.selected {
 
 /* PROGRESS */
 .audio-player-progress {
-
+    margin-bottom: 5px;
 }
 
 .audio-player-progress__pad {
@@ -103,25 +108,41 @@ ul.themes li.themes-li.selected {
 .audio-player-progress__handles {
     padding-left: 10px;
     margin-top: 5px;
-    width: 100%;
+    padding-right: 50px;
+    height: 87px;
+}
+
+.audio-player-progress__handles-progress-box {
     position: relative;
+    width: 100%;
 }
 
 .audio-player-progress__direct-handle {
-    background: #1d58ce;
+    position: absolute;
+    background: #d2ddf8;
+    border: 1px solid #1d58ce;
+    box-sizing: border-box;
     border-radius: 22px;
     width: 41px;
     height: 41px;
     margin-bottom: 5px;
+    top: 0;
+    z-index: 2;
+    user-select: none;
 }
 
 .audio-player-progress__slow-handle {
-    background: #1d58ce;
+    position: absolute;
+    background: #d2ddff;
+    border: 1px solid #1d58ce;
+    box-sizing: border-box;
     border-radius: 22px;
     width: 41px;
     height: 41px;
-    padding-left: 20px;
+    padding-left: 19px;
     box-sizing: border-box;
+    top: 46px;
+    user-select: none;
 }
 
 .audio-player-progress__slow-handle-notch {
@@ -134,3 +155,7 @@ ul.themes li.themes-li.selected {
 
 /* END PROGRESS */
 
+
+.btt-icon.btt-icon.btt-icon {
+    font-size: 20px;
+}

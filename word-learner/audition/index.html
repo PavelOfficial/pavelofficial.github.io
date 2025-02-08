@@ -56,40 +56,55 @@
           </div>
         </div>
         <div class="audio-player-progress__handles">
-          <div class="audio-player-progress__direct-handle">
-          </div>
-          <div class="audio-player-progress__slow-handle">
-            <div class="audio-player-progress__slow-handle-notch"></div>
+          <div class="audio-player-progress__handles-progress-box">
+            <div class="audio-player-progress__direct-handle">
+            </div>
+            <div class="audio-player-progress__slow-handle">
+              <div class="audio-player-progress__slow-handle-notch"></div>
+            </div>
           </div>
         </div>
       </div>
-      <div>
-        <button onclick="pauseAudio()">
-          Пауза
-        </button>
-        <button onclick="playAudio()">
-          Играть
-        </button>
-        |||
-        <button onclick="onRewindBack5Sec()">
-          До 5 сек
-        </button>
-        <button onclick="onRewindBack10Sec()">
-          До 10 сек
-        </button>
-        <button onclick="onRewindBack15Sec()">
-          До 15 сек
-        </button>
+      <div class="audio-player__controls">
+        <div class="mb-1">
+          <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="pauseAudio()">
+            ⏸
+          </button>
+          <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="playAudio()">
+            ⏵
+          </button>
+        </div>
+        <div>
+          <div class="mb-1">
+            <button class="btn btn-sm btn-primary" onclick="onRewindBack15Sec()">
+              -15
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindBack10Sec()">
+              -10
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindBack5Sec()">
+              -5
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindBack2_5Sec()">
+              -2.5
+            </button>
+          </div>
 
-        <button onclick="onRewindNext5Sec()">
-          После 5 сек
-        </button>
-        <button onclick="onRewindNext10Sec()">
-          После 10 сек
-        </button>
-        <button onclick="onRewindNext15Sec()">
-          После 15 сек
-        </button>
+          <div>
+            <button class="btn btn-sm btn-primary" onclick="onRewindNext2_5Sec()">
+              +2.5
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindNext5Sec()">
+              +5
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindNext10Sec()">
+              +10
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="onRewindNext15Sec()">
+              +15
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="text-container">

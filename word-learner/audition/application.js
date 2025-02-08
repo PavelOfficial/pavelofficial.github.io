@@ -3,6 +3,11 @@
   let soundValue = 1
   let auditions = null
   let currentAudio = null
+  let isDragging = false
+
+  const leadingZeros = (value, count) => {
+    return `0000000000000${value}`.slice(-count)
+  }
 
   const fetchAuditions = async () => {
     const auditionPromises = auditionUrls.map((url) => {
@@ -41,24 +46,72 @@
     currentAudio = new Howl({
       src: [auditionItem.audio],
       volume: soundValue,
+      onload: () => {
+        const duration = currentAudio.duration()
+        const durationSec = parseInt(duration % 60, 10)
+        const durationMin = parseInt(duration / 60, 10)
+
+        document.querySelector(".audio-player-progress__total-seek").innerHTML = `${leadingZeros(durationMin, 2)}:${leadingZeros(durationSec, 2)}`
+      },
     });
+
+  }
+
+  const applyProgressToUI = (value) => {
+    const progressPercent = `${(value) * 100}%`
+    const duration = currentAudio.duration()
+    const seek = duration * value
+    const seekSec = parseInt(seek % 60, 10)
+    const seekMin = parseInt(seek / 60, 10)
+
+    document.querySelector(".audio-player-progress__direct-handle").style.left = progressPercent
+    document.querySelector(".audio-player-progress__slow-handle").style.left = progressPercent
+    document.querySelector(".audio-player-progress__bar-progress").style.width = progressPercent
+
+    document.querySelector(".audio-player-progress__current-seek").innerHTML = `${leadingZeros(seekMin, 2)}:${leadingZeros(seekSec, 2)}`
+  }
+
+  let progressRequestAminationID = null
+  const watchProgress = () => {
+    const renderProgress = () => {
+      const seek = currentAudio.seek()
+      const duration = currentAudio.duration()
+
+      applyProgressToUI(seek / duration)
+    }
+
+    renderProgress()
+
+    const nextRender = () => {
+      progressRequestAminationID = requestAnimationFrame(() => {
+        if (!isDragging) {
+          renderProgress()
+        }
+
+        nextRender()
+      })
+    }
+
+    nextRender()
+  }
+
+  const finishProgress = () => {
+    cancelAnimationFrame(progressRequestAminationID);
   }
 
   window.playAudio = () => {
-    if (currentAudio.state() === "loaded") {
+    if (currentAudio && currentAudio.state() === "loaded") {
       currentAudio.play()
+      watchProgress()
     }
   }
 
   window.pauseAudio = () => {
-    if (currentAudio.state() === "loaded") {
+    if (currentAudio && currentAudio.state() === "loaded") {
       currentAudio.pause()
 
-      console.log("currentAudio.duration(): ", currentAudio.duration())
-      console.log("currentAudio.seek(): ", currentAudio.seek())
+      finishProgress()
     }
-
-    console.log("currentAudio: ", currentAudio)
   }
 
   const rewind = (delta) => {
@@ -77,24 +130,125 @@
     currentAudio.seek(nextSeek)
   }
 
+  window.onRewindBack2_5Sec = () => rewind(-2.5);
   window.onRewindBack5Sec = () =>  rewind(-5);
   window.onRewindBack10Sec = () => rewind(-10);
   window.onRewindBack15Sec = () => rewind(-15);
+
+  window.onRewindNext2_5Sec = () => rewind(2.5);
   window.onRewindNext5Sec = () =>  rewind(5);
   window.onRewindNext10Sec = () => rewind(10);
   window.onRewindNext15Sec = () => rewind(15);
 
+  const startDrag = (mouseDownEvent, selector, moveCallback, endCallback) => {
+    isDragging = true
+
+    let downMouseX
+
+    if (mouseDownEvent.touches) {
+      downMouseX = mouseDownEvent.touches[0].pageX;
+    } else {
+      downMouseX = mouseDownEvent.x
+    }
+
+    const draggedItem = document.querySelector(selector)
+
+    const handleMouseMove = (event) => {
+      let x
+
+      if (event.touches) {
+        x = event.touches[0].pageX;
+      } else {
+        x = event.x
+      }
+
+      moveCallback(x - downMouseX)
+    }
+
+    const handleMouseUp = (event) => {
+      document.removeEventListener("mousemove", handleMouseMove)
+      document.removeEventListener("touchmove", handleMouseMove)
+      document.removeEventListener("mouseup", handleMouseUp)
+      document.removeEventListener("touchend", handleMouseUp)
+
+      let x
+
+      if (event.changedTouches) {
+        x = event.changedTouches[0].pageX;
+      } else {
+        x = event.x
+      }
+
+      isDragging = false
+      endCallback(x - downMouseX)
+    }
+
+    document.addEventListener("mousemove", handleMouseMove)
+    document.addEventListener("touchmove", handleMouseMove)
+    document.addEventListener("mouseup", handleMouseUp)
+    document.addEventListener("touchend", handleMouseUp)
+  }
+
   const initFeatures = () => {
     document.addEventListener("click", (event) => {
       const closestThemesLi = event.target.closest(".themes-li")
+
       if (closestThemesLi) {
         const index = parseInt(closestThemesLi.getAttribute("data-index"), 10)
 
         selectThemeItem(closestThemesLi, index)
+        finishProgress()
       }
 
-
     })
+
+    const startDragEventHandler = (event) => {
+      const progressHandle = event.target.closest(".audio-player-progress__direct-handle")
+      const progressWidth = document.querySelector(".audio-player-progress__bar-progress").getBoundingClientRect().width
+      const calcProgress = (deltaX) => {
+        const totalWidth = document.querySelector(".audio-player-progress__bar").getBoundingClientRect().width
+
+        const currentProgressPercent = progressWidth / totalWidth
+        const currentProgressDeltaXPercent = deltaX / totalWidth
+        const resultProgressPercent = Math.min(Math.max(currentProgressPercent + currentProgressDeltaXPercent, 0), 1)
+
+        return resultProgressPercent
+      }
+
+      if (progressHandle) {
+        startDrag(event, ".audio-player-progress__direct-handle", (deltaX) => {
+          applyProgressToUI(calcProgress(deltaX))
+        }, (deltaX) => {
+          const progress = calcProgress(deltaX)
+          const duration = currentAudio.duration()
+
+          currentAudio.seek(progress * duration)
+          applyProgressToUI(progress)
+        })
+        return
+      }
+
+      const progressSlowHandle = event.target.closest(".audio-player-progress__slow-handle")
+
+      if (progressSlowHandle) {
+        const slowingRate = 0.1
+        startDrag(event, ".audio-player-progress__slow-handle", (deltaX) => {
+          applyProgressToUI(calcProgress(deltaX * slowingRate))
+        }, (deltaX) => {
+          const progress = calcProgress(deltaX * slowingRate)
+          const duration = currentAudio.duration()
+
+          currentAudio.seek(progress * duration)
+          applyProgressToUI(progress)
+        })
+
+        return
+      }
+    }
+
+    document.addEventListener("mousedown", startDragEventHandler)
+    document.addEventListener("touchstart", startDragEventHandler)
+
   }
 
   const initApp = async () => {
