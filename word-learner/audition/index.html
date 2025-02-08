@@ -35,20 +35,52 @@
 <script src="../dist/howler.core.min.js" type="text/javascript"></script>
 <script src="../dist/howler.min.js" type="text/javascript"></script>
 
-<div>
-  <div>
-    Список тем
-  </div>
-  <div>
-    <div>
-      Плеер
+<div class="layout-container">
+  <div class="theme-list">
+    <div class="theme-list-inner">
+
     </div>
-    <div>
+  </div>
+  <div class="player-container">
+    <div class="audio-player">
+      Плеер
+      <div>
+        <button onclick="pauseAudio()">
+          Пауза
+        </button>
+        <button onclick="playAudio()">
+          Играть
+        </button>
+        |||
+        <button onclick="onRewindBack5Sec()">
+          До 5 сек
+        </button>
+        <button onclick="onRewindBack10Sec()">
+          До 10 сек
+        </button>
+        <button onclick="onRewindBack15Sec()">
+          До 15 сек
+        </button>
+
+        <button onclick="onRewindNext5Sec()">
+          После 5 сек
+        </button>
+        <button onclick="onRewindNext10Sec()">
+          После 10 сек
+        </button>
+        <button onclick="onRewindNext15Sec()">
+          После 15 сек
+        </button>
+      </div>
+    </div>
+    <div class="text-container">
       Текст
     </div>
   </div>
 </div>
 
+<script src="./assets-map.js" type="text/javascript"></script>
+<script src="./application.js" type="text/javascript"></script>
 
 </body>
 </html>

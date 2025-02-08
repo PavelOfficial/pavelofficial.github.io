@@ -1,0 +1,61 @@
+
+body, html {
+    background: #eff6fa;
+    height: 100vh;
+    height: 100dvh;
+    font-family: Arial;
+}
+
+.layout-container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+}
+
+.theme-list,
+.theme-list-inner {
+    width: 165px;
+    max-width: 165px;
+}
+
+.theme-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.theme-list-inner {
+    overflow-y: scroll;
+    flex: 1;
+}
+
+ul.themes {
+    margin: 0;
+    padding: 0;
+}
+
+ul.themes li.themes-li {
+    padding: 15px;
+    cursor: pointer;
+}
+
+ul.themes li.themes-li.selected {
+    background: #a4c4ef;
+}
+
+.player-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.audio-player {
+    height: 150px;
+}
+
+.text-container {
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: scroll;
+}
+
