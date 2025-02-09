@@ -199,7 +199,8 @@ ul.themes li.themes-li.selected {
     justify-content: center;
     height: 50px;
     max-height: 50px;
-    padding-top: 19px;
+    padding-top: 9px;
+    padding-bottom: 10px;
 }
 
 .text-container.hide-ru .text-container_ru {
