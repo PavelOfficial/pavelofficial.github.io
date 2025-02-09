@@ -193,3 +193,19 @@ ul.themes li.themes-li.selected {
     min-width: 50%;
     padding-left: 5px;
 }
+
+.text-container-controls {
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    max-height: 50px;
+    padding-top: 19px;
+}
+
+.text-container.hide-ru .text-container_ru {
+    visibility: hidden;
+}
+
+.text-container-controls > * {
+    margin: 0 2px;
+}

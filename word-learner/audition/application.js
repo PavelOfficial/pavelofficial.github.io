@@ -180,6 +180,8 @@
     currentAudio.seek(nextSeek)
   }
 
+
+
   window.onRewindBack2_5Sec = () => rewind(-2.5);
   window.onRewindBack5Sec = () =>  rewind(-5);
   window.onRewindBack10Sec = () => rewind(-10);
@@ -199,6 +201,68 @@
       listElem.style.display = ""
     }
   }
+
+  window.switchRuDisplay = () => {
+    const listElem = document.querySelector(".text-container")
+    const currentClass = listElem.getAttribute("class")
+
+    if (/hide\-ru/.test(currentClass)) {
+      listElem.setAttribute("class", "text-container")
+    } else {
+      listElem.setAttribute("class", "text-container hide-ru")
+    }
+  }
+
+  window.switchAllDisplay = () => {
+    const allTexts = Array.from(document.querySelectorAll(".text-container .text-container_item"))
+
+    if (allTexts.length) {
+      const firstElement = allTexts[0]
+      const firstElementVisibility = firstElement.style.visibility
+
+      if (firstElementVisibility === "hidden") {
+        allTexts.forEach((text) => {
+          text.style.visibility = ""
+        })
+      } else {
+        allTexts.forEach((text) => {
+          text.style.visibility = "hidden"
+        })
+      }
+    }
+  }
+
+  const showSentences = (delta) => {
+    const allTexts = Array.from(document.querySelectorAll(".text-container .text-container_item"))
+
+    if (allTexts.length) {
+      let firstTextIndex = allTexts.findIndex((item) => {
+        return item.style.visibility === "hidden"
+      })
+
+      if (firstTextIndex === -1) {
+        firstTextIndex = allTexts.length
+      }
+
+      const secondIndex = firstTextIndex + delta
+
+      const textSlice = allTexts.slice(secondIndex > firstTextIndex ? firstTextIndex : secondIndex, secondIndex > firstTextIndex ? secondIndex : firstTextIndex)
+
+      textSlice.forEach((item) => {
+        if (delta < 0) {
+          item.style.visibility = "hidden"
+        } else {
+          item.style.visibility = ""
+        }
+      })
+    }
+  }
+
+  window.showPrev5Sentences = () => showSentences(-5)
+  window.showPrev1Sentences = () => showSentences(-1)
+  window.showNext1Sentences = () => showSentences(1)
+  window.showNext5Sentences = () => showSentences(5)
+
 
   const startDrag = (mouseDownEvent, selector, moveCallback, endCallback) => {
     isDragging = true
