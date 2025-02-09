@@ -25,6 +25,10 @@ body, html {
     padding: 10px;
 }
 
+.audio-player__controls .btn {
+    margin: 0 2px;
+}
+
 .audio-player__controls-flex {
     display: flex;
     flex-direction: row;
@@ -57,13 +61,12 @@ ul.themes li.themes-li.selected {
 
 .player-container {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: block;
+    height: 100vh;
 }
 
 .audio-player {
-    height: 275px;
+    height: 290px;
 }
 
 .text-container {
@@ -203,19 +206,32 @@ ul.themes li.themes-li.selected {
 
 .text-container-controls {
     display: flex;
-    justify-content: center;
-    height: 100px;
-    max-height: 100px;
+    flex-direction: column;
+    height: 110px;
+    max-height: 110px;
     padding-top: 9px;
-    padding-bottom: 60px;
+    padding-bottom: 10px;
+}
+
+.text-container-controls .btn {
+    margin: 0 5px;
 }
 
 .text-container.hide-ru .text-container_ru {
     visibility: hidden;
 }
 
-.text-container-controls > * {
-    margin: 0 2px;
+.text-container-controls_showings {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 5px;
+}
+
+.text-container-controls_other {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .icon-fix.icon-fix.icon-fix.icon-fix.icon-fix {
