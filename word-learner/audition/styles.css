@@ -1,9 +1,11 @@
 
 body, html {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
     background: #eff6fa;
+    font-family: Arial, Verdana, sans-serif;
     height: 100vh;
-    height: 100dvh;
-    font-family: Arial;
 }
 
 .layout-container {
@@ -67,7 +69,17 @@ ul.themes li.themes-li.selected {
 .text-container {
     flex-grow: 1;
     width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.text-container-inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
     overflow-y: scroll;
+    padding: 7px;
+    font-size: 12px;
 }
 
 /* PROGRESS */
@@ -166,12 +178,6 @@ ul.themes li.themes-li.selected {
     font-size: 20px;
 }
 
-.text-container {
-    padding: 7px;
-    font-size: 12px;
-}
-
-
 .text-container_item {
     display: flex;
     flex-direction: row;
@@ -209,4 +215,14 @@ ul.themes li.themes-li.selected {
 
 .text-container-controls > * {
     margin: 0 2px;
+}
+
+.icon-fix.icon-fix.icon-fix.icon-fix.icon-fix {
+    height: auto;
+}
+
+.player-container-up {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }

@@ -101,7 +101,7 @@
       `
     }).join("")
 
-    document.querySelector(".text-container").innerHTML = html
+    document.querySelector(".text-container-inner").innerHTML = html
 
     console.log(enList)
     console.log(ruList)
