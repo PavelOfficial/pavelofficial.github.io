@@ -23,6 +23,12 @@ body, html {
     padding: 10px;
 }
 
+.audio-player__controls-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .theme-list {
     display: flex;
     flex-direction: column;
@@ -100,7 +106,7 @@ ul.themes li.themes-li.selected {
 }
 
 .audio-player-progress__bar-progress {
-    width: 50%;
+    width: 0%;
     background: #1d58ce;
     height: 5px;
 }
@@ -172,10 +178,14 @@ ul.themes li.themes-li.selected {
     padding: 3px 0;
 }
 
+.text-container_item:nth-child(2n) {
+    background: #dce1f1;
+}
+
 .text-container_en {
     width: 50%;
     min-width: 50%;
-    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .text-container_ru {

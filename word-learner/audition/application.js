@@ -189,6 +189,16 @@
   window.onRewindNext5Sec = () =>  rewind(5);
   window.onRewindNext10Sec = () => rewind(10);
   window.onRewindNext15Sec = () => rewind(15);
+  window.switchTopicList = () => {
+    const listElem = document.querySelector(".theme-list")
+    const display = listElem.style.display
+
+    if (display !== "none") {
+      listElem.style.display = "none"
+    } else {
+      listElem.style.display = ""
+    }
+  }
 
   const startDrag = (mouseDownEvent, selector, moveCallback, endCallback) => {
     isDragging = true

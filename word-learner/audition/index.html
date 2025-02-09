@@ -47,7 +47,7 @@
         <div class="audio-player-progress__pad">
           <div class="audio-player-progress__captions">
             <div></div>
-            <div class="audio-player-progress__current-seek">01:00</div>
+            <div class="audio-player-progress__current-seek">00:00</div>
             <div class="audio-player-progress__total-seek">00:00</div>
           </div>
           <div class="audio-player-progress__bar">
@@ -66,13 +66,20 @@
         </div>
       </div>
       <div class="audio-player__controls">
-        <div class="mb-1">
-          <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="pauseAudio()">
-            ⏸
-          </button>
-          <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="playAudio()">
-            ⏵
-          </button>
+        <div class="mb-1 audio-player__controls-flex">
+          <div>
+            <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="pauseAudio()">
+              ⏸
+            </button>
+            <button type="button" class="btn btn-sm btn-primary btt-icon" onclick="playAudio()">
+              ⏵
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-primary btt-icon" onclick="switchTopicList()">
+              ☰
+            </button>
+          </div>
         </div>
         <div>
           <div class="mb-1">
