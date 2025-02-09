@@ -67,7 +67,8 @@ ul.themes li.themes-li.selected {
 }
 
 .text-container {
-    flex-grow: 1;
+    height: 45vh;
+    max-height: 45vh;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -203,10 +204,10 @@ ul.themes li.themes-li.selected {
 .text-container-controls {
     display: flex;
     justify-content: center;
-    height: 50px;
-    max-height: 50px;
+    height: 100px;
+    max-height: 100px;
     padding-top: 9px;
-    padding-bottom: 10px;
+    padding-bottom: 60px;
 }
 
 .text-container.hide-ru .text-container_ru {
