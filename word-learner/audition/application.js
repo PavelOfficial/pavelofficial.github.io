@@ -371,11 +371,16 @@
       if (closestThemesLi) {
         const index = parseInt(closestThemesLi.getAttribute("data-index"), 10)
 
+        localStorage.setItem("theme-index", String(index))
+
         selectThemeItem(closestThemesLi, index)
         finishProgress()
       }
 
     })
+
+    const initThemeIndex = localStorage.getItem("theme-index") || document.querySelector(".themes-li").getAttribute("data-index")
+    document.querySelector(`.themes-li[data-index="${initThemeIndex}"]`).click()
 
     const startDragEventHandler = (event) => {
       const progressHandle = event.target.closest(".audio-player-progress__direct-handle")
