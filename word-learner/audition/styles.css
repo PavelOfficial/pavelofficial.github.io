@@ -26,11 +26,11 @@ body, html {
 }
 
 .audio-player__controls .btn {
-    margin: 0 8px;
-    padding-right: 2px;
-    padding-left: 2px;
+    margin: 0 3px;
+    padding-right: 6px;
+    padding-left: 6px;
 }
-
+/*
 .audio-player__controls .btn:first-child {
     margin-left: 0;
 }
@@ -38,6 +38,7 @@ body, html {
 .audio-player__controls .btn:last-child {
     margin-right: 0;
 }
+ */
 
 .audio-player__controls-flex {
     display: flex;
@@ -65,7 +66,8 @@ ul.themes li.themes-li {
     cursor: pointer;
 }
 
-ul.themes li.themes-li.selected {
+ul.themes li.themes-li.selected,
+ul.categories li.category-li.selected {
     background: #a4c4ef;
 }
 
@@ -235,8 +237,8 @@ ul.themes li.themes-li.selected {
 
 .text-container-controls .btn {
     margin: 0 20px;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .text-container.hide-ru .text-container_ru {
@@ -278,4 +280,26 @@ ul.themes li.themes-li.selected {
     display: flex;
     flex-direction: row;
     padding-bottom: 10px;
+}
+
+ul.themes {
+    margin: 0;
+    padding: 0;
+}
+
+ul.themes li.themes-li {
+    padding: 5px;
+    cursor: pointer;
+}
+
+ul.categories {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #5e5e5e;
+}
+
+ul.categories li.category-li {
+    padding: 5px;
+    cursor: pointer;
+    color: #5b7fc6;
 }

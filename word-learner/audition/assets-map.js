@@ -1,4 +1,4 @@
-const auditionUrls = [
+const auditionUrlsA1EnglishCounsel = [
   "/audition/texts/0001.json",
   "/audition/texts/0002.json",
   "/audition/texts/0003.json",
@@ -14,4 +14,18 @@ const auditionUrls = [
   "/audition/texts/0013.json",
   "/audition/texts/0014.json",
   "/audition/texts/0015.json",
+]
+
+const categories = [
+  {
+    title: "A1 English Counsel",
+    auditions: auditionUrlsA1EnglishCounsel,
+  },
+  {
+    title: "Random",
+    auditions: [
+      "/audition/texts/0016.json",
+      "/audition/texts/0017.json",
+    ],
+  },
 ]

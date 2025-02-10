@@ -1,5 +1,5 @@
 (() => {
-
+  let currentCategory = null
   let soundValue = 1
   let auditions = null
   let currentAudio = null
@@ -10,7 +10,13 @@
   }
 
   const fetchAuditions = async () => {
-    const auditionPromises = auditionUrls.map((url) => {
+    const allAuditionUrls = categories.reduce((result, item) => {
+      result.push(...item.auditions)
+
+      return result
+    }, [])
+
+    const auditionPromises = allAuditionUrls.map((url) => {
       return fetch(url)
     })
 
@@ -19,13 +25,29 @@
 
     console.log("allSettledResultJSONs all: ", allSettledResultJSONs.map(result => result.value))
 
-    return allSettledResultJSONs.map(result => result.value)
+    return allSettledResultJSONs.map((result, index) => ({ ...result.value, url: allAuditionUrls[index] }))
+  }
+
+  const renderCategories = () => {
+    const html =`
+      <ul class="categories">${categories.map((audition) => audition.title).map((item, index) => `<li data-category-index="${index}" class="category-li">${item}</li>`).join("")}</ul>      
+    `
+
+    document.querySelector('.categories-box').innerHTML = html
+  }
+
+  const renderThemes = () => {
+    const auditionsSet = new Set(currentCategory.auditions)
+
+    const html =`
+      <ul class="themes">${auditions.filter(({ url }) => { return auditionsSet.has(url) }).map((audition) => audition.title).map((item, index) => `<li data-index="${index}" class="themes-li">${item}</li>`).join("")}</ul>      
+    `
+
+    document.querySelector('.themes-box').innerHTML = html
   }
 
   const render = () => {
-    const audioListHtml = `<ul class="themes">${auditions.map((audition) => audition.title).map((item, index) => `<li data-index="${index}" class="themes-li">${item}</li>`).join("")}</ul>`
-
-    document.querySelector('.theme-list-inner').innerHTML = audioListHtml
+    renderCategories();
   }
 
   const splitText = (text) => {
@@ -55,6 +77,41 @@
     return word3
   }
 
+  const initSelectTheme = () => {
+    const initThemeIndex = localStorage.getItem("theme-index") || document.querySelector(".themes-li").getAttribute("data-index")
+
+    const item = document.querySelector(`.themes-li[data-index="${initThemeIndex}"]`)
+
+    if (item) {
+      item.click()
+    }
+  }
+
+  const initSelectCategory = () => {
+    const initThemeIndex = localStorage.getItem("category-index") || document.querySelector(".category-li").getAttribute("data-category-index")
+
+    const item = document.querySelector(`.category-li[data-category-index="${initThemeIndex}"]`)
+
+    if (item) {
+      item.click()
+    }
+  }
+
+  const selectCategoryItem = (item, index) => {
+    const prevSelected = document.querySelector(".category-li.selected")
+
+    if (prevSelected) {
+      prevSelected.setAttribute("class", "category-li")
+    }
+
+    item.setAttribute("class", "category-li selected")
+
+
+    currentCategory = categories[index]
+
+    renderThemes()
+    initSelectTheme()
+  }
 
   const selectThemeItem = (item, index) => {
     const prevSelected = document.querySelector(".themes-li.selected")
@@ -187,8 +244,6 @@
 
     currentAudio.seek(nextSeek)
   }
-
-
 
   window.onRewindBack2_5Sec = () => rewind(-2.5);
   window.onRewindBack5Sec = () =>  rewind(-5);
@@ -377,10 +432,20 @@
         finishProgress()
       }
 
+      const closestCategoryLi = event.target.closest(".category-li")
+
+      if (closestCategoryLi) {
+        const index = parseInt(closestCategoryLi.getAttribute("data-category-index"), 10)
+
+        localStorage.setItem("category-index", String(index))
+
+        selectCategoryItem(closestCategoryLi, index)
+        finishProgress()
+      }
+
     })
 
-    const initThemeIndex = localStorage.getItem("theme-index") || document.querySelector(".themes-li").getAttribute("data-index")
-    document.querySelector(`.themes-li[data-index="${initThemeIndex}"]`).click()
+    initSelectCategory()
 
     const startDragEventHandler = (event) => {
       const progressHandle = event.target.closest(".audio-player-progress__direct-handle")
