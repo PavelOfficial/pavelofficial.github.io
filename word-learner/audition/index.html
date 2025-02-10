@@ -36,9 +36,18 @@
 <script src="../dist/howler.min.js" type="text/javascript"></script>
 
 <div class="layout-container">
-  <div class="theme-list">
-    <div class="theme-list-inner">
+  <div class="layout-top">
+    <div class="layout-top-inner">
+      <div class="theme-list">
+        <div class="theme-list-inner">
 
+        </div>
+      </div>
+      <div class="text-container">
+        <div class="text-container-inner">
+
+        </div>
+      </div>
     </div>
   </div>
   <div class="player-container">
@@ -67,84 +76,76 @@
           </div>
         </div>
         <div class="audio-player__controls">
-          <div class="mb-1 audio-player__controls-flex">
+          <div class="mb-3 audio-player__controls-flex">
             <div>
-              <button type="button" class="btn btn-primary btt-icon" onclick="pauseAudio()">
+              <button type="button" class="btn btn-primary btt-icon btn-pause" onclick="pauseAudio()">
                 <span class="pause-icon icon bi icon-fix">
                   
                 </span>
               </button>
-              <button type="button" class="btn btn-primary btt-icon" onclick="playAudio()">
+              <button type="button" class="btn btn-primary btt-icon btn-play" onclick="playAudio()">
                 <span class="play-icon icon bi icon-fix">
                   
                 </span>
               </button>
             </div>
             <div>
-              <button type="button" class="btn btn-outline-primary btt-icon" onclick="switchTopicList()">
+              <button type="button" class="btn btn-outline-primary btn-sm btt-icon" onclick="switchTopicList()">
                 ☰
               </button>
             </div>
           </div>
           <div>
-            <div class="mb-1">
-              <button class="btn btn-primary" onclick="onRewindBack15Sec()">
+            <div class="mb-3">
+              <button class="btn btn-primary btn-sm" onclick="onRewindBack15Sec()">
                 -15
               </button>
-              <button class="btn btn-primary" onclick="onRewindBack10Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindBack10Sec()">
                 -10
               </button>
-              <button class="btn btn-primary" onclick="onRewindBack5Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindBack5Sec()">
                 -5
               </button>
-              <button class="btn btn-primary" onclick="onRewindBack2_5Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindBack2_5Sec()">
                 -2.5
               </button>
-            </div>
-
-            <div>
-              <button class="btn btn-primary" onclick="onRewindNext2_5Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindNext2_5Sec()">
                 +2.5
               </button>
-              <button class="btn btn-primary" onclick="onRewindNext5Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindNext5Sec()">
                 +5
               </button>
-              <button class="btn btn-primary" onclick="onRewindNext10Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindNext10Sec()">
                 +10
               </button>
-              <button class="btn btn-primary" onclick="onRewindNext15Sec()">
+              <button class="btn btn-primary btn-sm" onclick="onRewindNext15Sec()">
                 +15
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="text-container">
-        <div class="text-container-inner">
-
-        </div>
-      </div>
     </div>
     <div class="text-container-controls">
       <div class="text-container-controls_showings">
-        <button type="button" class="btn btn-primary" onclick="showPrev5Sentences()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="showPrev5Sentences()">
           -5
         </button>
-        <button type="button" class="btn btn-primary" onclick="showPrev1Sentences()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="showPrev1Sentences()">
           -1
         </button>
-        <button type="button" class="btn btn-primary" onclick="showNext1Sentences()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="showNext1Sentences()">
           +1
         </button>
-        <button type="button" class="btn btn-primary" onclick="showNext5Sentences()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="showNext5Sentences()">
           +5
         </button>
       </div>
       <div class="text-container-controls_other">
-        <button type="button" class="btn btn-primary" onclick="switchAllDisplay()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="switchAllDisplay()">
           all
         </button>
-        <button type="button" class="btn btn-primary" onclick="switchRuDisplay()">
+        <button type="button" class="btn btn-primary btn-sm" onclick="switchRuDisplay()">
           ru
         </button>
       </div>

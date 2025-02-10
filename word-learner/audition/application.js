@@ -153,6 +153,9 @@
     if (currentAudio && currentAudio.state() === "loaded") {
       currentAudio.play()
       watchProgress()
+
+      document.querySelector(".btn-pause").style.display = ""
+      document.querySelector(".btn-play").style.display = "none"
     }
   }
 
@@ -161,8 +164,13 @@
       currentAudio.pause()
 
       finishProgress()
+
+      document.querySelector(".btn-pause").style.display = "none"
+      document.querySelector(".btn-play").style.display = ""
     }
   }
+
+  document.querySelector(".btn-pause").style.display = "none"
 
   const rewind = (delta) => {
     const currentSeek = currentAudio.seek()

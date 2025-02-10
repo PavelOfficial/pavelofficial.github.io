@@ -11,7 +11,7 @@ body, html {
 .layout-container {
     display: flex;
     height: 100%;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .theme-list,
@@ -22,11 +22,21 @@ body, html {
 }
 
 .audio-player__controls {
-    padding: 10px;
+    padding: 15px 10px 10px 10px;
 }
 
 .audio-player__controls .btn {
-    margin: 0 2px;
+    margin: 0 8px;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+.audio-player__controls .btn:first-child {
+    margin-left: 0;
+}
+
+.audio-player__controls .btn:last-child {
+    margin-right: 0;
 }
 
 .audio-player__controls-flex {
@@ -62,7 +72,7 @@ ul.themes li.themes-li.selected {
 .player-container {
     flex-grow: 1;
     display: block;
-    height: 100vh;
+    height: 50vh;
 }
 
 .audio-player {
@@ -70,11 +80,12 @@ ul.themes li.themes-li.selected {
 }
 
 .text-container {
-    height: 45vh;
-    max-height: 45vh;
+    /* height: 45vh; */
+    /* max-height: 45vh; */
     width: 100%;
     position: relative;
     overflow: hidden;
+    margin-top: 20px;
 }
 
 .text-container-inner {
@@ -83,7 +94,8 @@ ul.themes li.themes-li.selected {
     width: 100%;
     overflow-y: scroll;
     padding: 7px;
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 /* PROGRESS */
@@ -214,7 +226,9 @@ ul.themes li.themes-li.selected {
 }
 
 .text-container-controls .btn {
-    margin: 0 5px;
+    margin: 0 20px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .text-container.hide-ru .text-container_ru {
@@ -225,7 +239,7 @@ ul.themes li.themes-li.selected {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
 }
 
 .text-container-controls_other {
@@ -242,4 +256,18 @@ ul.themes li.themes-li.selected {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+}
+
+.layout-top {
+    height: 50vh;
+    position: relative;
+}
+
+.layout-top-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 10px;
 }
