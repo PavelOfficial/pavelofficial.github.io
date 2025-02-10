@@ -101,7 +101,7 @@
       `
     }).join("")
 
-    document.querySelector(".text-container-inner").innerHTML = html
+    document.querySelector(".text-container-inner .text-wrap").innerHTML = html
 
     console.log(enList)
     console.log(ruList)
@@ -228,14 +228,21 @@
       const firstElement = allTexts[0]
       const firstElementVisibility = firstElement.style.visibility
 
+      const scrollArea = document.querySelector(".text-container-inner")
+      const textWrap = document.querySelector(".text-wrap")
+
       if (firstElementVisibility === "hidden") {
         allTexts.forEach((text) => {
           text.style.visibility = ""
         })
+
+        scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height })
       } else {
         allTexts.forEach((text) => {
           text.style.visibility = "hidden"
         })
+
+        scrollArea.scrollTo({ top: 0 })
       }
     }
   }
@@ -263,6 +270,42 @@
           item.style.visibility = ""
         }
       })
+
+      let firstHiddenTextIndex = allTexts.findIndex((item) => {
+        return item.style.visibility === "hidden"
+      })
+
+      const lastVisibleTextIndex = firstHiddenTextIndex - 1
+
+      const scrollArea = document.querySelector(".text-container-inner")
+      const textWrap = document.querySelector(".text-wrap")
+
+      if (allTexts[lastVisibleTextIndex]) {
+        const { top: itemTop, height: itemHeight  } = allTexts[lastVisibleTextIndex].getBoundingClientRect()
+        const { top: scrollAreaTop, height: scrollAreaHeight  }  = scrollArea.getBoundingClientRect()
+        const scrollAreaScrollTop = scrollArea.scrollTop
+        const MARGIN_BOTTOM = 50
+        const resultTop = scrollAreaScrollTop + (itemTop - scrollAreaTop) - scrollAreaHeight + itemHeight + MARGIN_BOTTOM
+
+        scrollArea.scrollTo({ top: resultTop })
+      } else {
+        if (lastVisibleTextIndex === -2) {
+          scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height  })
+        } else {
+          scrollArea.scrollTo({ top: 0 })
+        }
+      }
+
+      allTexts.forEach((text) => {
+        text.setAttribute("class", text.getAttribute("class").replace(/\slast\-shown/, ""))
+      })
+
+      const prevLastVisibleItem = allTexts[firstTextIndex - 1]
+      if (prevLastVisibleItem) {
+        const prevLastVisibleItemClass = prevLastVisibleItem.getAttribute("class")
+
+        prevLastVisibleItem.setAttribute("class", `${prevLastVisibleItemClass} last-shown`)
+      }
     }
   }
 

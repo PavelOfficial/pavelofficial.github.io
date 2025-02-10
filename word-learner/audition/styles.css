@@ -98,6 +98,14 @@ ul.themes li.themes-li.selected {
     line-height: 1.6;
 }
 
+.text-container-inner .text-wrap {
+
+}
+
+.last-shown.last-shown.last-shown.last-shown.last-shown {
+    background: #a1bffa;
+}
+
 /* PROGRESS */
 .audio-player-progress {
     margin-bottom: 5px;
