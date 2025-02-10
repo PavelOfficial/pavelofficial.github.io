@@ -16,16 +16,25 @@ const auditionUrlsA1EnglishCounsel = [
   "/audition/texts/0015.json",
 ]
 
+const auditionUrlsA2EnglishCounsel = [
+  "/audition/texts/0018.json",
+  "/audition/texts/0019.json",
+  "/audition/texts/0020.json",
+  "/audition/texts/0021.json",
+  "/audition/texts/0022.json",
+  "/audition/texts/0023.json",
+  "/audition/texts/0024.json",
+  "/audition/texts/0025.json",
+  "/audition/texts/0026.json",
+]
+
 const categories = [
   {
     title: "A1 English Counsel",
     auditions: auditionUrlsA1EnglishCounsel,
   },
   {
-    title: "Random",
-    auditions: [
-      "/audition/texts/0016.json",
-      "/audition/texts/0017.json",
-    ],
+    title: "A2 English Counsel",
+    auditions: auditionUrlsA2EnglishCounsel,
   },
 ]

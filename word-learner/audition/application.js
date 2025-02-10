@@ -40,7 +40,13 @@
     const auditionsSet = new Set(currentCategory.auditions)
 
     const html =`
-      <ul class="themes">${auditions.filter(({ url }) => { return auditionsSet.has(url) }).map((audition) => audition.title).map((item, index) => `<li data-index="${index}" class="themes-li">${item}</li>`).join("")}</ul>      
+      <ul class="themes">${auditions.filter(({ url }) => { return auditionsSet.has(url) }).map((audition) =>  {
+        const themesIndex = auditions.indexOf(audition);
+
+        return { title: audition.title, themesIndex } 
+      }).map(({ title, themesIndex }, index) => {
+        return `<li data-index="${themesIndex}" class="themes-li">${title}</li>`
+      }).join("")}</ul>      
     `
 
     document.querySelector('.themes-box').innerHTML = html
