@@ -217,13 +217,13 @@ ul.categories li.category-li.selected {
 .text-container_en {
     width: 50%;
     min-width: 50%;
-    padding-left: 5px;
+    padding-left: 7px;
 }
 
 .text-container_ru {
     width: 50%;
     min-width: 50%;
-    padding-left: 5px;
+    padding-left: 7px;
 }
 
 .text-container-controls {
