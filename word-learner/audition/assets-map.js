@@ -47,6 +47,19 @@ const auditionUrlsB1EnglishCounsel = [
   "/audition/texts/0042.json",
 ]
 
+const auditionUrlsC1EnglishCounsel = [
+  "/audition/texts/0043.json",
+  "/audition/texts/0044.json",
+  "/audition/texts/0045.json",
+  "/audition/texts/0046.json",
+  "/audition/texts/0047.json",
+  "/audition/texts/0048.json",
+  "/audition/texts/0049.json",
+  "/audition/texts/0050.json",
+  "/audition/texts/0051.json",
+  "/audition/texts/0052.json",
+]
+
 const categories = [
   {
     title: "A1 English Counsel",
@@ -59,5 +72,9 @@ const categories = [
   {
     title: "B1 English Counsel",
     auditions: auditionUrlsB1EnglishCounsel,
+  },
+  {
+    title: "C1 English Counsel",
+    auditions: auditionUrlsC1EnglishCounsel,
   },
 ]
