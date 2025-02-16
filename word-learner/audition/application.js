@@ -400,6 +400,9 @@
   window.showNext1Sentences = () => showSentences(1)
   window.showNext5Sentences = () => showSentences(5)
 
+  const createCommentFileName = (timestamp, postfix, ext = "") => {
+    return `aud$$-${timestamp}-${postfix}${ext}`
+  }
 
   const startDrag = (mouseDownEvent, selector, moveCallback, endCallback) => {
     isDragging = true
@@ -479,7 +482,19 @@
       return word
     }).join(" ")
 
-    console.log(audioCommentRef.current)
+    const { srcAudio, commentAudio, timestamp, srcText, commentText } = audioCommentRef.current
+
+    downloadAsFile(srcAudio, srcAudio.type, createCommentFileName(timestamp, "src-audio", ".webm"))
+
+    if (commentAudio) {
+      downloadAsFile(commentAudio, commentAudio.type, createCommentFileName(timestamp, "cmnt-audio", ".webm"))
+    }
+
+    downloadAsFile(JSON.stringify({
+      timestamp: timestamp,
+      srcText: srcText,
+      commentText: commentText,
+    }, null, 2), "text/json", createCommentFileName(timestamp, "data", ".json"))
   }
 
   const initFeatures = () => {
