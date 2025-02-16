@@ -135,7 +135,7 @@
     }
 
     currentAudio = new Howl({
-      src: [auditionItem.audio],
+      src: [`/word-learner${auditionItem.audio}`],
       volume: soundValue,
       onload: () => {
         const duration = currentAudio.duration()
