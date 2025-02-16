@@ -531,10 +531,20 @@
   navigator.mediaDevices.getUserMedia({
     "audio": {
     "mandatory": {
-      "googEchoCancellation": "false",
-        "googAutoGainControl": "false",
-        "googNoiseSuppression": "false",
-        "googHighpassFilter": "false"
+      echoCancellation: false,
+      googEchoCancellation: false,
+      googAutoGainControl: false,
+      googAutoGainControl2: false,
+      googNoiseSuppression: false,
+      googHighpassFilter: false,
+      googTypingNoiseDetection: false,
+      autoGainControl: false,
+      channelCount: 2,
+      latency: 0,
+      noiseSuppression: false,
+      sampleRate: 48000,
+      sampleSize: 16,
+      volume: 1.0
     },
     "optional": []
     } }
