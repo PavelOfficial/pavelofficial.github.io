@@ -17,7 +17,7 @@
     }, [])
 
     const auditionPromises = allAuditionUrls.map((url) => {
-      return fetch(url)
+      return fetch("/word-learner" + url)
     })
 
     const allSettledResult = await Promise.allSettled(auditionPromises)
