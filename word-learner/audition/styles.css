@@ -307,8 +307,28 @@ ul.categories li.category-li {
 .btn-mic.btn-mic.btn-mic {
     margin-left: 25px;
     padding: 0 50px;
+    height: 31px;
 }
 
 .btn-mic.btn-mic_recording.btn-mic_recording.btn-mic_recording.btn-mic_recording {
     background: #ff3a3a;
+}
+
+.form-group {
+    padding: 20px;
+}
+
+.form-group label {
+    color: #838387;
+}
+
+.source-text {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.source-word-selected {
+    outline: 1px solid #4d5154;
+    background-color: #d7d7d7;
+    border-radius: 5px;
 }

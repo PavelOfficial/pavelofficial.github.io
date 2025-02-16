@@ -5,20 +5,30 @@
   let currentAudio = null
   let isDragging = false
   let isRecordingSrc = false
+  let lastWords = []
+  let lastSelectedWords = new Set([])
+
+  const cleanCommentForm = () => {
+    document.querySelector('.audio-comment-ready').innerHTML = ""
+    document.querySelector('.js-comment-text-field').value = ""
+    document.querySelector('.source-text').innerHTML = ""
+
+    stopRecord()
+  }
+
   const createNullAudioComment = () => {
-    let audioComment = {
+    let audioComment2 = {
       srcText: "",
       srcAudio: null,
       commentText: "",
       commentAudio: null,
+      timestamp: Date.now(),
     }
 
-    return audioComment
+    return audioComment2
   }
 
-  let audioComment = createNullAudioComment()
-
-
+  let audioCommentRef = { current: createNullAudioComment() }
 
   const leadingZeros = (value, count) => {
     return `0000000000000${value}`.slice(-count)
@@ -440,6 +450,38 @@
     document.addEventListener("touchend", handleMouseUp)
   }
 
+  function getChildIndex(node) {
+    return Array.prototype.indexOf.call(node.parentNode.children, node);
+  }
+
+  const createComment = () => {
+    audioCommentRef.current.commentText = document.querySelector(".js-comment-text-field").value
+    audioCommentRef.current.srcText = Array.from(
+      document.querySelector(".source-text").querySelectorAll(".source-word")
+    ).map((wordSpan, index) => {
+      const word = wordSpan.innerText
+
+      if (lastSelectedWords.has(index)) {
+        let prefix = ''
+        let postfix = ''
+
+        if (!lastSelectedWords.has(index - 1)) {
+          prefix = "<span class=\"highlight\">"
+        }
+
+        if (!lastSelectedWords.has(index + 1)) {
+          postfix = "</span>"
+        }
+
+        return `${prefix}${word}${postfix}`
+      }
+
+      return word
+    }).join(" ")
+
+    console.log(audioCommentRef.current)
+  }
+
   const initFeatures = () => {
     document.addEventListener("click", (event) => {
       const closestThemesLi = event.target.closest(".themes-li")
@@ -464,6 +506,33 @@
         finishProgress()
       }
 
+      if (event.target.closest(".source-word")) {
+        const closestWord = event.target.closest(".source-word")
+        const className = closestWord.getAttribute("class")
+
+        if (closestWord.matches(".source-word-selected")) {
+          closestWord.setAttribute("class", "source-word")
+
+          const childIndex = getChildIndex(closestWord)
+          lastSelectedWords.delete(childIndex)
+        } else {
+          closestWord.setAttribute("class", "source-word source-word-selected")
+
+          const childIndex = getChildIndex(closestWord)
+          lastSelectedWords.add(childIndex)
+        }
+      }
+
+      if (event.target.closest(".js-create-comment")) {
+        createComment()
+
+        cleanCommentForm()
+        document.querySelector('.comment-popup').style.display = "none"
+
+        // lastSelectedWords
+      }
+
+      console.log("lastSelectedWords: ", lastSelectedWords)
     })
 
     initSelectCategory()
@@ -593,7 +662,7 @@
         mediaRecorder.stop();
       }
 
-      mediaRecorder.addEventListener("dataavailable",function(event) {
+      mediaRecorder.addEventListener("dataavailable", function(event) {
         if (!ended) {
           saveTargetRef.current[saveField] = event.data
 
@@ -606,33 +675,60 @@
       });
     });
 
+  const renderNextSelectedWords = (words) => {
+    return words.map((word, index) => {
+      return `<span class="source-word">${word}</span>`
+    }).join(" ")
+  }
+
   const openCommentPopup = () => {
+    const selObj = window.getSelection();
     const commentPopup = document.querySelector(".comment-popup")
 
     commentPopup.style.display = "block"
+
+    const selectionText = selObj.toString()
+    const words = selectionText.split(" ")
+
+    lastWords = words
+    lastSelectedWords = new Set([])
+
+    document.querySelector('.source-text').innerHTML = renderNextSelectedWords(words)
   }
 
-  window.switchRecordingSrc = () => {
-    isRecordingSrc = !isRecordingSrc
+  const createSwitchRecordingSrc = (className, fieldName, onInit, onRecordFinish) => {
+    return () => {
+      isRecordingSrc = !isRecordingSrc
 
-    const micBtt = document.querySelector('.btn-mic')
+      const micBtt = document.querySelector(`.${className}`)
 
-    if (isRecordingSrc) {
-      micBtt.setAttribute("class", "btn btn-primary btn-mic btn-mic_recording")
-    } else {
-      micBtt.setAttribute("class", "btn btn-primary btn-mic")
-    }
+      if (isRecordingSrc) {
+        onInit()
+        micBtt.setAttribute("class", `${className} btn btn-primary btn-mic btn-mic_recording`)
+      } else {
+        micBtt.setAttribute("class", `${className} btn btn-primary btn-mic`)
+      }
 
-    if (isRecordingSrc) {
-      audioComment = createNullAudioComment()
-      startRecord(audioComment, "srcAudio", () => {
-        openCommentPopup()
-      })
-    } else {
-      stopRecord()
+      if (isRecordingSrc) {
+        startRecord(audioCommentRef.current, fieldName, onRecordFinish)
+      } else {
+        stopRecord()
+      }
     }
   }
 
+  window.switchRecordingSrc = createSwitchRecordingSrc("js-btn-mic-source", "srcAudio", () => {
+    cleanCommentForm()
+    audioCommentRef.current = createNullAudioComment()
+  }, () => {
+    openCommentPopup()
+    document.querySelector('.js-btn-mic-source').setAttribute("class", `js-btn-mic-source btn btn-primary btn-mic`)
+  })
+
+  window.switchRecordingComment = createSwitchRecordingSrc("js-btn-mic-comment", "commentAudio", () => {}, () => {
+    document.querySelector('.audio-comment-ready').innerHTML = "Ready"
+    document.querySelector('.js-btn-mic-comment').setAttribute("class", `js-btn-mic-comment btn btn-primary btn-mic`)
+  })
 
   /* COMMENT */
   /*
@@ -643,6 +739,7 @@
 
   document.querySelector(".close-comment-button").onclick = () => {
     document.querySelector(".comment-popup").style.display = "none"
+    cleanCommentForm()
   }
   /* END COMMENT */
 
