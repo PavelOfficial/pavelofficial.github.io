@@ -154,14 +154,53 @@
         <button type="button" class="btn btn-primary btn-sm" onclick="switchRuDisplay()">
           ru
         </button>
-        <button type="button" class="btn btn-primary btn-sm"  onclick="startRecord()">
-          Начать запись
-        </button>
-        <button type="button" class="btn btn-primary btn-sm"  onclick="stopRecord()">
-          Закончить запись
+        <button type="button" class="btn btn btn-primary btn-mic" onclick="switchRecordingSrc()">
+          <span class="play-icon icon bi icon-fix">
+            &#xF48D;
+          </span>
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<div style="display: none" class="comment-popup padded">
+  <div class="top-panel">
+    <form>
+      <div class="form-group">
+        <label>Source audio. Ready.</label>
+      </div>
+      <div class="form-group">
+        <label>Source text</label>
+        <div class="source-text">
+
+        </div>
+      </div>
+      <div class="form-group">
+        <textarea type="text" class="form-control" placeholder="Text comment"></textarea>
+      </div>
+      <div class="form-group">
+        <button type="button" class="btn btn btn-primary btn-mic-comment" onclick="switchRecordingSrc()">
+          <span class="play-icon icon bi icon-fix">
+            &#xF48D;
+          </span>
+        </button>
+        <label class="form-check-label">Audio comment</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  <div class="bottom-panel">
+    <div class="container no-pads">
+      <div class="row">
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary close-comment-button">
+            <span class="bi icon-btt"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

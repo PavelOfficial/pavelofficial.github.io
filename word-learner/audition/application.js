@@ -4,6 +4,21 @@
   let auditions = null
   let currentAudio = null
   let isDragging = false
+  let isRecordingSrc = false
+  const createNullAudioComment = () => {
+    let audioComment = {
+      srcText: "",
+      srcAudio: null,
+      commentText: "",
+      commentAudio: null,
+    }
+
+    return audioComment
+  }
+
+  let audioComment = createNullAudioComment()
+
+
 
   const leadingZeros = (value, count) => {
     return `0000000000000${value}`.slice(-count)
@@ -523,9 +538,19 @@
   let lastRecord = null;
   let counter = 0;
 
-  const onNewRecord = (audioData) => {
-    downloadAsFile(audioData, audioData.type, `test-${counter}.webm`)
-    counter++;
+  /*
+    const onNewRecord = (audioData) => {
+      downloadAsFile(audioData, audioData.type, `test-${counter}.webm`)
+      counter++;
+    }
+   */
+
+  let startRecord = () => {
+
+  }
+
+  let stopRecord = () => {
+
   }
 
   navigator.mediaDevices.getUserMedia({
@@ -550,28 +575,75 @@
     } }
   ).then(stream => {
       mediaRecorder = new MediaRecorder(stream);
+      let ended = false
+      let saveTargetRef = { current: null }
+      let saveField = ""
+      let onAfterReady = null
 
-      window.startRecord = () => {
+      startRecord = (saveTarget, saveFieldTemp, onAfterReadyHandler) => {
+        saveTargetRef.current = saveTarget
+        saveField = saveFieldTemp
+        onAfterReady = onAfterReadyHandler
+        ended = false
+
         mediaRecorder.start();
       }
 
-      window.stopRecord = () => {
+      stopRecord = () => {
         mediaRecorder.stop();
       }
 
       mediaRecorder.addEventListener("dataavailable",function(event) {
-        // recordings.push(event.data);
-        onNewRecord(event.data)
-        lastRecord = event.data
+        if (!ended) {
+          saveTargetRef.current[saveField] = event.data
+
+          onAfterReady()
+          ended = true
+        }
+
+        // onNewRecord(event.data)
+        // lastRecord = event.data
       });
     });
 
-  window.startRecord = () => {
+  const openCommentPopup = () => {
+    const commentPopup = document.querySelector(".comment-popup")
 
+    commentPopup.style.display = "block"
   }
 
-  window.stopRecord = () => {
+  window.switchRecordingSrc = () => {
+    isRecordingSrc = !isRecordingSrc
 
+    const micBtt = document.querySelector('.btn-mic')
+
+    if (isRecordingSrc) {
+      micBtt.setAttribute("class", "btn btn-primary btn-mic btn-mic_recording")
+    } else {
+      micBtt.setAttribute("class", "btn btn-primary btn-mic")
+    }
+
+    if (isRecordingSrc) {
+      audioComment = createNullAudioComment()
+      startRecord(audioComment, "srcAudio", () => {
+        openCommentPopup()
+      })
+    } else {
+      stopRecord()
+    }
   }
+
+
+  /* COMMENT */
+  /*
+    $$(".open-comment-button").onclick = () => {
+      $$(".comment-popup").style.display = ""
+    }
+   */
+
+  document.querySelector(".close-comment-button").onclick = () => {
+    document.querySelector(".comment-popup").style.display = "none"
+  }
+  /* END COMMENT */
 
 })()

@@ -192,7 +192,8 @@ ul {
 
 /* settings */
 .help-popup,
-.settings-popup {
+.settings-popup,
+.comment-popup {
     position: fixed;
     z-index: 1000;
     top: 0;

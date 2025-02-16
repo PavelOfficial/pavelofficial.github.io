@@ -303,3 +303,12 @@ ul.categories li.category-li {
     cursor: pointer;
     color: #5b7fc6;
 }
+
+.btn-mic.btn-mic.btn-mic {
+    margin-left: 25px;
+    padding: 0 50px;
+}
+
+.btn-mic.btn-mic_recording.btn-mic_recording.btn-mic_recording.btn-mic_recording {
+    background: #ff3a3a;
+}
