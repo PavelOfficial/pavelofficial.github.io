@@ -510,4 +510,58 @@
 
   initApp()
 
+  function downloadAsFile(data, mimeType, filename) {
+    let a = document.createElement("a");
+    let file = new Blob([data], { type: mimeType });
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+  }
+
+  let mediaRecorder = null;
+  const recordings = [];
+  let lastRecord = null;
+  let counter = 0;
+
+  const onNewRecord = (audioData) => {
+    downloadAsFile(audioData, audioData.type, `test-${counter}.webm`)
+    counter++;
+  }
+
+  navigator.mediaDevices.getUserMedia({
+    "audio": {
+    "mandatory": {
+      "googEchoCancellation": "false",
+        "googAutoGainControl": "false",
+        "googNoiseSuppression": "false",
+        "googHighpassFilter": "false"
+    },
+    "optional": []
+    } }
+  ).then(stream => {
+      mediaRecorder = new MediaRecorder(stream);
+
+      window.startRecord = () => {
+        mediaRecorder.start();
+      }
+
+      window.stopRecord = () => {
+        mediaRecorder.stop();
+      }
+
+      mediaRecorder.addEventListener("dataavailable",function(event) {
+        // recordings.push(event.data);
+        onNewRecord(event.data)
+        lastRecord = event.data
+      });
+    });
+
+  window.startRecord = () => {
+
+  }
+
+  window.stopRecord = () => {
+
+  }
+
 })()
