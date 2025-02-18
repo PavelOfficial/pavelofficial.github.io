@@ -711,7 +711,7 @@
     document.querySelector('.source-text').innerHTML = renderNextSelectedWords(words)
   }
 
-  const createSwitchRecordingSrc = (className, fieldName, onInit, onRecordFinish) => {
+  const createSwitchRecordingSrc = (className, fieldName, { onInit, onRecordFinish, onStart, onFinish }) => {
     return () => {
       isRecordingSrc = !isRecordingSrc
 
@@ -719,8 +719,10 @@
 
       if (isRecordingSrc) {
         onInit()
+        onStart()
         micBtt.setAttribute("class", `${className} btn btn-primary btn-mic btn-mic_recording`)
       } else {
+        onFinish()
         micBtt.setAttribute("class", `${className} btn btn-primary btn-mic`)
       }
 
@@ -732,17 +734,33 @@
     }
   }
 
-  window.switchRecordingSrc = createSwitchRecordingSrc("js-btn-mic-source", "srcAudio", () => {
-    cleanCommentForm()
-    audioCommentRef.current = createNullAudioComment()
-  }, () => {
-    openCommentPopup()
-    document.querySelector('.js-btn-mic-source').setAttribute("class", `js-btn-mic-source btn btn-primary btn-mic`)
+  window.switchRecordingSrc = createSwitchRecordingSrc("js-btn-mic-source", "srcAudio", {
+    onInit: () => {
+      cleanCommentForm()
+      audioCommentRef.current = createNullAudioComment()
+    },
+    onRecordFinish: () => {
+      openCommentPopup()
+      document.querySelector('.js-btn-mic-source').setAttribute("class", `js-btn-mic-source btn btn-primary btn-mic`)
+    },
+    onStart: () => {
+
+    },
+    onFinish: () => {
+      if (currentAudio && currentAudio.playing()) {
+        pauseAudio()
+      }
+    },
   })
 
-  window.switchRecordingComment = createSwitchRecordingSrc("js-btn-mic-comment", "commentAudio", () => {}, () => {
-    document.querySelector('.audio-comment-ready').innerHTML = "Ready"
-    document.querySelector('.js-btn-mic-comment').setAttribute("class", `js-btn-mic-comment btn btn-primary btn-mic`)
+  window.switchRecordingComment = createSwitchRecordingSrc("js-btn-mic-comment", "commentAudio", {
+    onInit: () => {},
+    onRecordFinish: () => {
+      document.querySelector('.audio-comment-ready').innerHTML = "Ready"
+      document.querySelector('.js-btn-mic-comment').setAttribute("class", `js-btn-mic-comment btn btn-primary btn-mic`)
+    },
+    onStart: () => {},
+    onFinish: () => {},
   })
 
   /* COMMENT */
