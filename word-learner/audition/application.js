@@ -81,21 +81,44 @@
     renderCategories();
   }
 
+  const rawSeparators = ["…", "...", ".", "?", "!"];
+  const separators = ["…", "\\.\\.\\.", "\\.", "\\?", "\\!"];
+  const separatorsAll = [...rawSeparators, ...rawSeparators]
+  const postFixes = ["\\'|\\”[\\s\\n]?", "(?:[^\\'\\S]|\\n)"]
+  const regCases = separators.reduce((result, separator) => {
+    const nextCases = postFixes.map((item) => {
+      return separator + item
+    });
+
+    result.push(...nextCases);
+
+    return result;
+  }, [])
+
+  const regs = regCases.map((regCase) => new RegExp(regCase, "gi"))
+  const allRegCasesCombinations = regCases.reduce((result, item, index) => {
+    regCases.forEach((item2, index2) => {
+      result.push({ reg: new RegExp(item + "\\s*" + item2, "gi"), index: index })
+      result.push({ reg: new RegExp(item2 + "\\s*" + item, "gi"), index: index2 })
+    })
+
+    return result
+  }, [])
+
   const splitText = (text) => {
     const doublesReg = (new RegExp("", "gi"))
     const quotesReg = (new RegExp("”", "gi"))
-    const word2 = text.trim().split(/\n+/).join('\n')
-      .split(/…\'|\”[\s\n]?/gi).join('...\'\n\n')
-      .split(/\.\.\.\'|\”[\s\n]?/gi).join('...\'\n\n')
-      .split(/\.\'|\”[\s\n]?/gi).join('.\'\n\n')
-      .split(/\?\'|\”[\s\n]?/gi).join('?\'\n\n')
-      .split(/\!\'|\”[\s\n]?/gi).join('!\'\n\n')
-      .split(/…(?:[^\'\S]|\n)/gi).join('...\n\n')
-      .split(/\.\.\.(?:[^\'\S]|\n)/gi).join('...\'\n\n')
-      .split(/\.(?:[^\'\S]|\n)/gi).join('.\n\n')
-      .split(/\?(?:[^\'\S]|\n)/gi).join('?\n\n')
-      .split(/\!(?:[^\'\S]|\n)/gi).join('!\n\n')
-      .split(/\n\n\n\n/).join('\n\n')
+    let word2 = text.trim().split(/\n+/).join('\n');
+
+    allRegCasesCombinations.forEach((regItem) => {
+      word2 = word2.split(regItem.reg).join(separatorsAll[regItem.index] + " ")
+    })
+
+    regs.forEach((reg, index) => {
+      word2 = word2.split(reg).join(separatorsAll[index] + (index > 4 ? "\'" : "") + "\n\n")
+    })
+
+    word2 = word2.split(/\n\n\n\n/).join('\n\n')
       .split(/\n\n\n/).join('\n\n')
       .split(/\n\n/).join('\n\n\n')
       .replace(doublesReg, '')
