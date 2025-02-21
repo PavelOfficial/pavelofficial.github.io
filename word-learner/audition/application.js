@@ -84,10 +84,10 @@
   const rawSeparators = ["…", "...", ".", "?", "!"];
   const separators = ["…", "\\.\\.\\.", "\\.", "\\?", "\\!"];
   const separatorsAll = [...rawSeparators, ...rawSeparators]
-  const postFixes = ["\\'|\\”[\\s\\n]?", "(?:[^\\'\\S]|\\n)"]
-  const regCases = separators.reduce((result, separator) => {
-    const nextCases = postFixes.map((item) => {
-      return separator + item
+  const postFixes = ["(?:\\'|\\”|\\\")[\\s\\n]?", "(?:[^\\'\\S]|\\n)"]
+  const regCases = postFixes.reduce((result, postFix) => {
+    const nextCases = separators.map((separator) => {
+      return separator + postFix
     });
 
     result.push(...nextCases);
