@@ -4,9 +4,15 @@
 
   // console.log("allMeanings", allMeanings)
 
+  let includeItems = false
+  let counterItems = 0
   // 0 25000 -
   const list = allMeanings.map((meaning, index) => {
-    if (!(index >= 10001 && index <= 20000)) {
+    if (meaning && meaning.en === "ancient") {
+      includeItems = true
+    }
+
+    if (!includeItems || counterItems >= 4000) {
       return "";
     }
 
@@ -14,7 +20,9 @@
       return `<tr><td colspan="5">-----------------------------------------------------------------------</td></tr>`
     }
 
-    return `<tr><td><input type="checkbox" data-use="true" name="use-${index}" /></td><td>${meaning.en}</td><td>${meaning.transcription}</td><td>${meaning.ru}</td><td>
+    counterItems++;
+
+    return `<tr><td><input type="checkbox" data-use="true" name="use-${index}" /></td><td>${meaning.en}</td><td>${meaning.transcription}</td><td class="ru-box">${meaning.ru.join(", ")}</td><td>
       <input type="checkbox" data-color="#ffaaaa" name="group-${index}-1" value="" />
       <input type="checkbox" data-color="#ffffaa" name="group-${index}-2" value="" />
       <input type="checkbox" data-color="#ffaaff" name="group-${index}-3" value="" />
@@ -57,6 +65,10 @@
 
   Object.entries(store).forEach(([key, item]) => {
     const input = document.querySelector(`[name=${key}]`)
+
+    if (!input) {
+      return
+    }
 
     if (input.type === "checkbox") {
       input.setAttribute("checked", item)
