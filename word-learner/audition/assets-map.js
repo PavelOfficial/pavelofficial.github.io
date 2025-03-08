@@ -75,6 +75,24 @@ const auditionUrlsC1EnglishCounselGreen = [
   "/audition/texts/0064.json",
 ];
 
+const leadingZeros = (num, count) => {
+  return String('0000000000000' + num).slice(-count)
+}
+
+const createJSONList = (from, to) => {
+  const list = []
+
+  for (let j = from; j <= to; j++) {
+    list.push(`/audition/texts/${leadingZeros(j, 4)}.json`)
+  }
+
+  return list
+}
+
+const eslCyberListeningLabDifficult = createJSONList(65, 98);
+
+console.log("eslCyberListeningLabDifficult: ", eslCyberListeningLabDifficult)
+
 const categories = [
   {
     title: "A1 English Counsel",
@@ -95,5 +113,9 @@ const categories = [
   {
     title: "C1 English Counsel Green",
     auditions: auditionUrlsC1EnglishCounselGreen,
+  },
+  {
+    title: "ESL Cyber Listening Lab (Difficult)",
+    auditions: eslCyberListeningLabDifficult,
   },
 ]

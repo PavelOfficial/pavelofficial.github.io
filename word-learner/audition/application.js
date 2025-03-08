@@ -210,7 +210,7 @@
             ${enItem}
           </div>
           <div class="text-container_ru">
-            ${ruItem}
+            ${ruItem ? String(ruItem) : ""}
           </div>
         </div>
       `
