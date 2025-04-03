@@ -107,7 +107,11 @@
     170: engWords170,
     900: engWords900,
     12000: enWords12000Delta,
-  }
+  };
+
+  const dictMapSamples = {
+    12000: enWords12000DeltaSamples,
+  };
 
   const shortedListsAll = [
     ...engDictNotKnownIndexes2000,
@@ -318,6 +322,8 @@
   let isPrevWord = false
   let isNextWord = false
   let isNextMassWord = false
+  let currentSamples = null
+  let audioExamples = null
 
   const DEFAULT_TRANSLATION_DELAY = 350
   const DEFAULT_PLAYING_TIME = null
@@ -334,11 +340,15 @@
   let currentWord = null
   let currentDescription = null
   let currentSelection = null
-  let handleFirstAudioEnd = null
+  let handleFirstAudioEnd = null;
+  let handleSecondAudioEnd = null;
+  let handleThirdAudioEnd = null;
   let indexFrom = localStorage.getItem("indexFrom") ? parseInt(localStorage.getItem("indexFrom"), 10) - 1 : null
   let indexTo = localStorage.getItem("indexTo") ? parseInt(localStorage.getItem("indexTo") - 1, 10) : null
   let isPlaying = false
   let soundCollection = null
+  let playSamples = true
+  let playSamplesCount = 3
 
   let soundValueStoraged
   if (localStorage.getItem("sound-value")) {
@@ -390,27 +400,6 @@
       playAWord(callback)
     }
   }
-
-  function prepareAudio() {
-    if (currentSelection) {
-      audioEng.oncanplaythrough = function () {
-        firstAudioReady = true
-
-        if (secondAudioReady) {
-          handleAudioPlay()
-        }
-      }
-
-      audioRu.oncanplaythrough = function () {
-        secondAudioReady = true
-
-        if (firstAudioReady) {
-          handleAudioPlay()
-        }
-      }
-    }
-  }
-
 
   const saveWordCheckboxes = () => {
     let storedWordIndexes = []
@@ -689,6 +678,7 @@
   const displayTranslationButton = document.querySelector(".display-translation-button")
   const displayWordButton = document.querySelector(".display-word-button")
   const transcriptionButton = document.querySelector(".display-transcription-button")
+  const playSamplesButton = document.querySelector(".play-samples-button")
   const playPauseButton = document.querySelector(".play-pause-button")
   const playListButton = document.querySelector(".play-list-button")
   const wordBox = document.querySelector(".word-box")
@@ -780,6 +770,20 @@
     wordBox.querySelector(".word-transcription").style.visibility = transcriptionDisplayed ? "visible" : "hidden"
   }
 
+  try {
+    playSamples = JSON.parse(localStorage.getItem("playSamples"));
+  } catch (error) {
+    //
+  }
+
+  playSamplesButton.checked = playSamples;
+
+  playSamplesButton.onchange = (event) => {
+    playSamples = !!event.target.checked;
+
+    localStorage.setItem("playSamples", JSON.stringify(playSamples));
+  }
+
   let wordPlaying = true
   wordPlayingButton.onchange = (event) => {
     wordPlaying = !!event.target.checked
@@ -796,9 +800,13 @@
     }
 
     if (handleFirstAudioEnd) {
-      handleFirstAudioEnd()
+      handleFirstAudioEnd();
+    } else if (handleSecondAudioEnd) {
+      handleSecondAudioEnd();
+    } else if (handleThirdAudioEnd) {
+      handleThirdAudioEnd();
     } else {
-      goToWord()
+      goToWord();
     }
   }
 
@@ -872,8 +880,15 @@
     const dict = dictMap[packName]
 
     if (dict) {
-      const word = dict[index]
-      const fullDescription = allWordsMap[word]
+      const word = dict[index];
+      const samplesDict = dictMapSamples[packName];
+      const fullDescription = allWordsMap[word];
+
+      if (samplesDict) {
+        currentSamples = samplesDict[index];
+      } else {
+        currentSamples = null;
+      }
 
       currentWord = word
       currentDescription = fullDescription
@@ -921,6 +936,8 @@
     li.querySelector("input").click()
   }
 
+  // currentSamples
+
   function renderСurrentPlaylist() {
     const content = currentList ? `
       <ul>
@@ -942,14 +959,26 @@
 
   function renderCurrentDescription() {
     let content
+
+    const trimUselessSample = (text) => {
+      return text.replace(/[^A-Za-z]+$/, "")
+    }
+
     if (currentDescription) {
       content = `
         <div class="word-box-inner">
           <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
           <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-        return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-      })}</div>
+          return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+        })}</div>
+          <div class="word-samples">
+            ${currentSamples ? currentSamples.map((item) => {
+              const trimmed = trimUselessSample(item);
+
+              return trimmed.trim().length ? `<div>- ${trimmed}</div>` : ""; 
+            }).join("") : ""}  
+          </div>
         </div>
       `
     } else {
@@ -1046,12 +1075,38 @@
             }
 
             skipPauseButton.removeAttribute("disabled")
-            translationDescriptor = setTimeout(() => {
-              skipPauseButton.setAttribute("disabled", "disabled")
-              translationDescriptor = null
 
+            handleSecondAudioEnd = () => {
+              handleSecondAudioEnd = null;
+              skipPauseButton.setAttribute("disabled", "disabled");
+              translationDescriptor = null;
+
+              thirdEnd();
+            };
+
+            translationDescriptor = setTimeout(handleSecondAudioEnd, audioExamples ? 500 : (delayAfter || 750))
+          }
+
+          const thirdEnd = () => {
+            if (audioExamples) {
+              currentPayingAudio = audioExamples
+
+              skipPauseButton.setAttribute("disabled", "disabled")
+              audioExamples.play(() => {
+                finish()
+              }, (delayAfter || 750), () => {
+                skipPauseButton.removeAttribute("disabled")
+              });
+
+              handleThirdAudioEnd = () => {
+                handleThirdAudioEnd = null;
+
+                audioExamples.stop();
+                finish()
+              };
+            } else {
               finish()
-            }, delayAfter || 750)
+            }
           }
 
           audioEng = new Howl({
@@ -1066,7 +1121,34 @@
             onend: currentAudioBackwardTranslationDirection ? firstEnd : secondEnd,
           });
 
-          currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioRu : audioEng)
+          if (currentSelection && currentSamples && currentSamples.length && playSamples) {
+            const packIndex = currentSelection[0];
+            const wordIndex = currentSelection[1];
+
+            const wordSamples = dictMapSamples[packIndex][wordIndex]
+
+            if (wordSamples && wordSamples.length) {
+              const fileNames = wordSamples.map((item) => (!item || !/[A-Za-z]/.test(item)) ? "" : item).map((item, index) => {
+                if (!item) {
+                  return null;
+                } else {
+                  return `./${packIndex}/samples/${leadingZeros(wordIndex)}_${leadingZeros(index + 1)}.mp3`;
+                }
+              }).filter(item => item).slice(0, playSamplesCount);
+
+              if (fileNames && fileNames.length) {
+                audioExamples = new AudioPackPlayer(fileNames, soundValue);
+              } else {
+                audioExamples = null;
+              }
+            } else {
+              audioExamples = null;
+            }
+          } else {
+            audioExamples = null;
+          }
+
+          currentPayingAudio = (currentAudioBackwardTranslationDirection ? audioRu : audioEng);
 
           if (getIsCurrentAudioPlayingForFirstAudio()) {
             currentPayingAudio.play()

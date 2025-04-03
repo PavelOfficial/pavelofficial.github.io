@@ -180,6 +180,8 @@ ul li input[type=checkbox] {
     line-height: 45px;
 }
 
+
+.word-samples,
 .word-translations {
     font-size: 18px;
     line-height: 25px;
@@ -189,6 +191,12 @@ ul li input[type=checkbox] {
     max-height: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.word-samples {
+    text-align: left;
+    margin-top: 10px;
+    width: 100%;
 }
 
 .loader-layer {

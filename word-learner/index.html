@@ -66,6 +66,8 @@
 <script src="./12000/enTrans.js" type="text/javascript"></script>
 
 <script src="./all-words-map.js" type="text/javascript"></script>
+<script src="./AudioPackPlayer.js" type="text/javascript"></script>
+
 <div style="display: none; padding:30px; position: absolute; z-index: 1000; top: 400px; width: 600px;">
   <input type="text" class="js-search-a-word__search" />
   <button class="js-search-a-word__get">get</button>
@@ -258,6 +260,12 @@
           Translation playing
         </label>
       </div>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input play-samples-button" type="checkbox" value="" id="playSamplesChecked" checked />
+        <label class="form-check-label form-check-label_large" for="displayTranslationChecked">
+          Play samples
+        </label>
+      </div>
     </div>
     <div class="volume-box">
       <button class="btn btn-primary btn-lg" onclick="handleSaveChecked()">Save checked</button>
@@ -346,6 +354,7 @@
 
 <div class="loader-layer" style="display: none">LOADING</div>
 
+</div>
 <script src="./assets/scripts/lib.js" type="text/javascript"></script>
 <script src="./word-dict-auto-play.js" type="text/javascript"></script>
 <script src="./assets/scripts/main.js" type="text/javascript"></script>
