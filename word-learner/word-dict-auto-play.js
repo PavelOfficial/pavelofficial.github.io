@@ -694,6 +694,7 @@
   const displayWordButton = document.querySelector(".display-word-button")
   const transcriptionButton = document.querySelector(".display-transcription-button")
   const playSamplesButton = document.querySelector(".play-samples-button")
+  const displayWordSamplesButton = document.querySelector(".display-samples-button")
   const playPauseButton = document.querySelector(".play-pause-button")
   const playListButton = document.querySelector(".play-list-button")
   const wordBox = document.querySelector(".word-box")
@@ -768,6 +769,23 @@
     translationDisplaied = !!event.target.checked
 
     wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
+  }
+
+  let displayWordSamples = false;
+
+  try {
+    displayWordSamples = JSON.parse(localStorage.getItem("displayWordSamples")) || false;
+  } catch (error) {
+    //
+  }
+
+  displayWordSamplesButton.checked = displayWordSamples;
+
+  displayWordSamplesButton.onchange = (event) => {
+    translationDisplaied = !!event.target.checked
+
+    wordBox.querySelector(".word-samples").style.visibility = translationDisplaied ? "visible" : "hidden"
+    localStorage.setItem("displayWordSamples", JSON.stringify(playSamples));
   }
 
   let wordDisplayed = true
@@ -985,14 +1003,14 @@
           <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
           <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-          return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-        })}</div>
-          <div class="word-samples">
+            return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
+          })}</div>
+          <div class="word-samples" style="visibility: ${displayWordSamples ? "visible" : "hidden"};">
             ${currentSamples ? currentSamples.map((item) => {
               const trimmed = trimUselessSample(item);
 
-              return trimmed.trim().length ? `<div>- ${trimmed}</div>` : ""; 
-            }).join("") : ""}  
+              return trimmed.trim().length ? `<div>- ${trimmed}</div>` : "";
+            }).join("") : ""}
           </div>
         </div>
       `
