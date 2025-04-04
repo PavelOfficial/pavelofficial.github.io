@@ -182,6 +182,21 @@
     name: "Популярные сокращенный все 12000",
     dict: exclude9000List(engDictNotKnownIndexes12000),
   }, playlistSeparator, {
+    name: "Популярные сокращенный все 12000. Имена.",
+    dict: engDictNotKnownIndexes12000Names,
+  }, {
+    name: "Популярные сокращенный все 12000. Специфические.",
+    dict: engDictNotKnownIndexes12000Specific,
+  }, {
+    name: "Популярные сокращенный все 12000. Понятные.",
+    dict: engDictNotKnownIndexes12000Understood,
+  }, {
+    name: "Популярные сокращенный все 12000. Новые.",
+    dict: engDictNotKnownIndexes12000Common,
+  }, {
+    name: "Популярные сокращенный все 12000. Суперспецифические.",
+    dict: engDictNotKnownIndexes12000SuperSpecific,
+  }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
   }, {
