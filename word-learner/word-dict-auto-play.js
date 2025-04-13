@@ -782,18 +782,19 @@
   displayWordSamplesButton.checked = displayWordSamples;
 
   displayWordSamplesButton.onchange = (event) => {
-    translationDisplaied = !!event.target.checked
+    translationDisplaied = !!event.target.checked;
 
-    wordBox.querySelector(".word-samples").style.visibility = translationDisplaied ? "visible" : "hidden"
-    localStorage.setItem("displayWordSamples", JSON.stringify(playSamples));
+    wordBox.querySelector(".word-samples").style.visibility = translationDisplaied ? "visible" : "hidden";
+    localStorage.setItem("displayWordSamples", JSON.stringify(translationDisplaied));
   }
 
-  let wordDisplayed = true
-  displayWordButton.onchange = (event) => {
-    wordDisplayed = !!event.target.checked
+  let wordDisplayed = true;
 
-    wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden"
-    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed && transcriptionDisplayed ? "visible" : "hidden"
+  displayWordButton.onchange = (event) => {
+    wordDisplayed = !!event.target.checked;
+
+    wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden";
+    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed && transcriptionDisplayed ? "visible" : "hidden";
   }
 
   let transcriptionDisplayed = true
@@ -1496,6 +1497,42 @@
 
     downloadAsFile(checkedWords)
   }
+
+  document.addEventListener("keydown", (event) => {
+    const key = event.key;
+
+    console.log("key: ", key);
+
+    if (key === "w") {
+      displayWordButton.click();
+
+      return;
+    }
+
+    if (key === "t") {
+      displayTranslationButton.click();
+
+      return;
+    }
+
+    if (key === "ArrowRight") {
+      nextWordButton.click();
+
+      return;
+    }
+
+    if (key === "ArrowLeft") {
+      prevWordButton.click();
+
+      return;
+    }
+
+    if (key === "p") {
+      playPauseButton.click();
+
+      return;
+    }
+  });
 
 })()
 

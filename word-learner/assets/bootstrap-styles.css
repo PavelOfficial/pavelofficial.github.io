@@ -171,6 +171,7 @@ ul {
 
 .top-panel {
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 .help-popup .top-panel {
