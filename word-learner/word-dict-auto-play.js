@@ -346,16 +346,6 @@
       ...engDictRecollection8000_part1650_3,
       ...engDictRecollection8000_part1650_4,
       ...engDictRecollection8000_part1650_5,
-      ...engDictRecollection8000_part1650_1,
-      ...engDictRecollection8000_part1650_2,
-      ...engDictRecollection8000_part1650_3,
-      ...engDictRecollection8000_part1650_4,
-      ...engDictRecollection8000_part1650_5,
-      ...engDictRecollection8000_part1650_1,
-      ...engDictRecollection8000_part1650_2,
-      ...engDictRecollection8000_part1650_3,
-      ...engDictRecollection8000_part1650_4,
-      ...engDictRecollection8000_part1650_5
     ]),
   }]
 
