@@ -331,6 +331,32 @@
   }, {
     name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 2)",
     dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_2),
+  }, playlistSeparator, {
+    name: "Все по повторениям",
+    dict: cleanDuplications([
+      ...engDictRecollection_2_8000_part1650_exclution_2,
+      ...engDictRecollection_2_8000_part1650_exclution_1,
+      ...engDictRecollection_2_8000_part1650_5,
+      ...engDictRecollection_2_8000_part1650_4,
+      ...engDictRecollection_2_8000_part1650_3,
+      ...engDictRecollection_2_8000_part1650_2,
+      ...engDictRecollection_2_8000_part1650_1,
+      ...engDictRecollection8000_part1650_1,
+      ...engDictRecollection8000_part1650_2,
+      ...engDictRecollection8000_part1650_3,
+      ...engDictRecollection8000_part1650_4,
+      ...engDictRecollection8000_part1650_5,
+      ...engDictRecollection8000_part1650_1,
+      ...engDictRecollection8000_part1650_2,
+      ...engDictRecollection8000_part1650_3,
+      ...engDictRecollection8000_part1650_4,
+      ...engDictRecollection8000_part1650_5,
+      ...engDictRecollection8000_part1650_1,
+      ...engDictRecollection8000_part1650_2,
+      ...engDictRecollection8000_part1650_3,
+      ...engDictRecollection8000_part1650_4,
+      ...engDictRecollection8000_part1650_5
+    ]),
   }]
 
   let isPrevMassWord = false
