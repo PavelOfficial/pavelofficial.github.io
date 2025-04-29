@@ -274,3 +274,20 @@ ul li input[type=checkbox] {
     width: 50px;
     margin: 0 auto;
 }
+
+.app-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.btn-xsm.btn-xsm.btn-xsm.btn-xsm {
+    --bs-btn-padding-y:0.25rem;
+    --bs-btn-padding-x:0.55rem;
+    --bs-btn-font-size:0.75rem;
+}

@@ -347,7 +347,36 @@
       ...engDictRecollection8000_part1650_4,
       ...engDictRecollection8000_part1650_5,
     ]),
-  }]
+  }];
+
+  const all12000 = engDictNotKnownIndexes12000Common;
+  const all8000 = cleanDuplications([
+    ...engDictRecollection_2_8000_part1650_exclution_2,
+    ...engDictRecollection_2_8000_part1650_exclution_1,
+    ...engDictRecollection_2_8000_part1650_5,
+    ...engDictRecollection_2_8000_part1650_4,
+    ...engDictRecollection_2_8000_part1650_3,
+    ...engDictRecollection_2_8000_part1650_2,
+    ...engDictRecollection_2_8000_part1650_1,
+    ...engDictRecollection8000_part1650_1,
+    ...engDictRecollection8000_part1650_2,
+    ...engDictRecollection8000_part1650_3,
+    ...engDictRecollection8000_part1650_4,
+    ...engDictRecollection8000_part1650_5,
+  ]);
+
+  const all12000En = all12000.map((item) => {
+    return dictMap[item[0]][item[1]];
+  });
+
+  console.log("all12000En: ", JSON.stringify(all12000En));
+
+  const all8000En = all8000.map((item) => {
+    return dictMap[item[0]][item[1]];
+  });
+
+  console.log("all8000En: ", JSON.stringify(all8000En));
+
 
   let isPrevMassWord = false
   let isPrevWord = false
@@ -1598,6 +1627,12 @@ const extractAWordFeature = () => {
 
 extractAWordFeature();
 
+
+document.querySelector(".switch-word-list-display").onclick = () => {
+  const currentPlaylistBox = document.querySelector(".current-playlist-box");
+
+  currentPlaylistBox.style.visibility = currentPlaylistBox.style.visibility === "hidden" ? "" : "hidden";
+};
 
 /*
   let text = JSON.stringify({hello:'example'});
