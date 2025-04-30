@@ -303,7 +303,7 @@
           const durationMin = parseInt((duration / 60) % 60, 10);
           const durationHours = parseInt(duration / (60 * 60), 10);
 
-          document.querySelector(".audio-player-progress__total-seek").innerHTML = `${durationHours ? `${durationHours}:` : ""}${leadingZeros(durationMin, 2)}:${leadingZeros(durationSec, 2)}`
+          document.querySelector(".audio-player-progress__total-seek").innerHTML = `${durationHours ? `${leadingZeros(durationHours)}:` : ""}${leadingZeros(durationMin, 2)}:${leadingZeros(durationSec, 2)}`
 
           const lastCurrentSeek = JSON.parse(localStorage.getItem("currentAudioSeek"));
           const lastCurrentUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));

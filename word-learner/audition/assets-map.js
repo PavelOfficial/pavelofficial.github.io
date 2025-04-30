@@ -77,6 +77,7 @@ const auditionUrlsC1EnglishCounselGreen = [
 
 const auditionUrlsTales = [
   "/audition/texts/1001.json",
+  "/audition/texts/1002.json",
 ];
 
 const leadingZeros = (num, count) => {
