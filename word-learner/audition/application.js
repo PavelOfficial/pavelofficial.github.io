@@ -171,7 +171,113 @@
     initSelectTheme()
   }
 
+  const showSentences = (delta, targetCount) => {
+    const allTexts = Array.from(document.querySelectorAll(".text-container .text-container_item"))
+
+    if (allTexts.length) {
+      let firstTextIndex
+      if (delta !== null) {
+        let firstTextIndex = allTexts.findIndex((item) => {
+          return item.style.visibility === "hidden";
+        });
+
+        if (firstTextIndex === -1) {
+          firstTextIndex = allTexts.length;
+        }
+
+        const secondIndex = firstTextIndex + delta;
+        const textSlice = allTexts.slice(secondIndex > firstTextIndex ? firstTextIndex : secondIndex, secondIndex > firstTextIndex ? secondIndex : firstTextIndex);
+
+        textSlice.forEach((item) => {
+          if (delta < 0) {
+            item.style.visibility = "hidden";
+          } else {
+            item.style.visibility = "";
+          }
+        });
+
+        const shownCount = allTexts.reduce((result, item) => {
+          if (item.style.visibility !== "hidden") {
+            result += 1;
+          }
+
+          return result;
+        }, 0)
+
+        localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+        localStorage.setItem("currentTextBlocksCount", JSON.stringify(shownCount));
+      } else {
+        firstTextIndex = allTexts.length;
+
+        allTexts.forEach((item, index) => {
+          if (index < targetCount) {
+            item.style.visibility = "";
+          } else {
+            item.style.visibility = "hidden";
+          }
+        });
+
+        localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+        localStorage.setItem("currentTextBlocksCount", JSON.stringify(targetCount));
+      }
+
+      let firstHiddenTextIndex = allTexts.findIndex((item) => {
+        return item.style.visibility === "hidden"
+      });
+
+      const lastVisibleTextIndex = firstHiddenTextIndex - 1;
+
+      const scrollArea = document.querySelector(".text-container-inner");
+      const textWrap = document.querySelector(".text-wrap");
+
+      if (allTexts[lastVisibleTextIndex]) {
+        const { top: itemTop, height: itemHeight  } = allTexts[lastVisibleTextIndex].getBoundingClientRect();
+        const { top: scrollAreaTop, height: scrollAreaHeight  }  = scrollArea.getBoundingClientRect();
+        const scrollAreaScrollTop = scrollArea.scrollTop;
+        const MARGIN_BOTTOM = 50;
+        const resultTop = scrollAreaScrollTop + (itemTop - scrollAreaTop) - scrollAreaHeight + itemHeight + MARGIN_BOTTOM;
+
+        scrollArea.scrollTo({ top: resultTop });
+      } else {
+        if (lastVisibleTextIndex === -2) {
+          scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height  });
+        } else {
+          scrollArea.scrollTo({ top: 0 });
+        }
+      }
+
+      allTexts.forEach((text) => {
+        text.setAttribute("class", text.getAttribute("class").replace(/\slast\-shown/, ""));
+      })
+
+      const prevLastVisibleItem = allTexts[firstTextIndex - 1];
+      if (prevLastVisibleItem) {
+        const prevLastVisibleItemClass = prevLastVisibleItem.getAttribute("class");
+
+        prevLastVisibleItem.setAttribute("class", `${prevLastVisibleItemClass} last-shown`);
+      }
+    }
+  };
+
+  const applyProgressToUI = (value) => {
+    const progressPercent = `${(value) * 100}%`
+    const duration = currentAudio.duration()
+    const seek = duration * value
+    const seekSec = parseInt(seek % 60, 10);
+    const seekMin = parseInt((seek / 60) % 60, 10);
+    const seekHours = parseInt(seek / (60 * 60), 10);
+
+    document.querySelector(".audio-player-progress__direct-handle").style.left = progressPercent
+    document.querySelector(".audio-player-progress__slow-handle").style.left = progressPercent
+    document.querySelector(".audio-player-progress__bar-progress").style.width = progressPercent
+
+    document.querySelector(".audio-player-progress__current-seek").innerHTML = `${seekHours ? `${leadingZeros(seekHours, 2)}:` : ""}${leadingZeros(seekMin, 2)}:${leadingZeros(seekSec, 2)}`
+  };
+
+  let currentAudioLoaded = false;
+  let currentAuditionItem = null;
   const selectThemeItem = (item, index) => {
+    currentAudioLoaded = false;
     const prevSelected = document.querySelector(".themes-li.selected")
 
     if (prevSelected) {
@@ -180,7 +286,8 @@
 
     item.setAttribute("class", "themes-li selected")
 
-    const auditionItem = auditions[index]
+    const auditionItem = auditions[index];
+    currentAuditionItem = auditionItem;
 
     if (currentAudio) {
       currentAudio.stop()
@@ -190,13 +297,31 @@
       src: [`/word-learner${auditionItem.audio}`],
       volume: soundValue,
       onload: () => {
-        const duration = currentAudio.duration()
-        const durationSec = parseInt(duration % 60, 10)
-        const durationMin = parseInt(duration / 60, 10)
+        if (currentAuditionItem === auditionItem) {
+          const duration = currentAudio.duration();
+          const durationSec = parseInt(duration % 60, 10);
+          const durationMin = parseInt((duration / 60) % 60, 10);
+          const durationHours = parseInt(duration / (60 * 60), 10);
 
-        document.querySelector(".audio-player-progress__total-seek").innerHTML = `${leadingZeros(durationMin, 2)}:${leadingZeros(durationSec, 2)}`
+          document.querySelector(".audio-player-progress__total-seek").innerHTML = `${durationHours ? `${durationHours}:` : ""}${leadingZeros(durationMin, 2)}:${leadingZeros(durationSec, 2)}`
+
+          const lastCurrentSeek = JSON.parse(localStorage.getItem("currentAudioSeek"));
+          const lastCurrentUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));
+
+          if (lastCurrentSeek && lastCurrentSeek !== null && lastCurrentUrl && lastCurrentUrl !== null && lastCurrentUrl === auditionItem.audio) {
+            currentAudio.seek(lastCurrentSeek);
+
+            localStorage.setItem("currentAudioSeek", JSON.stringify(null));
+
+            applyProgressToUI(currentAudio.seek() / currentAudio.duration());
+          }
+
+          currentAudioLoaded = true;
+
+        }
       },
     });
+
 
     const enList = splitText(auditionItem.en)
     const ruList = splitText(auditionItem.ru)
@@ -218,22 +343,20 @@
 
     document.querySelector(".text-container-inner .text-wrap").innerHTML = html
 
-    console.log(enList)
-    console.log(ruList)
-  }
+    /* display text blocks */
+    const lastCurrentUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));
+    const currentTextBlocksCount = JSON.parse(localStorage.getItem("currentTextBlocksCount"));
 
-  const applyProgressToUI = (value) => {
-    const progressPercent = `${(value) * 100}%`
-    const duration = currentAudio.duration()
-    const seek = duration * value
-    const seekSec = parseInt(seek % 60, 10)
-    const seekMin = parseInt(seek / 60, 10)
+    if (typeof currentTextBlocksCount === "number" &&
+      currentTextBlocksCount !== null &&
+      lastCurrentUrl &&
+      lastCurrentUrl !== null &&
+      lastCurrentUrl === auditionItem.audio) {
+      showSentences(null, currentTextBlocksCount);
+    }
 
-    document.querySelector(".audio-player-progress__direct-handle").style.left = progressPercent
-    document.querySelector(".audio-player-progress__slow-handle").style.left = progressPercent
-    document.querySelector(".audio-player-progress__bar-progress").style.width = progressPercent
-
-    document.querySelector(".audio-player-progress__current-seek").innerHTML = `${leadingZeros(seekMin, 2)}:${leadingZeros(seekSec, 2)}`
+    // console.log(enList)
+    // console.log(ruList)
   }
 
   let progressRequestAminationID = null
@@ -347,77 +470,21 @@
       if (firstElementVisibility === "hidden") {
         allTexts.forEach((text) => {
           text.style.visibility = ""
-        })
+        });
 
-        scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height })
+        scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height });
+
+        localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+        localStorage.setItem("currentTextBlocksCount", JSON.stringify(allTexts.length));
       } else {
         allTexts.forEach((text) => {
           text.style.visibility = "hidden"
-        })
+        });
 
-        scrollArea.scrollTo({ top: 0 })
-      }
-    }
-  }
+        scrollArea.scrollTo({ top: 0 });
 
-  const showSentences = (delta) => {
-    const allTexts = Array.from(document.querySelectorAll(".text-container .text-container_item"))
-
-    if (allTexts.length) {
-      let firstTextIndex = allTexts.findIndex((item) => {
-        return item.style.visibility === "hidden"
-      })
-
-      if (firstTextIndex === -1) {
-        firstTextIndex = allTexts.length
-      }
-
-      const secondIndex = firstTextIndex + delta
-
-      const textSlice = allTexts.slice(secondIndex > firstTextIndex ? firstTextIndex : secondIndex, secondIndex > firstTextIndex ? secondIndex : firstTextIndex)
-
-      textSlice.forEach((item) => {
-        if (delta < 0) {
-          item.style.visibility = "hidden"
-        } else {
-          item.style.visibility = ""
-        }
-      })
-
-      let firstHiddenTextIndex = allTexts.findIndex((item) => {
-        return item.style.visibility === "hidden"
-      })
-
-      const lastVisibleTextIndex = firstHiddenTextIndex - 1
-
-      const scrollArea = document.querySelector(".text-container-inner")
-      const textWrap = document.querySelector(".text-wrap")
-
-      if (allTexts[lastVisibleTextIndex]) {
-        const { top: itemTop, height: itemHeight  } = allTexts[lastVisibleTextIndex].getBoundingClientRect()
-        const { top: scrollAreaTop, height: scrollAreaHeight  }  = scrollArea.getBoundingClientRect()
-        const scrollAreaScrollTop = scrollArea.scrollTop
-        const MARGIN_BOTTOM = 50
-        const resultTop = scrollAreaScrollTop + (itemTop - scrollAreaTop) - scrollAreaHeight + itemHeight + MARGIN_BOTTOM
-
-        scrollArea.scrollTo({ top: resultTop })
-      } else {
-        if (lastVisibleTextIndex === -2) {
-          scrollArea.scrollTo({ top: textWrap.getBoundingClientRect().height  })
-        } else {
-          scrollArea.scrollTo({ top: 0 })
-        }
-      }
-
-      allTexts.forEach((text) => {
-        text.setAttribute("class", text.getAttribute("class").replace(/\slast\-shown/, ""))
-      })
-
-      const prevLastVisibleItem = allTexts[firstTextIndex - 1]
-      if (prevLastVisibleItem) {
-        const prevLastVisibleItemClass = prevLastVisibleItem.getAttribute("class")
-
-        prevLastVisibleItem.setAttribute("class", `${prevLastVisibleItemClass} last-shown`)
+        localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+        localStorage.setItem("currentTextBlocksCount", JSON.stringify(0));
       }
     }
   }
@@ -802,5 +869,33 @@
     cleanCommentForm()
   }
   /* END COMMENT */
+
+  /* Time progress saving */
+  let previousCurrentSeek = null;
+  setInterval(() => {
+    if (currentAudioLoaded) {
+      if (currentAudio) {
+        const currentSeek = currentAudio.seek();
+
+        localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+        localStorage.setItem("currentAudioSeek", JSON.stringify(previousCurrentSeek));
+
+        previousCurrentSeek = currentSeek;
+      } else {
+        localStorage.setItem("currentAudioUrl", JSON.stringify(null));
+        localStorage.setItem("currentAudioSeek", JSON.stringify(null));
+      }
+    }
+  }, 3000);
+
+
+  /* Displayed text blocks saving */
+
+
+  /* Buttons to hide till certain text block */
+
+
+  /*  */
+
 
 })()

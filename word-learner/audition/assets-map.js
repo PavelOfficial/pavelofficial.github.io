@@ -75,6 +75,10 @@ const auditionUrlsC1EnglishCounselGreen = [
   "/audition/texts/0064.json",
 ];
 
+const auditionUrlsTales = [
+  "/audition/texts/1001.json",
+];
+
 const leadingZeros = (num, count) => {
   return String('0000000000000' + num).slice(-count)
 }
@@ -117,5 +121,9 @@ const categories = [
   {
     title: "ESL Cyber Listening Lab (Difficult)",
     auditions: eslCyberListeningLabDifficult,
+  },
+  {
+    title: "Tales",
+    auditions: auditionUrlsTales,
   },
 ]
