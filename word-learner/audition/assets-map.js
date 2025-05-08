@@ -78,6 +78,12 @@ const auditionUrlsC1EnglishCounselGreen = [
 const auditionUrlsTales = [
   "/audition/texts/1001.json",
   "/audition/texts/1002.json",
+  "/audition/texts/1003.json",
+  "/audition/texts/1004.json",
+  "/audition/texts/1005.json",
+  "/audition/texts/1006.json",
+  "/audition/texts/1007.json",
+  "/audition/texts/1008.json",
 ];
 
 const leadingZeros = (num, count) => {
