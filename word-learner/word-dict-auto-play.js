@@ -347,6 +347,9 @@
       ...engDictRecollection8000_part1650_4,
       ...engDictRecollection8000_part1650_5,
     ]),
+  }, playlistSeparator, {
+    name: "Повторение 1 пачки 12000",
+    dict: cleanDuplications(engDictRecollection_1_12000),
   }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
@@ -378,28 +381,29 @@
   console.log("all8000En: ", JSON.stringify(all8000En));
 
 
-  let isPrevMassWord = false
-  let isPrevWord = false
-  let isNextWord = false
-  let isNextMassWord = false
-  let currentSamples = null
-  let audioExamples = null
+  let isPrevMassWord = false;
+  let isPrevWord = false;
+  let isNextWord = false;
+  let isNextMassWord = false;
+  let currentSamples = null;
+  let audioExamples = null;
 
-  const DEFAULT_TRANSLATION_DELAY = 350
-  const DEFAULT_PLAYING_TIME = null
-  const DEFAULT_SELECT_DELAY_AFTER_VALUE = 0
-  const DEFAULT_MASS_JUMP_COUNT = 5
-  let playTime = null
-  let delayAfter = null
-  let TRANSLATION_DELAY = 350
-  let selectDelayValue = localStorage.getItem("selectDelayValue")
-  let selectPlayValue = localStorage.getItem("selectPlayValue")
-  let selectDelayAfterValue = localStorage.getItem("selectDelayAfterValue")
-  let currentPayingAudio = null
-  let currentList = null
-  let currentWord = null
-  let currentDescription = null
-  let currentSelection = null
+  const DEFAULT_TRANSLATION_DELAY = 350;
+  const DEFAULT_PLAYING_TIME = null;
+  const DEFAULT_SELECT_DELAY_AFTER_VALUE = 0;
+  const DEFAULT_MASS_JUMP_COUNT = 5;
+  let playTime = null;
+  let delayAfter = null;
+  let TRANSLATION_DELAY = 350;
+  let selectDelayValue = localStorage.getItem("selectDelayValue");
+  let selectPlayValue = localStorage.getItem("selectPlayValue");
+  let selectDelayAfterValue = localStorage.getItem("selectDelayAfterValue");
+  let currentPayingAudio = null;
+  let currentList = null;
+  let currentWord = null;
+  let currentDescription = null;
+  let currentDescription2 = null;
+  let currentSelection = null;
   let handleFirstAudioEnd = null;
   let handleSecondAudioEnd = null;
   let handleThirdAudioEnd = null;
@@ -962,6 +966,7 @@
       const word = dict[index];
       const samplesDict = dictMapSamples[packName];
       const fullDescription = allWordsMap[word];
+      const fullDescription2 = enMap[word];
 
       if (samplesDict) {
         currentSamples = samplesDict[index];
@@ -969,8 +974,9 @@
         currentSamples = null;
       }
 
-      currentWord = word
-      currentDescription = fullDescription
+      currentWord = word;
+      currentDescription = fullDescription;
+      currentDescription2 = fullDescription2;
     }
 
     const listItemIndex = currentList.dict.findIndex((item) => {
@@ -1044,13 +1050,41 @@
     }
 
     if (currentDescription) {
+      currentDescription2
+      /*
+          "blimey": {
+            "en": "blimey",
+              "transcription": "['blaɪmɪ]",
+              "translations": [
+              {
+                "translations": [
+                  "межд.; разг.; уст.",
+                  "чтоб мне провалиться!, иди ты!"
+                ],
+                "examples": []
+              }
+            ]
+          },
+      */
+
       content = `
         <div class="word-box-inner">
           <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
-          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription}</div>
-          <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.blocks.map((item) => {
-            return `<div>${item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ")}</div>`
-          })}</div>
+          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription || (currentDescription2 ? currentDescription2.transcription : "")}</div>
+          <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">
+            ${currentDescription.blocks.map((item) => {
+              const result = item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ").trim();
+              
+              if (result === ",") {
+                return "";
+              }
+              
+              return `<div>&#x2022; ${result}</div>`;
+            }).join("")}
+            ${currentDescription2 ? currentDescription2.translations.map((item) => {
+              return `<div>&#x2022; ${item.translations.join("; ")}</div>`;      
+            }).join("") : ""}
+          </div>
           <div class="word-samples" style="visibility: ${displayWordSamples ? "visible" : "hidden"};">
             ${currentSamples ? currentSamples.map((item) => {
               const trimmed = trimUselessSample(item);
@@ -1554,13 +1588,13 @@
       return;
     }
 
-    if (key === "t") {
+    if (key === "t" || key === "2") {
       displayTranslationButton.click();
 
       return;
     }
 
-    if (key === "ArrowRight") {
+    if (key === "ArrowRight" || key === "3") {
       nextWordButton.click();
 
       return;
@@ -1572,8 +1606,14 @@
       return;
     }
 
-    if (key === "p") {
+    if (key === "p" || key === "6") {
       playPauseButton.click();
+
+      return;
+    }
+
+    if (event.code === "Space" || key === "1") {
+      currentCheckbox.click();
 
       return;
     }

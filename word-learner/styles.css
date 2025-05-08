@@ -191,6 +191,8 @@ ul li input[type=checkbox] {
     max-height: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
+    padding-left: 7px;
 }
 
 .word-samples {
