@@ -127,7 +127,7 @@
     </div>
   </div>
   <div>
-  <div class="app-controls">
+  <div class="app-controls js-fast-mode-simple">
     <div class="app-controls__secondary padded">
       <button class="btn btn-primary btn-lg play-list-button">
         play list
@@ -210,6 +210,42 @@
       </button -->
     </div>
   </div>
+  <div class="app-controls js-fast-mode-ru-en" style="display: none;">
+    <div class="app-controls__secondary padded">
+      <div class="container no-pads">
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-primary skip-button btn-lg">
+              skip
+            </button>
+          </div>
+          <div class="col">
+            <button disabled="disabled" class="btn btn-primary skip-pause-button btn-lg">
+              skip pause
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="app-controls__main padded">
+      <div class="mt-5 js-word">
+        <div class="form-check">
+          <input class="form-check-input display-word-button" type="checkbox" value="" id="displayWordChecked2" checked />
+          <label class="form-check-label" for="displayWordChecked2">
+            word
+          </label>
+        </div>
+      </div>
+      <div class="mt-5 js-translation">
+        <div class="form-check">
+          <input class="form-check-input display-translation-button" type="checkbox" value="" id="displayTranslationChecked2" checked />
+          <label class="form-check-label" for="displayTranslationChecked2">
+            translation
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="bottom-panel bottom-panel-main padded">
     <div class="container no-pads">
       <div class="row">
@@ -279,6 +315,28 @@
         </label>
       </div>
     </div>
+    <div>
+      <h3>Modes</h3>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input translation-playing-button" type="checkbox" value="" id="sprint-simple" checked />
+        <label class="form-check-label form-check-label_large" for="sprint-simple">
+          Simple
+        </label>
+      </div>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input play-samples-button" type="checkbox" value="" id="sprint-ru-en" />
+        <label class="form-check-label form-check-label_large" for="sprint-ru-en">
+          Sprint RU-EN
+        </label>
+      </div>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input display-samples-button" type="checkbox" value="" id="sprint-en-ru" />
+        <label class="form-check-label form-check-label_large" for="sprint-en-ru">
+          Sprint EN-RU
+        </label>
+      </div>
+    </div>
+
     <div class="volume-box">
       <button class="btn btn-primary btn-lg" onclick="handleSaveChecked()">Save checked</button>
     </div>

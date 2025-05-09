@@ -461,6 +461,16 @@
 
   function playAudio(callback) {
     if (isPlaying && !isWordPlaying) {
+      if (window.sprintMode === "RuEn") {
+        if (displayWordButton[0].checked) {
+          displayWordButton[0].click();
+        }
+      } else if (window.sprintMode === "EnRu") {
+        if (displayTranslationButton[0].checked) {
+          displayTranslationButton[0].click();
+        }
+      }
+
       playAWord(callback)
     }
   }
@@ -730,8 +740,8 @@
     }
   }
 
-  const skipButton = document.querySelector(".skip-button")
-  const skipPauseButton = document.querySelector(".skip-pause-button")
+  const skipButton = Array.from(document.querySelectorAll(".skip-button"));
+  const skipPauseButton = Array.from(document.querySelectorAll(".skip-pause-button"));
 
   const prevMassWordButton = document.querySelector(".prev-mass-word-button")
   const prevWordButton = document.querySelector(".prev-word-button")
@@ -739,8 +749,8 @@
   const nextMassWordButton = document.querySelector(".next-mass-word-button")
   const currentCheckbox = document.querySelector(".current-checkbox")
 
-  const displayTranslationButton = document.querySelector(".display-translation-button")
-  const displayWordButton = document.querySelector(".display-word-button")
+  const displayTranslationButton = Array.from(document.querySelectorAll(".display-translation-button"));
+  const displayWordButton = Array.from(document.querySelectorAll(".display-word-button"));
   const transcriptionButton = document.querySelector(".display-transcription-button")
   const playSamplesButton = document.querySelector(".play-samples-button")
   const displayWordSamplesButton = document.querySelector(".display-samples-button")
@@ -814,11 +824,17 @@
 
   playListButton.onclick = () => switchPlaying()
 
-  displayTranslationButton.onchange = (event) => {
-    translationDisplaied = !!event.target.checked
+  displayTranslationButton.forEach((item) => {
+    item.onchange = (event) => {
+      translationDisplaied = !!event.target.checked;
 
-    wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
-  }
+      displayTranslationButton.forEach((item) => {
+        item.checked = !!event.target.checked;
+      });
+
+      wordBox.querySelector(".word-translations").style.visibility = translationDisplaied ? "visible" : "hidden"
+    };
+  });
 
   let displayWordSamples = false;
 
@@ -839,12 +855,19 @@
 
   let wordDisplayed = true;
 
-  displayWordButton.onchange = (event) => {
-    wordDisplayed = !!event.target.checked;
+  displayWordButton.forEach((item) => {
+    item.onchange = (event) => {
+      wordDisplayed = !!event.target.checked;
 
-    wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden";
-    wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed && transcriptionDisplayed ? "visible" : "hidden";
-  }
+      displayWordButton.forEach((item) => {
+        item.checked = wordDisplayed;
+      });
+
+      wordBox.querySelector(".word-value").style.visibility = wordDisplayed ? "visible" : "hidden";
+      wordBox.querySelector(".word-transcription").style.visibility = wordDisplayed && transcriptionDisplayed ? "visible" : "hidden";
+    };
+  });
+
 
   let transcriptionDisplayed = true
   transcriptionButton.onchange = (event) => {
@@ -893,15 +916,29 @@
     }
   }
 
-  skipButton.onclick = () => {
-    goToWord()
-  }
+  const setSkipPauseDisabled = (disabled) => {
+    skipPauseButton.forEach((item) => {
+      if (disabled) {
+        item.setAttribute("disabled", disabled);
+      } else {
+        item.removeAttribute("disabled");
+      }
+    });
+  };
 
-  skipPauseButton.onclick = () => {
-    console.log("skipPauseButton !!!")
+  skipButton.forEach((item) => {
+    item.onclick = () => {
+      goToWord();
+    };
+  });
 
-    skipPause()
-  }
+  skipPauseButton.forEach((item) => {
+    item.onclick = () => {
+      console.log("skipPauseButton !!!")
+
+      skipPause();
+    };
+  });
 
   const switchSelection = (delta) => {
     const index = currentList.dict.findIndex((item) => {
@@ -1123,7 +1160,7 @@
         let finished = false
 
         const finish = () => {
-          skipPauseButton.setAttribute("disabled", "disabled")
+          setSkipPauseDisabled("disabled");
 
           if (finished) {
             return
@@ -1167,9 +1204,9 @@
               return
             }
 
-            skipPauseButton.removeAttribute("disabled")
+            setSkipPauseDisabled(null);
             handleFirstAudioEnd = () => {
-              skipPauseButton.setAttribute("disabled", "disabled")
+              setSkipPauseDisabled("disabled");
 
               handleFirstAudioEnd = null
               translationDescriptor = null
@@ -1196,11 +1233,11 @@
               return
             }
 
-            skipPauseButton.removeAttribute("disabled")
+            setSkipPauseDisabled(null);
 
             handleSecondAudioEnd = () => {
               handleSecondAudioEnd = null;
-              skipPauseButton.setAttribute("disabled", "disabled");
+              setSkipPauseDisabled("disabled");
               translationDescriptor = null;
 
               thirdEnd();
@@ -1213,11 +1250,11 @@
             if (audioExamples) {
               currentPayingAudio = audioExamples
 
-              skipPauseButton.setAttribute("disabled", "disabled")
+              setSkipPauseDisabled("disabled");
               audioExamples.play(() => {
                 finish()
               }, (delayAfter || 750), () => {
-                skipPauseButton.removeAttribute("disabled")
+                setSkipPauseDisabled(null);
               });
 
               handleThirdAudioEnd = () => {
@@ -1592,13 +1629,13 @@
     console.log("key: ", key);
 
     if (key === "w") {
-      displayWordButton.click();
+      displayWordButton[0].click();
 
       return;
     }
 
     if (key === "t" || key === "2") {
-      displayTranslationButton.click();
+      displayTranslationButton[0].click();
 
       return;
     }
@@ -1682,6 +1719,61 @@ document.querySelector(".switch-word-list-display").onclick = () => {
 
   currentPlaylistBox.style.visibility = currentPlaylistBox.style.visibility === "hidden" ? "" : "hidden";
 };
+
+window.sprintMode = "Simple";
+
+// Sprint modes
+(() => {
+  const sprintSimple = document.querySelector("#sprint-simple");
+  const sprintRuEn = document.querySelector("#sprint-ru-en");
+  const sprintEnRu = document.querySelector("#sprint-en-ru");
+
+  const modeSimpleBox = document.querySelector(".js-fast-mode-simple");
+  const modeRuEnBox = document.querySelector(".js-fast-mode-ru-en");
+
+  const modeRuEnBoxWord = modeRuEnBox.querySelector(".js-word");
+  const modeRuEnBoxTranslation = modeRuEnBox.querySelector(".js-translation");
+
+  sprintSimple.addEventListener("click", () => {
+    sprintSimple.checked = true;
+    sprintRuEn.checked = false;
+    sprintEnRu.checked = false;
+
+    modeSimpleBox.style.display = "flex";
+    modeRuEnBox.style.display = "none";
+
+    window.sprintMode = "Simple";
+  });
+
+  sprintRuEn.addEventListener("click", () => {
+    sprintSimple.checked = false;
+    sprintRuEn.checked = true;
+    sprintEnRu.checked = false;
+
+    modeSimpleBox.style.display = "none";
+    modeRuEnBox.style.display = "flex";
+
+    modeRuEnBoxWord.style.display = "block";
+    modeRuEnBoxTranslation.style.display = "none";
+
+    window.sprintMode = "RuEn";
+  });
+
+  sprintEnRu.addEventListener("click", () => {
+    sprintSimple.checked = false;
+    sprintRuEn.checked = false;
+    sprintEnRu.checked = true;
+
+    modeSimpleBox.style.display = "none";
+    modeRuEnBox.style.display = "flex";
+
+    modeRuEnBoxWord.style.display = "none";
+    modeRuEnBoxTranslation.style.display = "block";
+
+    window.sprintMode = "EnRu";
+  });
+
+})();
 
 /*
   let text = JSON.stringify({hello:'example'});
