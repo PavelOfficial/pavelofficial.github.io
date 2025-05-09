@@ -323,13 +323,18 @@
     });
 
 
-    const enList = splitText(auditionItem.en)
-    const ruList = splitText(auditionItem.ru)
+    if (auditionItem.contentType === "html") {
+      const html = `<div class="text-wrap-html">${auditionItem.en}</div>`;
 
-    const html = enList.map((enItem, index) => {
-      const ruItem = ruList[index]
+      document.querySelector(".text-container-inner .text-wrap").innerHTML = html;
+    } else {
+      const enList = splitText(auditionItem.en);
+      const ruList = splitText(auditionItem.ru);
 
-      return `
+      const html = enList.map((enItem, index) => {
+        const ruItem = ruList[index]
+
+        return `
         <div class="text-container_item">
           <div class="text-container_en">
             ${enItem}
@@ -339,24 +344,25 @@
           </div>
         </div>
       `
-    }).join("")
+      }).join("");
 
-    document.querySelector(".text-container-inner .text-wrap").innerHTML = html
+      document.querySelector(".text-container-inner .text-wrap").innerHTML = html;
 
-    /* display text blocks */
-    const lastCurrentUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));
-    const currentTextBlocksCount = JSON.parse(localStorage.getItem("currentTextBlocksCount"));
+      /* display text blocks */
+      const lastCurrentUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));
+      const currentTextBlocksCount = JSON.parse(localStorage.getItem("currentTextBlocksCount"));
 
-    if (typeof currentTextBlocksCount === "number" &&
-      currentTextBlocksCount !== null &&
-      lastCurrentUrl &&
-      lastCurrentUrl !== null &&
-      lastCurrentUrl === auditionItem.audio) {
-      showSentences(null, currentTextBlocksCount);
+      if (typeof currentTextBlocksCount === "number" &&
+        currentTextBlocksCount !== null &&
+        lastCurrentUrl &&
+        lastCurrentUrl !== null &&
+        lastCurrentUrl === auditionItem.audio) {
+        showSentences(null, currentTextBlocksCount);
+      }
+
+      // console.log(enList)
+      // console.log(ruList)
     }
-
-    // console.log(enList)
-    // console.log(ruList)
   }
 
   let progressRequestAminationID = null
@@ -387,10 +393,14 @@
     cancelAnimationFrame(progressRequestAminationID);
   }
 
+  let playing = false;
+
   window.playAudio = () => {
     if (currentAudio && currentAudio.state() === "loaded") {
       currentAudio.play()
       watchProgress()
+
+      playing = true;
 
       document.querySelector(".btn-pause").style.display = ""
       document.querySelector(".btn-play").style.display = "none"
@@ -402,6 +412,8 @@
       currentAudio.pause()
 
       finishProgress()
+
+      playing = false;
 
       document.querySelector(".btn-pause").style.display = "none"
       document.querySelector(".btn-play").style.display = ""
@@ -896,6 +908,51 @@
 
 
   /*  */
+  document.addEventListener("keydown", (event) => {
+    const key = event.key;
 
+    if (key === "q") {
+      onRewindBack10Sec();
+      return;
+    }
+
+    if (key === "w") {
+      onRewindBack5Sec();
+      return;
+    }
+
+    if (key === "e") {
+      onRewindBack2_5Sec();
+      return;
+    }
+
+    if (key === "r") {
+      onRewindNext2_5Sec();
+
+      return;
+    }
+
+    if (key === "t") {
+      onRewindNext5Sec();
+
+      return;
+    }
+
+    if (key === "y") {
+      onRewindNext10Sec();
+
+      return;
+    }
+
+    if (event.code === "Space") {
+      if (playing) {
+        pauseAudio();
+      } else {
+        playAudio();
+      }
+
+      return;
+    }
+  });
 
 })()

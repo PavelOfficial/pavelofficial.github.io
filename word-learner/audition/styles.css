@@ -96,8 +96,12 @@ ul.categories li.category-li.selected {
     width: 100%;
     overflow-y: scroll;
     padding: 7px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
+}
+
+.text-wrap-html {
+    font-size: 18px;
 }
 
 .text-container-inner .text-wrap {
