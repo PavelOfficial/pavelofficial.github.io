@@ -955,4 +955,93 @@
     }
   });
 
-})()
+})();
+
+// Replace google doc translation box.
+(() => {
+  const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  const observe = (obj, callback) => {
+    if (!obj || obj.nodeType !== 1) {
+      return;
+    }
+
+    if (MutationObserver) {
+      // define a new observer
+      var mutationObserver = new MutationObserver(callback);
+      // have the observer observe for changes in children
+      mutationObserver.observe(obj, { childList: true, subtree: false });
+      return mutationObserver;
+    }
+  };
+
+  const observeMap =  new Map([]);
+
+  observe(document.body, (...args) => {
+    console.log("args: ", args);
+
+    let googleTranslateCase = false;
+    let googleTranslateRemoveCase = false;
+
+    args[0].forEach((argItem) => {
+      argItem.addedNodes.forEach((item) => {
+        if (item.matches("div.jfk-bubble.gtx-bubble")) {
+          googleTranslateCase = true;
+        }
+      });
+    });
+
+    let removedItem = null;
+    args[0].forEach((argItem) => {
+      argItem.removedNodes.forEach((item) => {
+        if (item.matches("div.jfk-bubble.gtx-bubble")) {
+          removedItem = item;
+          googleTranslateRemoveCase = true;
+        }
+      });
+    });
+
+    if (googleTranslateCase) {
+      const translationBox = document.querySelector("div.jfk-bubble.gtx-bubble");
+
+      // const className = translationBox.getAttribute("class")
+
+      translationBox.style.top = "";
+      translationBox.style.left = "";
+      translationBox.style.bottom = 0;
+      translationBox.style.right = 0;
+
+      // Options for the observer (which mutations to observe)
+      const config = { attributes: true, childList: false, subtree: false };
+
+      // Callback function to execute when mutations are observed
+      const callback = (mutationList, observer) => {
+        translationBox.style.top = "";
+        translationBox.style.left = "";
+        translationBox.style.bottom = 0;
+        translationBox.style.right = 0;
+      };
+
+      // Create an observer instance linked to the callback function
+      const observer = new MutationObserver(callback);
+
+      // Start observing the target node for configured mutations
+      observer.observe(translationBox, config);
+      observeMap.set(translationBox, observer);
+
+      // Later, you can stop observing
+      // observer.disconnect();
+    }
+
+    if (googleTranslateRemoveCase && removedItem) {
+      const observerItem = observeMap.get(removedItem);
+
+      if (observerItem) {
+        observerItem.disconnect();
+
+        console.log("observeMap.get(removedItem).disconnect(); !!!");
+      }
+    }
+  });
+
+  return
+})();
