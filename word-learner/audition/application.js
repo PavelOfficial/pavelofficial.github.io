@@ -171,6 +171,15 @@
     initSelectTheme()
   }
 
+  const scrollArea = document.querySelector(".text-container-inner");
+
+  scrollArea.addEventListener("scroll", (event) => {
+    const scrollTop = event.target.scrollTop;
+
+    localStorage.setItem("currentAudioUrl", JSON.stringify(currentAuditionItem.audio));
+    localStorage.setItem("scrollAreaScrollTop", JSON.stringify(scrollTop));
+  });
+
   const showSentences = (delta, targetCount) => {
     const allTexts = Array.from(document.querySelectorAll(".text-container .text-container_item"))
 
@@ -327,6 +336,15 @@
       const html = `<div class="text-wrap-html">${auditionItem.en}</div>`;
 
       document.querySelector(".text-container-inner .text-wrap").innerHTML = html;
+
+      // Scroll to stored scroll.
+      const scrollArea = document.querySelector(".text-container-inner");
+      const scrollAreaScrollTop = JSON.parse(localStorage.getItem("scrollAreaScrollTop"));
+      const currentAudioUrl = JSON.parse(localStorage.getItem("currentAudioUrl"));
+
+      if (currentAudioUrl === auditionItem.audio) {
+        scrollArea.scrollTo({ top: scrollAreaScrollTop });
+      }
     } else {
       const enList = splitText(auditionItem.en);
       const ruList = splitText(auditionItem.ru);
@@ -905,7 +923,6 @@
 
 
   /* Buttons to hide till certain text block */
-
 
   /*  */
   document.addEventListener("keydown", (event) => {
