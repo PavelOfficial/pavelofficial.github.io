@@ -1050,7 +1050,16 @@
     }
 
     if (currentDescription) {
-      currentDescription2
+      const clearTranscription = (text, word) => {
+        text = text.replace(/\[(?:[^\n]*)\]/gi, "");
+
+        if (word) {
+          text = text.replace(new RegExp(word, "gi"), "———");
+        }
+
+        return text;
+      };
+
       /*
           "blimey": {
             "en": "blimey",
@@ -1082,7 +1091,7 @@
               return `<div>&#x2022; ${result}</div>`;
             }).join("")}
             ${currentDescription2 ? currentDescription2.translations.map((item) => {
-              return `<div>&#x2022; ${item.translations.join("; ")}</div>`;      
+              return `<div>&#x2022; ${clearTranscription(item.translations.join("; "), currentDescription.en)}</div>`;      
             }).join("") : ""}
           </div>
           <div class="word-samples" style="visibility: ${displayWordSamples ? "visible" : "hidden"};">
