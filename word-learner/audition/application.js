@@ -924,22 +924,30 @@
 
   /* Buttons to hide till certain text block */
 
+
+  const downloadWordListBtt = document.querySelector(".download-word-list-btt");
+  const saveToLocalStorageBtt = document.querySelector(".save-to-local-storage-btt");
+
   /*  */
   document.addEventListener("keydown", (event) => {
     const key = event.key;
 
+    /* rewind */
     if (key === "q") {
       onRewindBack10Sec();
+
       return;
     }
 
     if (key === "w") {
       onRewindBack5Sec();
+
       return;
     }
 
     if (key === "e") {
       onRewindBack2_5Sec();
+
       return;
     }
 
@@ -961,6 +969,7 @@
       return;
     }
 
+    /* play/pause */
     if (event.code === "Space") {
       if (playing) {
         pauseAudio();
@@ -970,6 +979,17 @@
 
       return;
     }
+
+    /* save word */
+    // console.log("event.code: ", event.code, event);
+    if (event.ctrlKey && key === "s") {
+      saveToLocalStorageBtt.click();
+
+
+      event.preventDefault();
+      return;
+    }
+
   });
 
 })();
@@ -1002,7 +1022,7 @@
 
     args[0].forEach((argItem) => {
       argItem.addedNodes.forEach((item) => {
-        if (item.matches("div.jfk-bubble.gtx-bubble")) {
+        if (item.matches("div.TnITTtw-tooltip-main-wrap")) {
           googleTranslateCase = true;
         }
 
@@ -1015,7 +1035,7 @@
     let removedItem = null;
     args[0].forEach((argItem) => {
       argItem.removedNodes.forEach((item) => {
-        if (item.matches("div.jfk-bubble.gtx-bubble")) {
+        if (item.matches("div.TnITTtw-tooltip-main-wrap")) {
           removedItem = item;
           googleTranslateRemoveCase = true;
         }
@@ -1023,7 +1043,7 @@
     });
 
     if (googleTranslateCase) {
-      const translationBox = document.querySelector("div.jfk-bubble.gtx-bubble");
+      const translationBox = document.querySelector("div.TnITTtw-tooltip-main-wrap");
 
       // const className = translationBox.getAttribute("class")
 
@@ -1074,24 +1094,35 @@
   return
 })();
 
+
+
 // Safe to localstorage.
 (() => {
   const saveToLocalStorageBtt = document.querySelector(".save-to-local-storage-btt");
+  const saveToLocalStorageBttRawClass = saveToLocalStorageBtt.getAttribute("class");
+  let succeedTimeoutDescriptor = null;
 
   saveToLocalStorageBtt.addEventListener("click", () => {
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
-    const ticket = document.querySelector("div.jfk-bubble.gtx-bubble");
+    const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
 
     if (!ticket) {
       return;
     }
 
-    const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
-    const type = String(ticket.querySelector(".gtx-pos").innerText).trim();
-    const ruTranslations = String(ticket.querySelector(".gtx-td").innerText).trim();
+    const enBody = ticket.querySelector(".TnITTtw-original .TnITTtw-mv-text-part");
+    const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
+    const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
 
-    const en = String(bodies[0].innerText).trim();
-    const ru = String(bodies[1].innerText).trim();
+    // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
+    const type = String(ticket.querySelector(".TnITTtw-v-pos").innerText).trim();
+
+    const en = String(enBody.innerText).trim();
+    const ru = String(ruBody.innerText).trim();
+
+    const ruTranslations = ruOthers.map((item) => {
+      return String(item.innerText).trim();
+    }).join("; ");
 
     if (dict.find((item) => item.ru === en)) {
       return;
@@ -1109,7 +1140,29 @@
 
     dict.push(record);
 
+
+    saveToLocalStorageBtt.setAttribute("class", saveToLocalStorageBttRawClass + " succeed-btt");
+    clearTimeout(succeedTimeoutDescriptor);
+    succeedTimeoutDescriptor = setTimeout(() => {
+      saveToLocalStorageBtt.setAttribute("class", saveToLocalStorageBttRawClass);
+    }, 750);
+
     localStorage.setItem("dict", JSON.stringify(dict));
+  });
+
+
+  const downloadWordListBtt = document.querySelector(".download-word-list-btt");
+
+  function downloadAsFile(data, name) {
+    let a = document.createElement("a");
+    let file = new Blob([data], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+    a.click();
+  }
+
+  downloadWordListBtt.addEventListener("click", () => {
+    downloadAsFile(localStorage.getItem("dict") || "", "memory-word-list.json");
   });
 
 })();

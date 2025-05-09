@@ -101,6 +101,10 @@ ul.categories li.category-li.selected {
     max-width: 450px;
 }
 
+.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt {
+    background: #229922;
+}
+
 .text-wrap-html {
     font-size: 18px;
 }
