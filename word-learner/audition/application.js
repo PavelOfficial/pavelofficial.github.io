@@ -998,11 +998,16 @@
 
     let googleTranslateCase = false;
     let googleTranslateRemoveCase = false;
+    let transButt = false;
 
     args[0].forEach((argItem) => {
       argItem.addedNodes.forEach((item) => {
         if (item.matches("div.jfk-bubble.gtx-bubble")) {
           googleTranslateCase = true;
+        }
+
+        if (item.matches(".TnITTtw-translate-selection-button")) {
+          transButt = true;
         }
       });
     });
@@ -1058,7 +1063,53 @@
         console.log("observeMap.get(removedItem).disconnect(); !!!");
       }
     }
+
+    if (transButt) {
+      const btt = document.querySelector(".TnITTtw-translate-selection-button")
+
+      btt.click();
+    }
   });
 
   return
+})();
+
+// Safe to localstorage.
+(() => {
+  const saveToLocalStorageBtt = document.querySelector(".save-to-local-storage-btt");
+
+  saveToLocalStorageBtt.addEventListener("click", () => {
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const ticket = document.querySelector("div.jfk-bubble.gtx-bubble");
+
+    if (!ticket) {
+      return;
+    }
+
+    const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
+    const type = String(ticket.querySelector(".gtx-pos").innerText).trim();
+    const ruTranslations = String(ticket.querySelector(".gtx-td").innerText).trim();
+
+    const en = String(bodies[0].innerText).trim();
+    const ru = String(bodies[1].innerText).trim();
+
+    if (dict.find((item) => item.ru === en)) {
+      return;
+    }
+
+    const nowDate = new Date()
+    const record = {
+      en: en,
+      ru: ru,
+      type: type,
+      ruTranslations: ruTranslations,
+      date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
+      time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
+    };
+
+    dict.push(record);
+
+    localStorage.setItem("dict", JSON.stringify(dict));
+  });
+
 })();
