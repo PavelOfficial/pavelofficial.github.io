@@ -1687,7 +1687,7 @@
     reverseCheckedInRangeBtt.addEventListener("click", (event) => {
       const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item"));
       const targetCheckboxes = checkboxes.slice(indexFrom, indexTo + 1);
-      const checkedCount = targetCheckboxes.forEach((item) => {
+      targetCheckboxes.forEach((item) => {
         item.checked = !item.checked;
       });
     });
