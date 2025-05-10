@@ -1071,7 +1071,7 @@
 
       word = dict[index]
 
-      return `<li><div><input id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div></li>`
+      return `<li><div><input class="word-checkbox-item" id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div></li>`
     }).join('')}
       </ul>
     ` : ''
@@ -1665,6 +1665,35 @@
     }
   });
 
+
+  // Checked in range
+  (() => {
+    const refreshCheckedCountBtt = document.querySelector(".js-refresh-checked-count");
+    const reverseCheckedInRangeBtt = document.querySelector(".js-reverse-checked-in-range");
+    const checkedCountText = document.querySelector(".js-checked-count");
+
+    refreshCheckedCountBtt.addEventListener("click", (event) => {
+      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item"));
+      const targetCheckboxes = checkboxes.slice(indexFrom, indexTo + 1);
+      const checkedCount = targetCheckboxes.reduce((result, item) => {
+        result += item.checked ? 1 : 0;
+
+        return result;
+      }, 0);
+
+      checkedCountText.innerHTML = `${checkedCount} / ${(indexTo - indexFrom) + 1}`
+    });
+
+    reverseCheckedInRangeBtt.addEventListener("click", (event) => {
+      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item"));
+      const targetCheckboxes = checkboxes.slice(indexFrom, indexTo + 1);
+      const checkedCount = targetCheckboxes.forEach((item) => {
+        item.checked = !item.checked;
+      });
+    });
+
+  })();
+
 })()
 
 // extract a word feature
@@ -1787,3 +1816,4 @@ window.sprintMode = "Simple";
     a.click();
   }
  */
+
