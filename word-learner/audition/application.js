@@ -1117,7 +1117,7 @@
     let record;
 
     if (!enBody || !ruBody) {
-      const enBodyText = ticket.querySelector(".TnITTtw-mv-text-part.TnITTtw-t .TnITTtw-mv-text-part.TnITTtw-t");
+      const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
       const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
       const type = "";
 
