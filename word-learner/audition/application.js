@@ -1114,32 +1114,56 @@
     const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
     const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
 
-    // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
-    const type = String(ticket.querySelector(".TnITTtw-v-pos").innerText).trim();
+    let record;
 
-    const en = String(enBody.innerText).trim();
-    const ru = String(ruBody.innerText).trim();
+    if (!enBody || !ruBody) {
+      const enBodyText = ticket.querySelector(".TnITTtw-mv-text-part.TnITTtw-t .TnITTtw-mv-text-part.TnITTtw-t");
+      const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
+      const type = "";
 
-    const ruTranslations = ruOthers.map((item) => {
-      return String(item.innerText).trim();
-    }).join("; ");
+      const en = String(enBodyText.innerText).trim();
+      const ru = String(ruBodyText.innerText).trim();
 
-    if (dict.find((item) => item.ru === en)) {
-      return;
+      if (dict.find((item) => item.en === en)) {
+        return;
+      }
+
+      const nowDate = new Date()
+      record = {
+        en: en,
+        ru: ru,
+        type: type,
+        ruTranslations: [],
+        date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
+        time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
+      };
+    } else {
+      // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
+      const type = String(ticket.querySelector(".TnITTtw-v-pos").innerText).trim();
+
+      const en = String(enBody.innerText).trim();
+      const ru = String(ruBody.innerText).trim();
+
+      const ruTranslations = ruOthers.map((item) => {
+        return String(item.innerText).trim();
+      }).join("; ");
+
+      if (dict.find((item) => item.en === en)) {
+        return;
+      }
+
+      const nowDate = new Date()
+      record = {
+        en: en,
+        ru: ru,
+        type: type,
+        ruTranslations: ruTranslations,
+        date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
+        time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
+      };
     }
 
-    const nowDate = new Date()
-    const record = {
-      en: en,
-      ru: ru,
-      type: type,
-      ruTranslations: ruTranslations,
-      date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
-      time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
-    };
-
     dict.push(record);
-
 
     saveToLocalStorageBtt.setAttribute("class", saveToLocalStorageBttRawClass + " succeed-btt");
     clearTimeout(succeedTimeoutDescriptor);
