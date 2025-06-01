@@ -353,6 +353,9 @@
   }, {
     name: "Повторение 2 пачки 12000",
     dict: cleanDuplications(engDictRecollection_2_12000),
+  }, {
+    name: "Повторение 3 пачки 12000",
+    dict: cleanDuplications(engDictRecollection_3_12000),
   }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
