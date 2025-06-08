@@ -200,6 +200,9 @@
   }, {
     name: "Популярные сокращенный 20001 все.",
     dict: engAll20001,
+  }, {
+    name: "Популярные сокращенный 20001 все. Сокращенный.",
+    dict: excludeSublist(engAll20001, engAll20001Exclude),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
