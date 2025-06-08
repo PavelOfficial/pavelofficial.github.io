@@ -107,6 +107,7 @@
     170: engWords170,
     900: engWords900,
     12000: enWords12000Delta,
+    20001: enWords20000ExtraDelta,
   };
 
   const dictMapSamples = {
@@ -196,6 +197,9 @@
   }, {
     name: "Популярные сокращенный все 12000. Суперспецифические.",
     dict: engDictNotKnownIndexes12000SuperSpecific,
+  }, {
+    name: "Популярные сокращенный 20001 все.",
+    dict: engAll20001,
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
@@ -409,6 +413,7 @@
   let currentWord = null;
   let currentDescription = null;
   let currentDescription2 = null;
+  let currentDescription3 = null;
   let currentSelection = null;
   let handleFirstAudioEnd = null;
   let handleSecondAudioEnd = null;
@@ -1010,6 +1015,7 @@
       const samplesDict = dictMapSamples[packName];
       const fullDescription = allWordsMap[word];
       const fullDescription2 = enMap[word];
+      const heightPriorityDescription3 = heightPriorityWordsMap[word];
 
       if (samplesDict) {
         currentSamples = samplesDict[index];
@@ -1017,9 +1023,12 @@
         currentSamples = null;
       }
 
+      console.log("heightPriorityDescription3: ", heightPriorityDescription3)
+
       currentWord = word;
       currentDescription = fullDescription;
       currentDescription2 = fullDescription2;
+      currentDescription3 = heightPriorityDescription3;
     }
 
     const listItemIndex = currentList.dict.findIndex((item) => {
@@ -1092,7 +1101,7 @@
       return text.replace(/[^A-Za-z]+$/, "")
     }
 
-    if (currentDescription) {
+    if (currentDescription || currentDescription3) {
       const clearTranscription = (text, word) => {
         text = text.replace(/\[(?:[^\n]*)\]/gi, "");
 
@@ -1119,12 +1128,17 @@
           },
       */
 
+      console.log("currentDescription3: ", currentDescription3);
+
       content = `
         <div class="word-box-inner">
-          <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.en}</div>
-          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${currentDescription.transcription || (currentDescription2 ? currentDescription2.transcription : "")}</div>
+          <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">
+            ${currentDescription3 ? currentDescription3.displayEn : currentDescription.en}
+          </div>
+          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${(currentDescription && currentDescription.transcription) || (currentDescription2 ? currentDescription2.transcription : "")}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">
-            ${currentDescription.blocks.map((item) => {
+            ${currentDescription3 ? `<div>&#x2022; ${currentDescription3.ru}</div>` : ""}
+            ${currentDescription ? currentDescription.blocks.map((item) => {
               const result = item.translations.filter((item) => item).map((itemWord) => itemWord.split(",").join(", ")).join("; ").trim();
               
               if (result === ",") {
@@ -1132,9 +1146,9 @@
               }
               
               return `<div>&#x2022; ${result}</div>`;
-            }).join("")}
+            }).join("") : ""}
             ${currentDescription2 ? currentDescription2.translations.map((item) => {
-              return `<div>&#x2022; ${clearTranscription(item.translations.join("; "), currentDescription.en)}</div>`;      
+              return `<div>&#x2022; ${clearTranscription(item.translations.join("; "), (currentDescription && currentDescription.en) || (currentDescription3 && currentDescription3.displayEn))}</div>`;      
             }).join("") : ""}
           </div>
           <div class="word-samples" style="visibility: ${displayWordSamples ? "visible" : "hidden"};">
