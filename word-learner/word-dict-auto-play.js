@@ -1153,6 +1153,7 @@
               
               return `<div>&#x2022; ${result}</div>`;
             }).join("") : ""}
+            ${(currentDescription && currentDescription.yaTranslation) ?  `<div>&#x2022; ${currentDescription.yaTranslation}</div>` : ""}
             ${currentDescription2 ? currentDescription2.translations.map((item) => {
               return `<div>&#x2022; ${clearTranscription(item.translations.join("; "), (currentDescription && currentDescription.en) || (currentDescription3 && currentDescription3.displayEn))}</div>`;      
             }).join("") : ""}
