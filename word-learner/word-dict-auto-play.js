@@ -141,6 +141,12 @@
     dict: [],
   }
 
+  const shortEngAll20001 = excludeSublist(engAll20001, [
+    ...engAll20001Exclude1IrregularVerbs,
+    ...engAll20001Exclude2PhrasalVerbs,
+    ...engAll20001ExcludeRest,
+  ]);
+
   // enWords8000
   // engWords2700
   const playLists = [{
@@ -202,11 +208,13 @@
     dict: engAll20001,
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный.",
-    dict: excludeSublist(engAll20001, [
-      ...engAll20001Exclude1IrregularVerbs,
-      ...engAll20001Exclude2PhrasalVerbs,
-      ...engAll20001ExcludeRest,
-    ]),
+    dict: shortEngAll20001,
+  }, {
+    name: "Популярные сокращенный 20001 все. Сокращенный. Часть 1.",
+    dict: shortEngAll20001.slice(0, 1052),
+  }, {
+    name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
+    dict: shortEngAll20001.slice(1052),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
