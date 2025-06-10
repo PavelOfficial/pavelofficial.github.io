@@ -205,6 +205,7 @@
     dict: excludeSublist(engAll20001, [
       ...engAll20001Exclude1IrregularVerbs,
       ...engAll20001Exclude2PhrasalVerbs,
+      ...engAll20001ExcludeRest,
     ]),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
