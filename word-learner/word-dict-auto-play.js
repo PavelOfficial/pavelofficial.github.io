@@ -145,10 +145,9 @@
     ...engAll20001Exclude1IrregularVerbs,
     ...engAll20001Exclude2PhrasalVerbs,
     ...engAll20001ExcludeRest,
+    ...wrongAll20001,
   ]);
 
-  // enWords8000
-  // engWords2700
   const playLists = [{
     name: "Популярные 2000",
     dict: engDictAllIndexes2000,
@@ -211,7 +210,7 @@
     dict: shortEngAll20001,
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 1.",
-    dict: shortEngAll20001.slice(0, 1052),
+    dict: shortEngAll20001.slice(0, 1024),
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
     dict: shortEngAll20001.slice(1052),
