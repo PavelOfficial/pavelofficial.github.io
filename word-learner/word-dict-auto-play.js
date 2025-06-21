@@ -374,6 +374,9 @@
   }, {
     name: "Повторение 3 пачки 12000",
     dict: cleanDuplications(engDictRecollection_3_12000),
+  }, {
+    name: "Повторение 1. Популярные 20001 все. Сокр. ч1. ",
+    dict: shortEngAll20001Recollection_1,
   }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
