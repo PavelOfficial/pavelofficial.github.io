@@ -210,10 +210,10 @@
     dict: shortEngAll20001,
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 1.",
-    dict: shortEngAll20001.slice(0, 1024),
+    dict: shortEngAll20001.slice(0, 1019),
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
-    dict: shortEngAll20001.slice(1052),
+    dict: shortEngAll20001.slice(1019),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
