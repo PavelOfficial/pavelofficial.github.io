@@ -148,6 +148,27 @@
     ...wrongAll20001,
   ]);
 
+  console.log("shortEngAll20001.slice(1019) : ", JSON.stringify(shortEngAll20001.slice(1019)));
+
+  const mixItems = (array) => {
+    for (let i = 0; i < array.length; i++) {
+      const aIndex = Math.floor(Math.random() * array.length, 10);
+      const bIndex = Math.floor(Math.random() * array.length, 10);
+
+      let a = array[aIndex];
+      let b = array[bIndex];
+
+      array[aIndex] = b;
+      array[bIndex] = a;
+    }
+
+    return array
+  };
+
+  console.log("result: ", JSON.stringify(mixItems(mixItems(shortEngAll20001.slice(1019).slice(433)))));
+
+  //
+
   const playLists = [{
     name: "Популярные 2000",
     dict: engDictAllIndexes2000,
@@ -213,7 +234,7 @@
     dict: shortEngAll20001.slice(0, 1019),
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
-    dict: shortEngAll20001.slice(1019),
+    dict: shortEngAll20001.slice(1019).slice(0, 433).concat(restOf20001_part2Mixed),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
