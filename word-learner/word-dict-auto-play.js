@@ -165,9 +165,8 @@
     return array
   };
 
-  console.log("result: ", JSON.stringify(mixItems(mixItems(shortEngAll20001.slice(1019).slice(433)))));
-
   //
+  // console.log("result 3: ", JSON.stringify(mixItems(mixItems(shortEngPart20001Recollection_1))));
 
   const playLists = [{
     name: "Популярные 2000",
@@ -234,7 +233,7 @@
     dict: shortEngAll20001.slice(0, 1019),
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
-    dict: shortEngAll20001.slice(1019).slice(0, 433).concat(restOf20001_part2Mixed),
+    dict: restOf20001_AllMixed,
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
@@ -396,11 +395,14 @@
     name: "Повторение 3 пачки 12000",
     dict: cleanDuplications(engDictRecollection_3_12000),
   }, {
-    name: "Повторение 1. Популярные 20001 все. Сокр. ч1. ",
+    name: "Повторение 1. Популярные 20001 все. Сокр. ч1.",
     dict: shortEngAll20001Recollection_1,
   }, {
-    name: "Повторение 2. Популярные 20001 все. Сокр. ч1. ",
+    name: "Повторение 2. Популярные 20001 все. Сокр. ч1.",
     dict: shortEngAll20001Recollection_2,
+  }, {
+    name: "Повторение 1. Популярные 20001 все. Сокр. ч2.",
+    dict: shortEngPart20001Recollection_1,
   }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
