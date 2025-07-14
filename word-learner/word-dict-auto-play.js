@@ -403,6 +403,9 @@
   }, {
     name: "Повторение 1. Популярные 20001 все. Сокр. ч2.",
     dict: shortEngPart20001Recollection_1,
+  }, {
+    name: "Повторение 2. Популярные 20001 все. Сокр. ч2.",
+    dict: shortEngPart20001Recollection_2,
   }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
