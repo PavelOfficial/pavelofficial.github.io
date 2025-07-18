@@ -165,6 +165,89 @@
     return array
   };
 
+  /*
+    console.log("ч1", shortEngAll20001.slice(0, 1019).slice(920, 1018));
+    console.log("ч2",  shortEngAll20001.slice(0, 1019).slice(796, 919));
+
+    const filterAllSameItems = (list, overList) => {
+      const listReadySet = new Set([]);
+      const wordSet = new Set([]);
+      const resultList = [];
+
+      overList.forEach(([listIndex, index]) => {
+        const newKey = `${listIndex}-${index}`;
+        if (listReadySet.has(newKey)) {
+          return;
+        }
+
+        const word = dictMap[listIndex][index];
+        if (wordSet.has(word)) {
+          return;
+        }
+
+        listReadySet.add(newKey);
+        wordSet.add(word);
+      });
+
+      // list.map(([listIndex, index]) => `${listIndex}-${index}`)
+      list.forEach(([listIndex, index]) => {
+        const newKey = `${listIndex}-${index}`;
+
+        if (listReadySet.has(newKey)) {
+          return;
+        }
+
+        const word = dictMap[listIndex][index];
+
+        if (wordSet.has(word)) {
+          return;
+        }
+
+        listReadySet.add(newKey);
+        wordSet.add(word);
+
+        resultList.push([listIndex, index]);
+      });
+
+      overList.forEach((item) => {
+        resultList.push(item);
+      });
+
+      return resultList;
+    };
+
+    console.log("!: ", JSON.stringify(filterAllSameItems([
+      ...engDictAllIndexes2000,
+      ...engDictAllIndexes3000,
+      ...engDictAllIndexes5000,
+      ...engDictAllIndexes7000,
+      ...engDictAllIndexesAll,
+
+      ...engDictNotKnownIndexes2000,
+      ...engDictNotKnownIndexes3000,
+      ...engDictNotKnownIndexes5000,
+      ...engDictNotKnownIndexes7000,
+      ...engDictNotKnownIndexes12000Names, // 12000
+      ...engDictNotKnownIndexes12000Common, // 12000
+      ...engDictNotKnownIndexes12000Understood, // 12000
+      ...shortEngAll20001.slice(0, 1019).slice(0, 796), // 20001
+      // ...shortEngAll20001.slice(0, 1019).slice(920, 1018), // ч. 1
+      // ...shortEngAll20001.slice(0, 1019).slice(796, 919), // ч. 2
+      ...restOf20001_AllMixed,
+
+    ], [
+      //
+      ...engDictAllIndexes170, // фразовые глаголы
+      ...engDictAllIndexes900, // фразовые глаголы
+      ...engAll20001Exclude2PhrasalVerbs, // фразовые глаголы
+      ...shortEngAll20001.slice(0, 1019).slice(920, 1019), // ч. 1 // фразовые глаголы
+
+      //
+      ...engAll20001Exclude1IrregularVerbs,
+      ...shortEngAll20001.slice(0, 1019).slice(796, 920), // ч. 2 // Irregular Verbs
+    ])));
+
+   */
   //
   // console.log("result 3: ", JSON.stringify(mixItems(mixItems(shortEngPart20001Recollection_1))));
 
@@ -234,6 +317,18 @@
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
     dict: restOf20001_AllMixed,
+  }, playlistSeparator, /* {
+    name: "Часть 1.",
+    dict: shortEngAll20001.slice(0, 1019).slice(920, 1019),
+  }, {
+    name: "Часть 2.",
+    dict: shortEngAll20001.slice(0, 1019).slice(796, 920),
+  }, {
+    name: "Часть 3.",
+    dict: shortEngAll20001.slice(0, 1019).slice(0, 796),
+  }, */ {
+    name: "Полный 20001 срез.",
+    dict: fullPackOfAllLists20001,
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
