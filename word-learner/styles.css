@@ -149,9 +149,20 @@ ul li input[type=checkbox] {
     flex-direction: column;
     position: relative;
     height: 100%;
-    max-width: 250px;
-    min-width: 160px;
+    /*
+        max-width: 250px;
+        min-width: 160px;
+     */
+
+    max-width: 450px;
+    min-width: 350px;
+
     flex-basis: 40%;
+}
+
+.flex-inline {
+    display: flex;
+    flex-direction: row;
 }
 
 .current-playlist-wrapper {

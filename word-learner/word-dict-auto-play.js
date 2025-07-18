@@ -580,6 +580,8 @@
   }
 
   let storedWordIndexes = []
+  let storedWordSemiknownIndexes = []
+  let storedWordKnownIndexes = []
 
   try {
     storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
@@ -588,7 +590,23 @@
 
   let checkedWords = new Map(storedWordIndexes.map((item) => {
     return [`${item[0]}-${item[1]}`, item]
-  }))
+  }));
+
+  try {
+    storedWordSemiknownIndexes = JSON.parse(localStorage.getItem("checked-words-semiknown-tuples")) ?? []
+  } catch (error) {}
+
+  let checkedWordsSemiknown = new Map(storedWordSemiknownIndexes.map((item) => {
+    return [`${item[0]}-${item[1]}`, item]
+  }));
+
+  try {
+    storedWordKnownIndexes = JSON.parse(localStorage.getItem("checked-words-known-tuples")) ?? []
+  } catch (error) {}
+
+  let checkedWordsKnown = new Map(storedWordKnownIndexes.map((item) => {
+    return [`${item[0]}-${item[1]}`, item]
+  }));
 
   let firstAudioReady = false
   let secondAudioReady = false
@@ -630,46 +648,76 @@
     }
   }
 
-  const saveWordCheckboxes = () => {
-    let storedWordIndexes = []
+  const saveWordCheckboxesForAList = (list, storageName) => {
+    let storedWordIndexes = [];
 
     try {
-      storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? []
+      storedWordIndexes = JSON.parse(localStorage.getItem("checked-words-tuples")) ?? [];
     } catch (error) {
     }
 
     const storedWordIndexesMap = new Map(storedWordIndexes.map((item) => {
       return [`${item[0]}-${item[1]}`, item]
-    }))
+    }));
 
     currentList.dict.forEach((item) => {
       storedWordIndexesMap.delete(`${item[0]}-${item[1]}`)
-    })
+    });
 
-    localStorage.setItem("checked-words-tuples", JSON.stringify([
-      ...Array.from(checkedWords).map(item => item[1]).filter(item => item),
+    localStorage.setItem(storageName, JSON.stringify([
+      ...Array.from(list).map(item => item[1]).filter(item => item),
       ...Array.from(storedWordIndexesMap).map((item) => item[1]).filter(item => item),
-    ]))
-  }
+    ]));
+  };
+
+  const saveWordCheckboxes = () => {
+    saveWordCheckboxesForAList(checkedWords, "checked-words-tuples");
+    saveWordCheckboxesForAList(checkedWordsSemiknown, "checked-words-semiknown-tuples");
+    saveWordCheckboxesForAList(checkedWordsKnown, "checked-words-known-tuples");
+  };
 
   window.handleSelectDictItem = handleSelectDictItem
 
-  function handleChangeWordCheckbox(event, index, pack) {
-    const checked = !!event.target.checked
+  function handleChangeWordCheckbox(event, index, pack, postfix) {
+    const checked = !!event.target.checked;
 
     // if it is current then change current checkbox
-    if (String(pack) === String(currentSelection[0]) && String(index) === String(currentSelection[1])) {
-      currentCheckbox.checked = checked
+    if (postfix === "") {
+      if (String(pack) === String(currentSelection[0]) && String(index) === String(currentSelection[1])) {
+        currentCheckbox.checked = checked;
+      }
+    } else if (postfix === "semiknown") {
+      if (String(pack) === String(currentSelection[0]) && String(index) === String(currentSelection[1])) {
+        currentCheckboxSemiknown.checked = checked;
+      }
+    } else if (postfix === "known") {
+      if (String(pack) === String(currentSelection[0]) && String(index) === String(currentSelection[1])) {
+        currentCheckboxKnown.checked = checked;
+      }
     }
 
-    if (checked) {
-      checkedWords.set(`${pack}-${index}`, [pack, index])
-    } else {
-      checkedWords.delete(`${pack}-${index}`)
+    if (postfix === "") {
+      if (checked) {
+        checkedWords.set(`${pack}-${index}`, [pack, index]);
+      } else {
+        checkedWords.delete(`${pack}-${index}`);
+      }
+    } else if (postfix === "semiknown") {
+      if (checked) {
+        checkedWordsSemiknown.set(`${pack}-${index}`, [pack, index]);
+      } else {
+        checkedWordsSemiknown.delete(`${pack}-${index}`);
+      }
+    } else if (postfix === "known") {
+      if (checked) {
+        checkedWordsKnown.set(`${pack}-${index}`, [pack, index]);
+      } else {
+        checkedWordsKnown.delete(`${pack}-${index}`);
+      }
     }
 
-    saveWordCheckboxes()
-    updateCurrentAllCheckbox()
+    saveWordCheckboxes();
+    updateCurrentAllCheckbox();
   }
 
   window.handleChangeWordCheckbox = handleChangeWordCheckbox
@@ -902,7 +950,9 @@
   const prevWordButton = document.querySelector(".prev-word-button")
   const nextWordButton = document.querySelector(".next-word-button")
   const nextMassWordButton = document.querySelector(".next-mass-word-button")
-  const currentCheckbox = document.querySelector(".current-checkbox")
+  const currentCheckbox = document.querySelector(".current-checkbox.current-checkbox-unknown")
+  const currentCheckboxSemiknown = document.querySelector(".current-checkbox.current-checkbox-semiknown")
+  const currentCheckboxKnown = document.querySelector(".current-checkbox.current-checkbox-known")
 
   const displayTranslationButton = Array.from(document.querySelectorAll(".display-translation-button"));
   const displayWordButton = Array.from(document.querySelectorAll(".display-word-button"));
@@ -1183,7 +1233,10 @@
 
     const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[listItemIndex]
     const currentSelectedLI = document.querySelector(".playlist-item-selected")
-    const currentSelectedLIChecked = li.querySelector("input").checked
+
+    const currentSelectedLIUnknownChecked = li.querySelector("input.word-checkbox-unknown").checked
+    const currentSelectedLIKnownChecked = li.querySelector("input.word-checkbox-known").checked
+    const currentSelectedLISemiknownChecked = li.querySelector("input.word-checkbox-semiknown").checked
 
     if (currentSelectedLI) {
       currentSelectedLI.setAttribute("class", "")
@@ -1200,22 +1253,36 @@
       currentPlaylist.scrollTop = currentPlaylist.scrollTop + topDelta - targetYOffset
     }
 
-    currentCheckbox.checked = currentSelectedLIChecked
+    currentCheckbox.checked = currentSelectedLIUnknownChecked;
+    currentCheckboxSemiknown.checked = currentSelectedLISemiknownChecked;
+    currentCheckboxKnown.checked = currentSelectedLIKnownChecked;
 
     renderAll()
 
     playAudio(afterPlayAudio)
   }
 
-  currentCheckbox.onclick = () => {
+  const currentCheckboxClick = (selector) => {
     const index = currentList.dict.findIndex((item) => {
       return item[0] === currentSelection[0] && item[1] === currentSelection[1]
-    })
+    });
 
-    const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[index]
+    const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[index];
 
-    li.querySelector("input").click()
-  }
+    li.querySelector(`input${selector}`).click();
+  };
+
+  currentCheckboxSemiknown.onclick = () => {
+    currentCheckboxClick(".word-checkbox-semiknown");
+  };
+
+  currentCheckboxKnown.onclick = () => {
+    currentCheckboxClick(".word-checkbox-known");
+  };
+
+  currentCheckbox.onclick = () => {
+    currentCheckboxClick(".word-checkbox-unknown");
+  };
 
   // currentSamples
 
@@ -1230,7 +1297,16 @@
 
       word = dict[index]
 
-      return `<li><div><input class="word-checkbox-item" id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}')" /></div><div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div></li>`
+      return `
+        <li>
+          <div>
+            <input class="word-checkbox-item word-checkbox-unknown" id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', '')" />
+            <input class="word-checkbox-item word-checkbox-semiknown" id="word-checkbox-semiknown-${pack}-${index}" ${checkedWordsSemiknown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'semiknown')" />
+            <input class="word-checkbox-item word-checkbox-known" id="word-checkbox-known-${pack}-${index}" ${checkedWordsKnown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'known')" />       
+          </div>
+          <div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div>
+        </li>
+      `
     }).join('')}
       </ul>
     ` : ''
@@ -1774,18 +1850,22 @@
 
   document.querySelector(".sound-volume").value = soundValue
 
-  function downloadAsFile(data) {
+  function downloadAsFile(data, fileName) {
     let a = document.createElement("a");
     let file = new Blob([data], {type: 'application/json'});
     a.href = URL.createObjectURL(file);
-    a.download = "checked-words-tuples.json";
+    a.download = fileName;
     a.click();
   }
 
   window.handleSaveChecked = () => {
-    const checkedWords = localStorage.getItem("checked-words-tuples") ?? []
+    const checkedWords = localStorage.getItem("checked-words-tuples") ?? [];
+    const checkedWordsSemiknown = localStorage.getItem("checked-words-semiknown-tuples") ?? [];
+    const checkedWordsKnown = localStorage.getItem("checked-words-known-tuples") ?? [];
 
-    downloadAsFile(checkedWords)
+    downloadAsFile(checkedWords, "checked-words-tuples.json");
+    downloadAsFile(checkedWordsSemiknown, "checked-words-semiknown-tuples.json");
+    downloadAsFile(checkedWordsKnown, "checked-words-known-tuples.json");
   }
 
   document.addEventListener("keydown", (event) => {
