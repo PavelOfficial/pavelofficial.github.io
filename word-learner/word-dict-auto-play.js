@@ -334,13 +334,13 @@
     dict: fullPackOfAllLists20001.slice(0, 4500),
   }, {
     name: "Полный 20001 срез. 2",
-    dict: fullPackOfAllLists20001.slice(4501, 9000),
+    dict: fullPackOfAllLists20001.slice(4500, 9000),
   }, {
     name: "Полный 20001 срез. 3",
-    dict: fullPackOfAllLists20001.slice(9001, 13500),
+    dict: fullPackOfAllLists20001.slice(9000, 13500),
   }, {
     name: "Полный 20001 срез. 4",
-    dict: fullPackOfAllLists20001.slice(13501),
+    dict: fullPackOfAllLists20001.slice(13500),
   }, playlistSeparator, {
     name: "Популярные простые 2000",
     dict: excludePopular(engDictAllIndexes2000),
