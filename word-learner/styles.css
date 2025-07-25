@@ -304,3 +304,9 @@ ul li input[type=checkbox] {
     --bs-btn-padding-x:0.55rem;
     --bs-btn-font-size:0.75rem;
 }
+
+.checkbox-h-list {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+}

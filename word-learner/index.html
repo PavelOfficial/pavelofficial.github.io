@@ -271,7 +271,7 @@
             <span class="bi icon-btt"></span>
           </button>
         </div>
-        <div class="col-4 flex-inline">
+        <div class="col-4 flex-inline checkbox-h-list">
           <div class="form-check">
             <input name="current-checkbox-unknown" class="form-check-input current-checkbox current-checkbox-unknown" type="checkbox" value="" checked onchange="" />
           </div>
@@ -353,19 +353,24 @@
         <span class="ml-5 js-checked-count">
           X / X
         </span>
-      </span>
-      <div class="mt-2">
-        <button type="button" class="btn btn-primary btn-sm js-reverse-checked-in-range">
-          Reverse checked in range
-        </button>
+      </div>
+        <div class="mt-2">
+          <button type="button" class="btn btn-primary btn-sm js-reverse-checked-in-range">
+            Reverse checked in range
+          </button>
+        </div>
+    </div>
+    <div class="mt-3">
+      <h3>Special modes</h3>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input js-auto-skip-on-check" type="checkbox" value="" id="auto-skip-on-check" checked />
+        <label class="form-check-label form-check-label_large" for="auto-skip-on-check">
+          Auto skip on check
+        </label>
       </div>
     </div>
-
-    <div class="volume-box">
-      <button class="btn btn-primary btn-lg" onclick="handleSaveChecked()">Save checked</button>
-    </div>
   </div>
-  <div class="bottom-panel">
+  <div class="bottom-panel mt-3">
     <div class="container no-pads">
       <div class="row">
         <div class="col-2">

@@ -29,6 +29,8 @@
     return nextWords
   }
 
+  const autoSkipOnCheckCheckboxOption = document.querySelector(".js-auto-skip-on-check");
+
   const leadingZeros = (num) => {
     return String('0000000000000' + num).slice(-5)
   }
@@ -1282,6 +1284,10 @@
     const li = Array.from(document.querySelectorAll(".current-playlist ul li"))[index];
 
     li.querySelector(`input${selector}`).click();
+
+    if (autoSkipOnCheckCheckboxOption.checked) {
+      skipButton[0].click();
+    }
   };
 
   currentCheckboxSemiknown.onclick = () => {
