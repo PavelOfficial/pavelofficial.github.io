@@ -30,6 +30,17 @@
   }
 
   const autoSkipOnCheckCheckboxOption = document.querySelector(".js-auto-skip-on-check");
+  const reversedWordDescription = document.querySelector(".js-reversed-word-description");
+
+  reversedWordDescription.onchange = (event) => {
+    const target = event.target;
+
+    if (target.checked) {
+      document.querySelector(".word-box-inner").setAttribute("class", "word-box-inner word-box-inner_reversed");
+    } else {
+      document.querySelector(".word-box-inner").setAttribute("class", "word-box-inner");
+    }
+  };
 
   const leadingZeros = (num) => {
     return String('0000000000000' + num).slice(-5)
@@ -1369,11 +1380,13 @@
       console.log("currentDescription3: ", currentDescription3);
 
       content = `
-        <div class="word-box-inner">
-          <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">
-            ${currentDescription3 ? currentDescription3.displayEn : currentDescription.en}
+        <div class="word-box-inner ${reversedWordDescription.checked ? `word-box-inner_reversed` : ""}" >
+          <div class="word-value-box">
+            <div class="word-value" style="${wordDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">
+              ${currentDescription3 ? currentDescription3.displayEn : currentDescription.en}
+            </div>
+            <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${(currentDescription && currentDescription.transcription) || (currentDescription2 ? currentDescription2.transcription : "")}</div>
           </div>
-          <div class="word-transcription" style="${wordDisplayed && transcriptionDisplayed ? 'visibility: visible;' : 'visibility: hidden;'}">${(currentDescription && currentDescription.transcription) || (currentDescription2 ? currentDescription2.transcription : "")}</div>
           <div class="word-translations" style="${translationDisplaied ? 'visibility: visible;' : 'visibility: hidden;'}">
             ${currentDescription3 ? `<div>&#x2022; ${currentDescription3.ru}</div>` : ""}
             ${currentDescription ? currentDescription.blocks.map((item) => {

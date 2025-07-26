@@ -112,6 +112,16 @@ select {
     height: 100%;
 }
 
+.word-box-inner.word-box-inner_reversed {
+    flex-direction: column-reverse;
+    display: flex;
+    /* height: 100%; */
+}
+
+.word-box-inner.word-box-inner_reversed .word-value-box {
+    margin-top: 35px;
+}
+
 ul,
 .current-playlist-box ul {
     margin: 0;
