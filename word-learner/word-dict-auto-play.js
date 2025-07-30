@@ -1352,8 +1352,8 @@
         <li>
           <div>
             <input class="word-checkbox-item word-checkbox-unknown" id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', '')" />
-            <input class="word-checkbox-item word-checkbox-semiknown" id="word-checkbox-semiknown-${pack}-${index}" ${checkedWordsSemiknown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'semiknown')" />
-            <input class="word-checkbox-item word-checkbox-known" id="word-checkbox-known-${pack}-${index}" ${checkedWordsKnown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'known')" />       
+            <!-- <input class="word-checkbox-item word-checkbox-semiknown" id="word-checkbox-semiknown-${pack}-${index}" ${checkedWordsSemiknown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'semiknown')" />
+            <input class="word-checkbox-item word-checkbox-known" id="word-checkbox-known-${pack}-${index}" ${checkedWordsKnown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'known')" /> -->       
           </div>
           <div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div>
         </li>
