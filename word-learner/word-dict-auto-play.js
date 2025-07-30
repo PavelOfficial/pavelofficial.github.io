@@ -262,9 +262,31 @@
 
    */
   //
-  // console.log("result 3: ", JSON.stringify(mixItems(mixItems(shortEngPart20001Recollection_1))));
+  // console.log("result 3: ", JSON.stringify(mixItems(mixItems(shortEngPart20001Recollection_1))));;
+/*
+  const list_set = new Set(shortEngAll20001.slice(0, 1019).slice(796, 920).map(([index, word]) => {
+    return `${index}-${word}`;
+  }));
 
-  const playLists = [{
+  const wrongWordList = fullPackOfAllLists20001.slice(18175, 18348).filter(([index, indexWord]) => {
+    return !list_set.has(`${index}-${indexWord}`);
+  });
+
+  const fullPackOfAllListsCheckedWords_1_set = new Set(fullPackOfAllListsCheckedWords_1.concat(wrongWordList).map(([index, word]) => {
+    return `${index}-${word}`;
+  }));
+
+  const fullPackOfAllLists20001ExcludedRep_1 = fullPackOfAllLists20001.filter(([index, wordIndex]) => {
+    return !fullPackOfAllListsCheckedWords_1_set.has(`${index}-${wordIndex}`);
+  });
+
+  // console.log("fullPackOfAllLists20001: ", JSON.stringify(fullPackOfAllLists20001));
+  console.log("fullPackOfAllLists20001ExcludedRep_1: ", JSON.stringify(fullPackOfAllLists20001ExcludedRep_1));
+*/
+  // Исключить что по фразовым глаголам: shortEngAll20001.slice(0, 1019)
+
+
+  const playLists = [ {
     name: "Популярные 2000",
     dict: engDictAllIndexes2000,
   }, {
@@ -330,7 +352,7 @@
   }, {
     name: "Популярные сокращенный 20001 все. Сокращенный. Часть 2.",
     dict: restOf20001_AllMixed,
-  }, playlistSeparator, /* {
+  }, playlistSeparator, {
     name: "Часть 1.",
     dict: shortEngAll20001.slice(0, 1019).slice(920, 1019),
   }, {
@@ -339,7 +361,7 @@
   }, {
     name: "Часть 3.",
     dict: shortEngAll20001.slice(0, 1019).slice(0, 796),
-  }, */ {
+  },   {
     name: "Полный 20001 срез.",
     dict: fullPackOfAllLists20001,
   }, {
@@ -355,9 +377,9 @@
     name: "Полный 20001 срез. 4",
     dict: fullPackOfAllLists20001.slice(13500),
   }, playlistSeparator, {
-    name: "Популярные простые 2000",
-    dict: excludePopular(engDictAllIndexes2000),
-  }, {
+    name: "Полный 20001 срез. повторение 1",
+    dict: fullPackOfAllLists_Repeat_1,
+  },/* {
     name: "Популярные простые 3000",
     dict: excludePopular(engDictAllIndexes3000),
   }, {
@@ -529,7 +551,7 @@
   }, {
     name: "Повторение 3. Популярные 20001 все. Сокр. ч2.",
     dict: shortEngPart20001Recollection_3,
-  }];
+  }*/];
 
   const all12000 = engDictNotKnownIndexes12000Common;
   const all8000 = cleanDuplications([
