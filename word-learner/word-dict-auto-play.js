@@ -1971,7 +1971,7 @@
     const checkedCountText = document.querySelector(".js-checked-count");
 
     refreshCheckedCountBtt.addEventListener("click", (event) => {
-      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item"));
+      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item.word-checkbox-unknown"));
       const targetCheckboxes = checkboxes.slice(indexFrom, indexTo + 1);
       const checkedCount = targetCheckboxes.reduce((result, item) => {
         result += item.checked ? 1 : 0;
@@ -1983,7 +1983,7 @@
     });
 
     reverseCheckedInRangeBtt.addEventListener("click", (event) => {
-      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item"));
+      const checkboxes = Array.from(document.querySelectorAll(".word-checkbox-item.word-checkbox-unknown"));
       const targetCheckboxes = checkboxes.slice(indexFrom, indexTo + 1);
 
       targetCheckboxes.forEach((item) => {
