@@ -1,4 +1,8 @@
 (() => {
+  const leadingZeros = (value, count) => {
+    return `0000000000000${value}`.slice(-count)
+  };
+
   let currentCategory = null
   let soundValue = 1
   let auditions = null
@@ -30,9 +34,7 @@
 
   let audioCommentRef = { current: createNullAudioComment() }
 
-  const leadingZeros = (value, count) => {
-    return `0000000000000${value}`.slice(-count)
-  }
+
 
   const fetchAuditions = async () => {
     const allAuditionUrls = categories.reduce((result, item) => {
@@ -1011,6 +1013,91 @@
     }
   };
 
+  const parseAndSetSelectedDictArticle = () => {
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
+
+    if (!ticket) {
+      return;
+    }
+
+    const enBody = ticket.querySelector(".TnITTtw-original .TnITTtw-mv-text-part");
+    const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
+    const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
+
+    let record;
+
+    if (!enBody || !ruBody) {
+      const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
+      const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
+      const type = "";
+
+      const en = String(enBodyText.innerText).trim();
+      const ru = String(ruBodyText.innerText).trim();
+
+      if (dict.find((item) => item.en === en)) {
+        return;
+      }
+
+      const isASingleWord = /\s/.test(en);
+      const nowDate = new Date();
+
+      record = {
+        en: en,
+        ru: ru,
+        type: isASingleWord ? "word" : "phrase",
+        ruTranslations: [],
+        datestamp: nowDate.getTime(),
+        date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
+        time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+      };
+    } else {
+      // TnITTtw-variant-row TnITTtw-t - блок
+      // TnITTtw-v-pos TnITTtw-t - заголовок
+      // .TnITTtw-v-closest-wrap .TnITTtw-main-of-item - переводы
+
+      // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
+      const translationBocks = Array.from(ticket.querySelectorAll(".TnITTtw-variant-row.TnITTtw-t"));
+      const ruTranslations = translationBocks.map((translationBock) => {
+        const header = String(translationBock.querySelector(".TnITTtw-v-pos.TnITTtw-t").innerText).trim();
+        const items = Array.from(translationBock.querySelectorAll(".TnITTtw-main-of-item.TnITTtw-t")).map((item) => {
+          return String(item.innerText).trim();
+        });
+
+        return {
+          header,
+          items,
+        };
+      });
+
+      const en = String(enBody.innerText).trim();
+      const ru = String(ruBody.innerText).trim();
+
+      if (dict.find((item) => item.en === en)) {
+        return;
+      }
+
+      const nowDate = new Date()
+      record = {
+        en: en,
+        ru: ru,
+        type: "word",
+        ruTranslations: ruTranslations,
+        datestamp: nowDate.getTime(),
+        date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros((nowDate.getMonth() + 1, 3), 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
+        time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+      };
+
+      console.log("Single word!");
+    }
+
+    console.log("record: ", record);
+
+    dict.push(record);
+
+    localStorage.setItem("dict", JSON.stringify(dict));
+  };
+
   const observeMap =  new Map([]);
 
   observe(document.body, (...args) => {
@@ -1061,6 +1148,8 @@
         translationBox.style.left = "";
         translationBox.style.bottom = 0;
         translationBox.style.right = 0;
+
+        parseAndSetSelectedDictArticle();
       };
 
       // Create an observer instance linked to the callback function
@@ -1098,81 +1187,6 @@
 
 // Safe to localstorage.
 (() => {
-  const saveToLocalStorageBtt = document.querySelector(".save-to-local-storage-btt");
-  const saveToLocalStorageBttRawClass = saveToLocalStorageBtt.getAttribute("class");
-  let succeedTimeoutDescriptor = null;
-
-  saveToLocalStorageBtt.addEventListener("click", () => {
-    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
-    const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
-
-    if (!ticket) {
-      return;
-    }
-
-    const enBody = ticket.querySelector(".TnITTtw-original .TnITTtw-mv-text-part");
-    const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
-    const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
-
-    let record;
-
-    if (!enBody || !ruBody) {
-      const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
-      const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
-      const type = "";
-
-      const en = String(enBodyText.innerText).trim();
-      const ru = String(ruBodyText.innerText).trim();
-
-      if (dict.find((item) => item.en === en)) {
-        return;
-      }
-
-      const nowDate = new Date()
-      record = {
-        en: en,
-        ru: ru,
-        type: type,
-        ruTranslations: [],
-        date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
-        time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
-      };
-    } else {
-      // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
-      const type = String(ticket.querySelector(".TnITTtw-v-pos").innerText).trim();
-
-      const en = String(enBody.innerText).trim();
-      const ru = String(ruBody.innerText).trim();
-
-      const ruTranslations = ruOthers.map((item) => {
-        return String(item.innerText).trim();
-      }).join("; ");
-
-      if (dict.find((item) => item.en === en)) {
-        return;
-      }
-
-      const nowDate = new Date()
-      record = {
-        en: en,
-        ru: ru,
-        type: type,
-        ruTranslations: ruTranslations,
-        date: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1)}-${nowDate.getDate()}`,
-        time: `${nowDate.getHours()}:${nowDate.getMinutes()}`,
-      };
-    }
-
-    dict.push(record);
-
-    saveToLocalStorageBtt.setAttribute("class", saveToLocalStorageBttRawClass + " succeed-btt");
-    clearTimeout(succeedTimeoutDescriptor);
-    succeedTimeoutDescriptor = setTimeout(() => {
-      saveToLocalStorageBtt.setAttribute("class", saveToLocalStorageBttRawClass);
-    }, 750);
-
-    localStorage.setItem("dict", JSON.stringify(dict));
-  });
 
 
   const downloadWordListBtt = document.querySelector(".download-word-list-btt");

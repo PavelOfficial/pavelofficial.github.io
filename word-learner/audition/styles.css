@@ -371,7 +371,7 @@ ul.categories li.category-li {
 
 .dict-article__top-left {
     flex-grow: 1;
-    line-height: 0.9em;
+    line-height: 1.1em;
 }
 
 .dict-article__transcription {
@@ -401,5 +401,12 @@ ul.categories li.category-li {
 .dict-hint {
     font-weight: bold;
     color: #44aa44;
+}
+
+.btn-sm-short.btn-sm-short.btn-sm-short {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    height: 20px;
+    line-height: 10px;
 }
 
