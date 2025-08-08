@@ -341,3 +341,65 @@ ul.categories li.category-li {
     background-color: #d7d7d7;
     border-radius: 5px;
 }
+
+.dict-container {
+    background: #ffffff;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dict-container-inner {
+    overflow-y: scroll;
+    flex-grow: 1;
+}
+
+.dict-container-inner-footer {
+    height: 30px;
+}
+
+.dict-article {
+    padding: 5px;
+}
+
+.dict-article__top {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.dict-article__top-left {
+    flex-grow: 1;
+    line-height: 0.9em;
+}
+
+.dict-article__transcription {
+    font-size: 12px;
+    color: #777777;
+    height: 14px;
+}
+
+.dict-article__word-number {
+    font-size: 10px;
+    color: #777777;
+    height: 12px;
+    overflow: hidden;
+}
+
+.dict-article__top-right {
+    width: 125px;
+    font-size: 12px;
+}
+
+.dict-article__bottom {
+    height: 50px;
+    padding-top: 5px;
+    font-size: 12px;
+}
+
+.dict-hint {
+    font-weight: bold;
+    color: #44aa44;
+}
+
