@@ -1013,8 +1013,119 @@
     }
   };
 
+  let currentDictArticle;
+
+  const renderDictItem = (item, index, renderAddButton) => {
+    if (item.type === "phrase") {
+      return `
+        <div class="dict-article dict-article-phrase">
+          <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
+            <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
+          </div>
+          <div class="dict-article__top">
+            <div class="dict-article__top-left">
+              <div class="dict-article__word">
+                <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
+                <div>${item.en}</div>
+              </div>
+              <div class="dict-article__transcription">
+                ${item.date} - ${item.time}
+              </div>
+            </div>
+            <div class="dict-article__top-right">
+
+            </div>
+          </div>
+          <div class="dict-article__bottom">
+            ${item.ru}
+          </div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="dict-article">
+          <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
+            <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
+          </div>
+          <div class="dict-article__top">
+            <div class="dict-article__top-left">
+              <div class="dict-article__word">
+                <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
+                <div>${item.en}</div>
+              </div>
+              <div class="dict-article__transcription">
+                ${item.date} - ${item.time}
+              </div>
+            </div>
+            <div class="dict-article__top-right">
+              
+            </div>
+          </div>
+          <div class="dict-article__bottom">
+            ${(item.ruTranslations || []).map((item) => {
+                return `
+                        <span class="dict-hint">${item.header.slice(0, 4)}.</span>
+                        ${item.items.map((item) => {
+                  return `<span class="dict-word-item">${item}</span>`;
+                }).join(", ")};
+                      `;
+              })}          
+          </div>
+        </div>
+      `;
+    }
+
+  };
+
+  const rerenderDictList = (dict, renderAddButton) => {
+    document.querySelector(".dict-list").innerHTML = dict.map((item, index, array) => {
+      return renderDictItem(item, array.length - index, renderAddButton);
+    }).join("");
+  };
+
+  const setCurrentArticleInDictionary = () => {
+    let dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+    const indexOfTarget = dict.indexOf((dictItem) => {
+      return dictItem.en === currentDictArticle.en;
+    });
+
+    if (indexOfTarget !== -1) {
+      const item = dict[indexOfTarget];
+
+      dict.splice(indexOfTarget, 1);
+
+      dict.unshift(item);
+    } else {
+      dict.unshift(currentDictArticle);
+    }
+
+    rerenderDictList(dict, false);
+    localStorage.setItem("dict", JSON.stringify(dict));
+  };
+
+  const firstDictListRender = () => {
+    let dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+    rerenderDictList(dict, false);
+  };
+
+  firstDictListRender();
+
+  window.handleClickAddItemToDict = () => {
+    setCurrentArticleInDictionary();
+  };
+
+  const renderSelectedDictArticleElement = () => {
+    let dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const selectedArticleDictItem = document.querySelector(".selected-text-item");
+
+    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true);
+
+    // currentDictArticle
+  };
+
   const parseAndSetSelectedDictArticle = () => {
-    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
 
     if (!ticket) {
@@ -1025,8 +1136,6 @@
     const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
     const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
 
-    let record;
-
     if (!enBody || !ruBody) {
       const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
       const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
@@ -1035,14 +1144,10 @@
       const en = String(enBodyText.innerText).trim();
       const ru = String(ruBodyText.innerText).trim();
 
-      if (dict.find((item) => item.en === en)) {
-        return;
-      }
-
-      const isASingleWord = /\s/.test(en);
+      const isASingleWord = !/\s/.test(en);
       const nowDate = new Date();
 
-      record = {
+      currentDictArticle = {
         en: en,
         ru: ru,
         type: isASingleWord ? "word" : "phrase",
@@ -1073,12 +1178,8 @@
       const en = String(enBody.innerText).trim();
       const ru = String(ruBody.innerText).trim();
 
-      if (dict.find((item) => item.en === en)) {
-        return;
-      }
-
       const nowDate = new Date()
-      record = {
+      currentDictArticle = {
         en: en,
         ru: ru,
         type: "word",
@@ -1091,11 +1192,7 @@
       console.log("Single word!");
     }
 
-    console.log("record: ", record);
-
-    dict.push(record);
-
-    localStorage.setItem("dict", JSON.stringify(dict));
+    renderSelectedDictArticleElement()
   };
 
   const observeMap =  new Map([]);
@@ -1138,6 +1235,7 @@
       translationBox.style.left = "";
       translationBox.style.bottom = 0;
       translationBox.style.right = 0;
+      translationBox.style.zIndex = -1000;
 
       // Options for the observer (which mutations to observe)
       const config = { attributes: true, childList: false, subtree: false };
@@ -1148,6 +1246,7 @@
         translationBox.style.left = "";
         translationBox.style.bottom = 0;
         translationBox.style.right = 0;
+        translationBox.style.zIndex = -1000;
 
         parseAndSetSelectedDictArticle();
       };
