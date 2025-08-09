@@ -1086,7 +1086,7 @@
   const setCurrentArticleInDictionary = () => {
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
-    const indexOfTarget = dict.indexOf((dictItem) => {
+    const indexOfTarget = dict.findIndex((dictItem) => {
       return dictItem.en === currentDictArticle.en;
     });
 
