@@ -1030,7 +1030,7 @@
 
   let currentDictArticle;
 
-  const renderDictItem = (item, index, renderAddButton, listIndex) => {
+  const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText) => {
     if (item.type === "phrase") {
       return `
         <div class="dict-article dict-article-phrase">
@@ -1060,6 +1060,9 @@
           </div>
           <div class="dict-article__bottom">
             ${item.ru}
+          </div>
+          <div>
+            ${selectionSentencesText}
           </div>
         </div>
       `;
@@ -1100,10 +1103,12 @@
                       `;
               })}          
           </div>
+          <div>
+            ${selectionSentencesText}
+          </div>
         </div>
       `;
     }
-
   };
 
   const rerenderDictList = (dict, renderAddButton) => {
@@ -1155,13 +1160,116 @@
     localStorage.setItem("dict", JSON.stringify(dict));
   };
 
+  const getTextFragmentSelection = () => {
+    const selObj = window.getSelection();
+
+    let baseOffset = selObj.baseOffset;
+    let extentOffset = selObj.extentOffset;
+
+    let baseNodeItem = selObj.baseNode.closest("[data-span-index]");
+    let extentNodeItem = selObj.extentNode.closest("[data-span-index]");
+
+    let baseNodeItemP = baseNodeItem.closest("[data-p-index]");
+    let extentNodeItemP = extentNodeItem.closest("[data-p-index]");
+
+    if (parseInt(baseNodeItemP.getAttribute("data-p-index"), 10) >
+      parseInt(extentNodeItemP.getAttribute("data-p-index"), 10)) {
+      let tempP = baseNodeItemP;
+      let tempOffset = baseOffset;
+      let tempNodeSpan = baseNodeItem;
+
+      baseNodeItem = extentNodeItem;
+      baseNodeItemP = extentNodeItemP;
+      baseOffset = extentOffset;
+
+      extentNodeItem = tempNodeSpan;
+      extentNodeItemP = tempP;
+      extentOffset = baseOffset;
+    }
+
+    const baseNodePItemIndex = baseNodeItemP.getAttribute("data-p-index");
+    const extentNodePItemIndex = extentNodeItemP.getAttribute("data-p-index");
+
+    const allNodes = [];
+
+    const baseNodeItemIndex = parseInt(baseNodeItem.getAttribute("data-span-index"), 10);
+    const extentNodeItemIndex = parseInt(extentNodeItem.getAttribute("data-span-index"), 10);
+
+    let i2 = baseNodeItemIndex + 1;
+    let nextItem;
+    while (nextItem) {
+      nextItem = baseNodeItemP.querySelector(`[data-span-index=${i2}]`)
+
+      if (nextItem) {
+        allNodes.push([baseNodePItemIndex, nextItem]);
+      }
+
+      i2 -= 1;
+    }
+
+    for (let i = baseNodePItemIndex + 1; i < extentNodePItemIndex - 1; i++) {
+      const item = document.querySelector(`[data-p-index=${i}]`);
+      const spanSelectors = Array.from(item.querySelectorAll("> *")).map((item) => {
+        return [i, parseInt(item.getAttribute("data-span-index"), 10)];
+      });
+
+      allNodes.push(...spanSelectors);
+    }
+
+    let i3 = extentNodeItemIndex - 1;
+    let nextItem2;
+    while (nextItem2) {
+      nextItem2 = extentNodeItemP.querySelector(`[data-span-index=${i3}]`)
+
+      if (nextItem2) {
+        allNodes.push([extentNodeItemIndex, nextItem2]);
+      }
+
+      i3 -= 1;
+    }
+
+    return {
+      selectedSpans: allNodes,
+      startSpan: [baseNodePItemIndex, parseInt(baseNodeItem.getAttribute("data-span-index"), 10)],
+      endSpan: [extentNodePItemIndex, parseInt(extentNodeItem.getAttribute("data-span-index"), 10)],
+      baseOffset: baseOffset,
+      extentOffset: extentOffset,
+    };
+  };
+
+  const getSelectionText = (textFragmentSelection) => {
+    const startSpan = textFragmentSelection.startSpan;
+    const selectedSpans = textFragmentSelection.selectedSpans;
+    const endSpan = textFragmentSelection.endSpan;
+    let result = "";
+
+    const startSpanElem = document.querySelector(`[data-p-index=${startSpan[0]}]`)
+      .querySelector(`[data-span-index=${startSpan[1]}]`);
+
+    result += startSpanElem.innerText + " ";
+
+    selectedSpans.forEach((selectedSpan) => {
+      const selectedSpanElem = document.querySelector(`[data-p-index=${selectedSpan[0]}]`)
+        .querySelector(`[data-span-index=${selectedSpan[1]}]`);
+
+      result += selectedSpanElem.innerText + " ";
+    });
+
+    const endSpanElem = document.querySelector(`[data-p-index=${endSpan[0]}]`)
+      .querySelector(`[data-span-index=${endSpan[1]}]`);
+
+    result += endSpanElem.innerText + " ";
+
+    return result;
+  };
+
   const renderSelectedDictArticleElement = () => {
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const selectedArticleDictItem = document.querySelector(".selected-text-item");
+    const textFragmentSelection = getTextFragmentSelection();
+    const selectionSentencesText = getSelectionText(textFragmentSelection);
 
-    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true);
-
-    // currentDictArticle
+    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, selectionText);
   };
 
   const parseAndSetSelectedDictArticle = () => {
