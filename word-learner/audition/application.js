@@ -1015,7 +1015,7 @@
 
   let currentDictArticle;
 
-  const renderDictItem = (item, index, renderAddButton) => {
+  const renderDictItem = (item, index, renderAddButton, listIndex) => {
     if (item.type === "phrase") {
       return `
         <div class="dict-article dict-article-phrase">
@@ -1026,7 +1026,14 @@
             <div class="dict-article__top-left">
               <div class="dict-article__word">
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
-                <div>${item.en}</div>
+                <div>
+                  ${item.en}
+                  <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
+                          data-index="${listIndex}" 
+                          onclick="window.handleClickRemoveItemFromDict(event)">
+                          -
+                  </button>
+                </div>
               </div>
               <div class="dict-article__transcription">
                 ${item.date} - ${item.time}
@@ -1051,7 +1058,14 @@
             <div class="dict-article__top-left">
               <div class="dict-article__word">
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
-                <div>${item.en}</div>
+                <div>
+                  ${item.en}
+                  <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
+                          data-index="${listIndex}"
+                          onclick="window.handleClickRemoveItemFromDict(event)">
+                          -
+                  </button>
+                </div>
               </div>
               <div class="dict-article__transcription">
                 ${item.date} - ${item.time}
@@ -1079,7 +1093,7 @@
 
   const rerenderDictList = (dict, renderAddButton) => {
     document.querySelector(".dict-list").innerHTML = dict.map((item, index, array) => {
-      return renderDictItem(item, array.length - index, renderAddButton);
+      return renderDictItem(item, array.length - index, renderAddButton, index);
     }).join("");
   };
 
@@ -1114,6 +1128,16 @@
 
   window.handleClickAddItemToDict = () => {
     setCurrentArticleInDictionary();
+  };
+
+  window.handleClickRemoveItemFromDict = (event) => {
+    const index = parseInt(event.target.getAttribute("data-index"));
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+    dict.splice(index, 1);
+
+    rerenderDictList(dict, false);
+    localStorage.setItem("dict", JSON.stringify(dict));
   };
 
   const renderSelectedDictArticleElement = () => {
