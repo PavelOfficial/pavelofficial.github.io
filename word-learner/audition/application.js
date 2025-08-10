@@ -339,6 +339,21 @@
 
       document.querySelector(".text-container-inner .text-wrap").innerHTML = html;
 
+      Array.from(document.querySelector(".text-container-inner .text-wrap").querySelectorAll("p"))
+        .forEach((item, index) => {
+          const text = String(item.innerText);
+
+          item.setAttribute("data-p-index", index);
+
+          const nextText = text.split(/\.|\!|\?/gi).map((item2, index) => {
+            const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
+
+            return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""}</span> `;
+          }).join("");
+
+          item.innerHTML = nextText;
+        });
+
       // Scroll to stored scroll.
       const scrollArea = document.querySelector(".text-container-inner");
       const scrollAreaScrollTop = JSON.parse(localStorage.getItem("scrollAreaScrollTop"));
