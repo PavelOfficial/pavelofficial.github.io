@@ -345,11 +345,13 @@
 
           item.setAttribute("data-p-index", index);
 
-          const nextText = text.split(/\.|\!|\?/gi).map((item2, index) => {
-            const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
+          const nextText = text.split(/\.|\!|\?/gi)
+            .filter((item) => item.trim())
+            .map((item2, index) => {
+              const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
 
-            return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""}</span> `;
-          }).join("");
+              return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""}</span> `;
+            }).join("");
 
           item.innerHTML = nextText;
         });
@@ -1166,8 +1168,13 @@
     let baseOffset = selObj.baseOffset;
     let extentOffset = selObj.extentOffset;
 
-    let baseNodeItem = selObj.baseNode.closest("[data-span-index]");
-    let extentNodeItem = selObj.extentNode.closest("[data-span-index]");
+    let baseNodeItem = selObj.baseNode instanceof Text ?
+      selObj.baseNode.parentElement.closest("[data-span-index]") :
+      selObj.baseNode.closest("[data-span-index]");
+
+    let extentNodeItem = selObj.baseNode instanceof Text ?
+      selObj.extentNode.parentElement.closest("[data-span-index]") :
+      selObj.extentNode.closest("[data-span-index]");
 
     let baseNodeItemP = baseNodeItem.closest("[data-p-index]");
     let extentNodeItemP = extentNodeItem.closest("[data-p-index]");
@@ -1196,19 +1203,23 @@
     const extentNodeItemIndex = parseInt(extentNodeItem.getAttribute("data-span-index"), 10);
 
     let i2 = baseNodeItemIndex + 1;
-    let nextItem;
+    let nextItem = baseNodeItemP.querySelector(`[data-span-index="${i2}"]`);
     while (nextItem) {
-      nextItem = baseNodeItemP.querySelector(`[data-span-index=${i2}]`)
+      nextItem = baseNodeItemP.querySelector(`[data-span-index="${i2}"]`);
+
+      if (baseNodePItemIndex === extentNodePItemIndex && i2 >= extentNodeItemIndex) {
+        nextItem = null;
+      }
 
       if (nextItem) {
-        allNodes.push([baseNodePItemIndex, nextItem]);
+        allNodes.push([baseNodePItemIndex, i2]);
       }
 
       i2 -= 1;
     }
 
-    for (let i = baseNodePItemIndex + 1; i < extentNodePItemIndex - 1; i++) {
-      const item = document.querySelector(`[data-p-index=${i}]`);
+    for (let i = baseNodePItemIndex + 1; i <= extentNodePItemIndex - 1; i++) {
+      const item = document.querySelector(`[data-p-index="${i}"]`);
       const spanSelectors = Array.from(item.querySelectorAll("> *")).map((item) => {
         return [i, parseInt(item.getAttribute("data-span-index"), 10)];
       });
@@ -1217,12 +1228,12 @@
     }
 
     let i3 = extentNodeItemIndex - 1;
-    let nextItem2;
-    while (nextItem2) {
-      nextItem2 = extentNodeItemP.querySelector(`[data-span-index=${i3}]`)
+    let nextItem2 = extentNodeItemP.querySelector(`[data-span-index="${i3}"]`);
+    while (nextItem2 && baseNodePItemIndex !== extentNodePItemIndex) {
+      nextItem2 = extentNodeItemP.querySelector(`[data-span-index="${i3}"]`);
 
       if (nextItem2) {
-        allNodes.push([extentNodeItemIndex, nextItem2]);
+        allNodes.push([extentNodeItemIndex, i3]);
       }
 
       i3 -= 1;
@@ -1243,22 +1254,24 @@
     const endSpan = textFragmentSelection.endSpan;
     let result = "";
 
-    const startSpanElem = document.querySelector(`[data-p-index=${startSpan[0]}]`)
-      .querySelector(`[data-span-index=${startSpan[1]}]`);
+    const startSpanElem = document.querySelector(`[data-p-index="${startSpan[0]}"`)
+      .querySelector(`[data-span-index="${startSpan[1]}"]`);
 
     result += startSpanElem.innerText + " ";
 
     selectedSpans.forEach((selectedSpan) => {
-      const selectedSpanElem = document.querySelector(`[data-p-index=${selectedSpan[0]}]`)
-        .querySelector(`[data-span-index=${selectedSpan[1]}]`);
+      const selectedSpanElem = document.querySelector(`[data-p-index="${selectedSpan[0]}"]`)
+        .querySelector(`[data-span-index="${selectedSpan[1]}"]`);
 
       result += selectedSpanElem.innerText + " ";
     });
 
-    const endSpanElem = document.querySelector(`[data-p-index=${endSpan[0]}]`)
-      .querySelector(`[data-span-index=${endSpan[1]}]`);
+    const endSpanElem = document.querySelector(`[data-p-index="${endSpan[0]}"`)
+      .querySelector(`[data-span-index="${endSpan[1]}"]`);
 
-    result += endSpanElem.innerText + " ";
+    if (startSpan[0] !== endSpan[0] || startSpan[1] !== endSpan[1]) {
+      result += endSpanElem.innerText + " ";
+    }
 
     return result;
   };
@@ -1269,7 +1282,7 @@
     const textFragmentSelection = getTextFragmentSelection();
     const selectionSentencesText = getSelectionText(textFragmentSelection);
 
-    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, selectionText);
+    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, -1, selectionSentencesText);
   };
 
   const parseAndSetSelectedDictArticle = () => {
