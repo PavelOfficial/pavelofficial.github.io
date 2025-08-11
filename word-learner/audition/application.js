@@ -1196,6 +1196,35 @@
       extentOffset = baseOffset;
     }
 
+    /*
+
+      const { baseNode, extentNode } = selObj;
+
+      if (baseNode instanceof Text) {
+        let counter = 0;
+
+        let tempNode = extentNode;
+        while (tempNode && tempNode.previousSibling) {
+          counter += baseNode.previousSibling.innerText.length;
+          tempNode = tempNode.nextSibling;
+        }
+
+        baseOffset += counter;
+      }
+
+      if (extentNode instanceof Text) {
+        let counter = 0;
+
+        let tempNode = extentNode;
+        while (tempNode && tempNode.nextSibling) {
+          counter += baseNode.nextSibling.innerText.length;
+          tempNode = tempNode.nextSibling;
+        }
+
+        extentOffset += counter;
+      }
+     */
+
     const baseNodePItemIndex = baseNodeItemP.getAttribute("data-p-index");
     const extentNodePItemIndex = extentNodeItemP.getAttribute("data-p-index");
 
