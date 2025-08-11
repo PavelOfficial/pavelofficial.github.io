@@ -1031,6 +1031,8 @@
   };
 
   let currentDictArticle;
+  let selectionSentencesText;
+  let textFragmentSelection;
 
   const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText) => {
     if (item.type === "phrase") {
@@ -1243,8 +1245,8 @@
       selectedSpans: allNodes,
       startSpan: [baseNodePItemIndex, parseInt(baseNodeItem.getAttribute("data-span-index"), 10)],
       endSpan: [extentNodePItemIndex, parseInt(extentNodeItem.getAttribute("data-span-index"), 10)],
-      baseOffset: baseOffset,
-      extentOffset: extentOffset,
+      startOffset: baseOffset,
+      endOffset: extentOffset,
     };
   };
 
@@ -1279,10 +1281,65 @@
   const renderSelectedDictArticleElement = () => {
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const selectedArticleDictItem = document.querySelector(".selected-text-item");
-    const textFragmentSelection = getTextFragmentSelection();
-    const selectionSentencesText = getSelectionText(textFragmentSelection);
 
     selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, -1, selectionSentencesText);
+  };
+
+  const textSentenceClass = "text-sentence ";
+  const cleanAllDictFragments = () => {
+    const allElements = document.querySelectorAll(".span-dict-linked-text");
+
+    allElements.forEach((item) => {
+      if (item.matches(".text-sentence")) {
+        item.setAttribute("class", textSentenceClass);
+      } else {
+        const sentence = item.closest(".text-sentence");
+        if (sentence) {
+          const sentenceInnerText = sentence.innerText;
+
+          sentence.innerHTML = sentenceInnerText;
+        }
+      }
+    });
+  };
+
+  const renderTextFragmentSelection = (textFragment) => {
+    textFragment.selectedSpans.forEach((span) => {
+      const spanElem = document.querySelector(`[data-p-index="${span[0]}"]`)
+        .querySelector(`[data-span-index="${span[1]}"]`);
+
+      spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text`);
+    });
+
+    const { startSpan, endSpan } = textFragment;
+
+    if (startSpan[0] !== endSpan[0] || startSpan[1] !== endSpan[1]) {
+      // others
+      const startSpanElement = document.querySelector(`[data-p-index="${startSpan[0]}"]`)
+        .querySelector(`[data-span-index="${startSpan[1]}"]`);
+      const endSpanElement = document.querySelector(`[data-p-index="${endSpan[0]}"]`)
+        .querySelector(`[data-span-index="${endSpan[1]}"]`);
+
+      const startSpanInnerText = startSpanElement.innerText;
+      const startSpanResultHTML = startSpanInnerText.slice(0, textFragment.startOffset)
+        + `<span class="span-dict-linked-text">${startSpanInnerText.slice(textFragment.startOffset)}</span>`;
+      startSpanElement.innerHTML = startSpanResultHTML;
+
+      const endSpanInnerText = endSpanElement.innerText;
+      const endSpanResultHTML = `<span class="span-dict-linked-text">${endSpanInnerText.slice(0, textFragment.endOffset)}</span>`
+        + endSpanInnerText.slice(textFragment.endOffset);
+      endSpanElement.innerHTML = endSpanResultHTML;
+
+    } else {
+      // the same
+      const element = document.querySelector(`[data-p-index="${startSpan[0]}"]`)
+        .querySelector(`[data-span-index="${startSpan[1]}"]`);
+
+      const innerText = element.innerText;
+      const resultHTML = innerText.slice(0, textFragment.startOffset) + `<span class="span-dict-linked-text">${innerText.slice(textFragment.startOffset, textFragment.endOffset)}</span>` + innerText.slice(textFragment.endOffset);
+
+      element.innerHTML = resultHTML;
+    }
   };
 
   const parseAndSetSelectedDictArticle = () => {
@@ -1352,7 +1409,18 @@
       console.log("Single word!");
     }
 
-    renderSelectedDictArticleElement()
+    textFragmentSelection = getTextFragmentSelection();
+    selectionSentencesText = getSelectionText(textFragmentSelection);
+
+    renderSelectedDictArticleElement();
+    const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
+      textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
+      textFragmentSelection.startOffset === textFragmentSelection.endOffset;
+
+    if (!isSelectionEmpty) {
+      cleanAllDictFragments();
+      renderTextFragmentSelection(textFragmentSelection);
+    }
   };
 
   const observeMap =  new Map([]);
