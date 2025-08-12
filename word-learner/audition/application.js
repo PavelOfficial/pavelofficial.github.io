@@ -1,3 +1,5 @@
+const textSentenceClass = "text-sentence ";
+
 (() => {
   const leadingZeros = (value, count) => {
     return `0000000000000${value}`.slice(-count)
@@ -35,6 +37,32 @@
   let audioCommentRef = { current: createNullAudioComment() }
 
 
+  window.renderTextFragmentSelection = (textFragment, listIndex) => {
+    textFragment.selectedSpans.forEach((span) => {
+      const spanElem = document.querySelector(`[data-p-index="${span[0]}"]`)
+        .querySelector(`[data-span-index="${span[1]}"]`);
+
+      const dictArticles = spanElem.getAttribute("data-dict-articles") || "";
+      const dictArticlesList = dictArticles.split(",")
+        .filter(item => item)
+        .map((item) => parseInt(item, 10));
+
+      dictArticlesList.push(listIndex);
+
+      spanElem.setAttribute("data-dict-articles", dictArticlesList.join(","));
+      spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text span-dict-linked-text_${dictArticlesList.slice(0, 3).length}`);
+    });
+  };
+
+  window.renderListTextFragments = () => {
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+    dict.forEach((item, index) => {
+      if (item.textSelectionFragment) {
+        renderTextFragmentSelection(item.textSelectionFragment, index);
+      }
+    });
+  };
 
   const fetchAuditions = async () => {
     const allAuditionUrls = categories.reduce((result, item) => {
@@ -355,6 +383,8 @@
 
           item.innerHTML = nextText;
         });
+
+      window.renderListTextFragments();
 
       // Scroll to stored scroll.
       const scrollArea = document.querySelector(".text-container-inner");
@@ -1327,6 +1357,37 @@
 
       localStorage.setItem("dict", JSON.stringify(dict));
     }
+
+    if (event.target.matches(".text-sentence")) {
+      let dictArticles = event.target.getAttribute("data-dict-articles") || "";
+
+      dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));
+
+      const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
+
+      dataList.forEach((item) => {
+        // dict-article dict-article-phrase
+        if (/dict-article-phrase/.test(item.getAttribute("class"))) {
+          item.setAttribute("class", "dict-article dict-article-phrase");
+        } else {
+          item.setAttribute("class", "dict-article");
+        }
+      });
+
+      if (!dictArticles.length) {
+        return;
+      }
+
+      dictArticles.forEach((listIndex) => {
+        const dictArticle = document.querySelector(`[data-list-index="${listIndex}"]`);
+
+        if (/dict-article-phrase/.test(dictArticle.getAttribute("class"))) {
+          dictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
+        } else {
+          dictArticle.setAttribute("class", "dict-article dict-article_active");
+        }
+      });
+    }
   });
 
 
@@ -1549,7 +1610,7 @@
     selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, -1, selectionSentencesText);
   };
 
-  const textSentenceClass = "text-sentence ";
+
   const cleanAllDictFragments = () => {
     const allElements = document.querySelectorAll(".span-dict-linked-text");
 
@@ -1559,22 +1620,6 @@
     });
   };
 
-  const renderTextFragmentSelection = (textFragment, listIndex) => {
-    textFragment.selectedSpans.forEach((span) => {
-      const spanElem = document.querySelector(`[data-p-index="${span[0]}"]`)
-        .querySelector(`[data-span-index="${span[1]}"]`);
-
-      const dictArticles = spanElem.getAttribute("data-dict-articles") || "";
-      const dictArticlesList = dictArticles.split(",")
-        .filter(item => item)
-        .map((item) => parseInt(item, 10));
-
-      dictArticlesList.push(listIndex);
-
-      spanElem.setAttribute("data-dict-articles", dictArticlesList.join(","));
-      spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text span-dict-linked-text_${dictArticlesList.slice(0, 3).length}`);
-    });
-  };
 
   const parseAndSetSelectedDictArticle = () => {
     const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
@@ -1660,16 +1705,11 @@
       textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
     if (!isSelectionEmpty) {
-      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
-
       cleanAllDictFragments();
-      renderTextFragmentSelection(textFragmentSelection, -1);
-      dict.forEach((item, index) => {
-        if (item.textSelectionFragment) {
-          renderTextFragmentSelection(item.textSelectionFragment, index);
-        }
-      });
+      window.renderTextFragmentSelection(textFragmentSelection, -1);
     }
+
+    window.renderListTextFragments();
   };
 
   const observeMap =  new Map([]);
@@ -1780,3 +1820,5 @@
   });
 
 })();
+
+

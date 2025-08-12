@@ -363,6 +363,10 @@ ul.categories li.category-li {
     padding: 15px 5px;
 }
 
+.dict-article_active {
+    background: #badbff;
+}
+
 .dict-article__top {
     height: 50px;
     display: flex;
