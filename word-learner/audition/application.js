@@ -1030,6 +1030,19 @@
     }
   };
 
+  window.handlePhraseBlurHandler = (event) => {
+    const text = event.target.value;
+    const listIndexBox = event.target.closest("[data-list-index]");
+    const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
+
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const item = dict[listIndex];
+
+    item.ruComment = text;
+
+    localStorage.setItem("dict", JSON.stringify(dict));
+  };
+
   let currentDictArticle;
   let selectionSentencesText;
   let textFragmentSelection;
@@ -1046,7 +1059,11 @@
               <div class="dict-article__word">
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
                 <div>
-                  ${item.en}
+                  ${item.en.split(" ").map((word, index) => {
+                    return `<span data-phrase-word-index="${index}" 
+                                  class="span-phrase-word ${(item.highlightedWords || []).indexOf(index) !== -1 ? "span-phrase-word_selected" : ""}">
+                      ${word} </span>`;
+                  }).join("")}
                   <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
                           data-index="${listIndex}" 
                           onclick="window.handleClickRemoveItemFromDict(event)">
@@ -1059,7 +1076,7 @@
               </div>
             </div>
             <div class="dict-article__top-right">
-
+              <textarea class="dict-phrase-comment" onblur="window.handlePhraseBlurHandler(event)">${item.ruComment}</textarea>
             </div>
           </div>
           <div class="dict-article__bottom">
@@ -1132,6 +1149,32 @@
       item.ruCurrentMeaning.push(text);
 
       listIndexBox.querySelector(".dict-article__top-right").innerText = item.ruCurrentMeaning.join(", ");
+
+      localStorage.setItem("dict", JSON.stringify(dict));
+    }
+
+    if (event.target.matches(".span-phrase-word")) {
+      const phraseWordIndex = parseInt(event.target.getAttribute("data-phrase-word-index"), 10);
+      const listIndexBox = event.target.closest("[data-list-index]");
+      const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
+
+      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+      const item = dict[listIndex];
+
+      if (!item.highlightedWords) {
+        item.highlightedWords = [];
+      }
+
+      if (item.highlightedWords.indexOf(phraseWordIndex) !== -1) {
+        item.highlightedWords.splice(item.highlightedWords.indexOf(phraseWordIndex), 1);
+      } else {
+        item.highlightedWords.push(phraseWordIndex);
+      }
+
+      event.target.setAttribute("class", item.highlightedWords.indexOf(phraseWordIndex) !== -1 ?
+        "span-phrase-word span-phrase-word_selected" :
+        "span-phrase-word"
+      );
 
       localStorage.setItem("dict", JSON.stringify(dict));
     }
@@ -1420,6 +1463,7 @@
         en: en,
         ru: ru,
         ruComment: "",
+        highlightedWords: [],
         type: isASingleWord ? "word" : "phrase",
         ruTranslations: [],
         datestamp: nowDate.getTime(),
