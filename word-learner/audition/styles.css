@@ -424,8 +424,20 @@ ul.categories li.category-li {
 }
 
 .span-dict-linked-text {
-    background: #a6c1ff;
+    background: #dfe8ff;
     border-radius: 2px;
+}
+
+.span-dict-linked-text_1 {
+    background: #d5e1ff;
+}
+
+.span-dict-linked-text_2 {
+    background: #b9ccff;
+}
+
+.span-dict-linked-text_3 {
+    background: #89abff;
 }
 
 .dict-word-item {

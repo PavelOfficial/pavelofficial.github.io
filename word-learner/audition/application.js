@@ -1554,25 +1554,25 @@
     const allElements = document.querySelectorAll(".span-dict-linked-text");
 
     allElements.forEach((item) => {
-      if (item.matches(".text-sentence")) {
-        item.setAttribute("class", textSentenceClass);
-      } else {
-        const sentence = item.closest(".text-sentence");
-        if (sentence) {
-          const sentenceInnerText = sentence.innerText;
-
-          sentence.innerHTML = sentenceInnerText;
-        }
-      }
+      item.setAttribute("class", textSentenceClass);
+      item.setAttribute("data-dict-articles", "");
     });
   };
 
-  const renderTextFragmentSelection = (textFragment) => {
+  const renderTextFragmentSelection = (textFragment, listIndex) => {
     textFragment.selectedSpans.forEach((span) => {
       const spanElem = document.querySelector(`[data-p-index="${span[0]}"]`)
         .querySelector(`[data-span-index="${span[1]}"]`);
 
-      spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text`);
+      const dictArticles = spanElem.getAttribute("data-dict-articles") || "";
+      const dictArticlesList = dictArticles.split(",")
+        .filter(item => item)
+        .map((item) => parseInt(item, 10));
+
+      dictArticlesList.push(listIndex);
+
+      spanElem.setAttribute("data-dict-articles", dictArticlesList.join(","));
+      spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text span-dict-linked-text_${dictArticlesList.slice(0, 3).length}`);
     });
   };
 
@@ -1612,6 +1612,7 @@
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
+        textSelectionFragment: textFragmentSelection,
       };
     } else {
       // TnITTtw-variant-row TnITTtw-t - блок
@@ -1646,6 +1647,7 @@
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros((nowDate.getMonth() + 1, 3), 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
+        textSelectionFragment: textFragmentSelection,
       };
 
       console.log("Single word!");
@@ -1658,8 +1660,15 @@
       textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
     if (!isSelectionEmpty) {
+      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
       cleanAllDictFragments();
-      renderTextFragmentSelection(textFragmentSelection);
+      renderTextFragmentSelection(textFragmentSelection, -1);
+      dict.forEach((item, index) => {
+        if (item.textSelectionFragment) {
+          renderTextFragmentSelection(item.textSelectionFragment, index);
+        }
+      });
     }
   };
 
