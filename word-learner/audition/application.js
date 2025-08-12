@@ -1043,9 +1043,145 @@
     localStorage.setItem("dict", JSON.stringify(dict));
   };
 
+  const renderSelectionSentencesText = (text, item) => {
+    text = text || "";
+    const textIndex = text.indexOf(item.trim());
+
+    if (textIndex !== -1) {
+      return `${text.slice(0, textIndex)}<span class="subject-fragment">${text.slice(textIndex, textIndex + item.length)}</span>${text.slice(textIndex + item.length)}`;
+    }
+
+    return text
+  };
+
+  window.handleOpenTableInWindow = () => {
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const newWindow = window.open("", "_blank");
+
+    newWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Table</title>
+            <style>
+              body {
+                font-family: Arial;
+                padding: 15px;
+                font-size: 8pt;
+              }
+              
+              table {
+                border-collapse: collapse;
+              }
+
+              table td,
+              table th {
+                vertical-align: top;
+                text-align: left;
+                border: 1px solid #000000;
+                padding: 0px;       
+              }
+              
+              .date-header {
+                padding-top: 10px;
+                font-size: 11pt;
+              }
+              
+              .span-phrase-word {
+                cursor: pointer;
+              }
+              
+              .span-phrase-word_selected {
+                text-decoration: underline;
+              }
+              
+              .subject-fragment {
+                text-decoration: underline;
+              }
+            </style>
+        </head>
+        <body>
+            <table>
+              <colgroup>
+                <col style="width:3.5cm;" />
+                <col style="width:2.25cm;" />
+                <col style="width:4.5cm;" />
+                <col style="width:3.75cm;" />
+                <col style="width:2.6cm;" />
+              </colgroup> 
+              <tr>
+                <th>en</th>
+                <th>current meaning</th>
+                <th>ru</th>
+                <th>text fragment</th>
+                <th>time</th>
+              </tr>
+              ${dict.map((item, index, array) => {
+                let prefix = "";
+      
+                if (array[index - 1] ? (array[index - 1].date !== item.date) : true) {
+                  prefix = `
+                    <tr>
+                      <td class="date-header" colspan=5>${item.date}</td>
+                    </tr>
+                  `;
+                }
+
+                if (item.type === "word") {
+                  return `
+                    ${prefix}
+                    <tr>
+                      <td>${item.en}</td>
+                      <td>${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(","): ""}</td>
+                      <td>${renderRuTranslations((item.ruTranslations || []))}</td>
+                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
+                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
+                    </tr>
+                  `;
+                } else if (item.type === "phrase") {
+                  return `
+                    ${prefix}
+                    <tr>
+                      <td>${renderEnPhrase(item)}</td>
+                      <td>${item.ruComment}</td>
+                      <td>${item.ru}</td>
+                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
+                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
+                    </tr>
+                  `;
+                }
+              }).join("")}
+                        
+            </table>
+        </body>
+        </html>
+    `);
+  };
+
   let currentDictArticle;
   let selectionSentencesText;
   let textFragmentSelection;
+
+  const renderRuTranslations = (ruTranslations) => {
+    return ruTranslations.map((item) => {
+      return `
+          <span class="dict-hint">${item.header.slice(0, 4)}.</span>
+          ${item.items.map((item) => {
+            return `<span class="dict-word-item">${item}</span>`;
+          }).join(", ")};
+      `;
+    })
+  };
+
+
+  const renderEnPhrase = (item) => {
+    return item.en.split(" ").map((word, index) => {
+      return `<span data-phrase-word-index="${index}"
+                    class="span-phrase-word ${(item.highlightedWords || []).indexOf(index) !== -1 ? "span-phrase-word_selected" : ""}">
+        ${word} </span>`;
+    }).join("");
+  };
+
 
   const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText) => {
     if (item.type === "phrase") {
@@ -1059,11 +1195,7 @@
               <div class="dict-article__word">
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
                 <div>
-                  ${item.en.split(" ").map((word, index) => {
-                    return `<span data-phrase-word-index="${index}" 
-                                  class="span-phrase-word ${(item.highlightedWords || []).indexOf(index) !== -1 ? "span-phrase-word_selected" : ""}">
-                      ${word} </span>`;
-                  }).join("")}
+                  ${renderEnPhrase(item)}
                   <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
                           data-index="${listIndex}" 
                           onclick="window.handleClickRemoveItemFromDict(event)">
@@ -1082,8 +1214,8 @@
           <div class="dict-article__bottom">
             ${item.ru}
           </div>
-          <div>
-            ${selectionSentencesText}
+          <div class="dict-source-santance">
+            ${item.selectionSentencesText || ""}
           </div>
         </div>
       `;
@@ -1115,17 +1247,10 @@
             </div>
           </div>
           <div class="dict-article__bottom">
-            ${(item.ruTranslations || []).map((item) => {
-                return `
-                        <span class="dict-hint">${item.header.slice(0, 4)}.</span>
-                        ${item.items.map((item) => {
-                          return `<span class="dict-word-item">${item}</span>`;
-                          }).join(", ")};
-                `;
-              })}          
+            ${renderRuTranslations((item.ruTranslations || []))}          
           </div>
-          <div>
-            ${selectionSentencesText}
+          <div class="dict-source-santance">
+            ${item.selectionSentencesText || ""}
           </div>
         </div>
       `;
@@ -1448,6 +1573,9 @@
     const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
     const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
 
+    textFragmentSelection = getTextFragmentSelection();
+    selectionSentencesText = getSelectionText(textFragmentSelection);
+
     if (!enBody || !ruBody) {
       const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
       const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
@@ -1469,6 +1597,7 @@
         datestamp: nowDate.getTime(),
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+        selectionSentencesText: selectionSentencesText,
       };
     } else {
       // TnITTtw-variant-row TnITTtw-t - блок
@@ -1502,23 +1631,24 @@
         datestamp: nowDate.getTime(),
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros((nowDate.getMonth() + 1, 3), 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+        selectionSentencesText: selectionSentencesText,
       };
 
       console.log("Single word!");
     }
 
-    textFragmentSelection = getTextFragmentSelection();
-    selectionSentencesText = getSelectionText(textFragmentSelection);
 
     renderSelectedDictArticleElement();
-    const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
-      textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
-      textFragmentSelection.startOffset === textFragmentSelection.endOffset;
+    /*
+      const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
+        textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
+        textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
-    if (!isSelectionEmpty) {
-      cleanAllDictFragments();
-      renderTextFragmentSelection(textFragmentSelection);
-    }
+      if (!isSelectionEmpty) {
+        cleanAllDictFragments();
+        renderTextFragmentSelection(textFragmentSelection);
+      }
+     */
   };
 
   const observeMap =  new Map([]);
