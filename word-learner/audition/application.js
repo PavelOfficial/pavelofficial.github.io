@@ -345,12 +345,12 @@
 
           item.setAttribute("data-p-index", index);
 
-          const nextText = text.split(/\.|\!|\?/gi)
+          const nextText = text.split(/\s/gi)
             .filter((item) => item.trim())
             .map((item2, index) => {
               const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
 
-              return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""}</span> `;
+              return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""} </span>`;
             }).join("");
 
           item.innerHTML = nextText;
@@ -1068,10 +1068,10 @@
 
       if (array[index - 1] ? (array[index - 1].date !== item.date) : true) {
         prefix = `
-                    <tr>
-                      <td class="date-header" colspan=5>${item.date}</td>
-                    </tr>
-                  `;
+          <tr>
+            <td class="date-header" colspan=5>${item.date}</td>
+          </tr>
+        `;
       }
 
       if (item.type === "word") {
@@ -1448,12 +1448,12 @@
     const baseNodeItemIndex = parseInt(baseNodeItem.getAttribute("data-span-index"), 10);
     const extentNodeItemIndex = parseInt(extentNodeItem.getAttribute("data-span-index"), 10);
 
-    let i2 = baseNodeItemIndex + 1;
+    let i2 = baseNodeItemIndex;
     let nextItem = baseNodeItemP.querySelector(`[data-span-index="${i2}"]`);
     while (nextItem) {
       nextItem = baseNodeItemP.querySelector(`[data-span-index="${i2}"]`);
 
-      if (baseNodePItemIndex === extentNodePItemIndex && i2 >= extentNodeItemIndex) {
+      if (baseNodePItemIndex === extentNodePItemIndex && i2 > extentNodeItemIndex) {
         nextItem = null;
       }
 
@@ -1461,7 +1461,7 @@
         allNodes.push([baseNodePItemIndex, i2]);
       }
 
-      i2 -= 1;
+      i2 += 1;
     }
 
     for (let i = baseNodePItemIndex + 1; i <= extentNodePItemIndex - 1; i++) {
@@ -1473,13 +1473,13 @@
       allNodes.push(...spanSelectors);
     }
 
-    let i3 = extentNodeItemIndex - 1;
+    let i3 = extentNodeItemIndex;
     let nextItem2 = extentNodeItemP.querySelector(`[data-span-index="${i3}"]`);
     while (nextItem2 && baseNodePItemIndex !== extentNodePItemIndex) {
       nextItem2 = extentNodeItemP.querySelector(`[data-span-index="${i3}"]`);
 
       if (nextItem2) {
-        allNodes.push([extentNodeItemIndex, i3]);
+        allNodes.push([extentNodePItemIndex, i3]);
       }
 
       i3 -= 1;
@@ -1489,35 +1489,55 @@
       selectedSpans: allNodes,
       startSpan: [baseNodePItemIndex, parseInt(baseNodeItem.getAttribute("data-span-index"), 10)],
       endSpan: [extentNodePItemIndex, parseInt(extentNodeItem.getAttribute("data-span-index"), 10)],
-      startOffset: baseOffset,
-      endOffset: extentOffset,
     };
   };
 
   const getSelectionText = (textFragmentSelection) => {
-    const startSpan = textFragmentSelection.startSpan;
+    let allSpans = [];
     const selectedSpans = textFragmentSelection.selectedSpans;
-    const endSpan = textFragmentSelection.endSpan;
     let result = "";
 
-    const startSpanElem = document.querySelector(`[data-p-index="${startSpan[0]}"`)
-      .querySelector(`[data-span-index="${startSpan[1]}"]`);
+    const { startSpan, endSpan } = textFragmentSelection;
 
-    result += startSpanElem.innerText + " ";
+    let tempSpan = document.querySelector(`[data-p-index="${startSpan[0]}"]`)
+      .querySelector(`[data-span-index="${startSpan[1]}"]`).previousSibling;
 
-    selectedSpans.forEach((selectedSpan) => {
-      const selectedSpanElem = document.querySelector(`[data-p-index="${selectedSpan[0]}"]`)
-        .querySelector(`[data-span-index="${selectedSpan[1]}"]`);
+    while (tempSpan) {
+      if (!/\.|\!|\?/.test(tempSpan.innerText)) {
+        allSpans.push(tempSpan);
 
-      result += selectedSpanElem.innerText + " ";
-    });
-
-    const endSpanElem = document.querySelector(`[data-p-index="${endSpan[0]}"`)
-      .querySelector(`[data-span-index="${endSpan[1]}"]`);
-
-    if (startSpan[0] !== endSpan[0] || startSpan[1] !== endSpan[1]) {
-      result += endSpanElem.innerText + " ";
+        tempSpan = tempSpan.previousSibling;
+      } else {
+        tempSpan = null;
+      }
     }
+
+    allSpans = allSpans.reverse();
+
+    allSpans = allSpans.concat(selectedSpans);
+
+    tempSpan = document.querySelector(`[data-p-index="${endSpan[0]}"]`)
+      .querySelector(`[data-span-index="${endSpan[1]}"]`).nextSibling;
+
+    while (tempSpan) {
+      if (!/\.|\!|\?/.test(tempSpan.innerText)) {
+        allSpans.push(tempSpan);
+        tempSpan = tempSpan.nextSibling;
+      } else {
+        allSpans.push(tempSpan);
+        tempSpan = null;
+      }
+    }
+
+    allSpans.forEach((selectedSpan) => {
+      let selectedSpanElem;
+      if (Array.isArray(selectedSpan)) {
+        selectedSpanElem = document.querySelector(`[data-p-index="${selectedSpan[0]}"]`)
+          .querySelector(`[data-span-index="${selectedSpan[1]}"]`);
+      }
+
+      result += (selectedSpanElem || selectedSpan).innerText + " ";
+    });
 
     return result;
   };
@@ -1554,36 +1574,6 @@
 
       spanElem.setAttribute("class", `${textSentenceClass}span-dict-linked-text`);
     });
-
-    const { startSpan, endSpan } = textFragment;
-
-    if (startSpan[0] !== endSpan[0] || startSpan[1] !== endSpan[1]) {
-      // others
-      const startSpanElement = document.querySelector(`[data-p-index="${startSpan[0]}"]`)
-        .querySelector(`[data-span-index="${startSpan[1]}"]`);
-      const endSpanElement = document.querySelector(`[data-p-index="${endSpan[0]}"]`)
-        .querySelector(`[data-span-index="${endSpan[1]}"]`);
-
-      const startSpanInnerText = startSpanElement.innerText;
-      const startSpanResultHTML = startSpanInnerText.slice(0, textFragment.startOffset)
-        + `<span class="span-dict-linked-text">${startSpanInnerText.slice(textFragment.startOffset)}</span>`;
-      startSpanElement.innerHTML = startSpanResultHTML;
-
-      const endSpanInnerText = endSpanElement.innerText;
-      const endSpanResultHTML = `<span class="span-dict-linked-text">${endSpanInnerText.slice(0, textFragment.endOffset)}</span>`
-        + endSpanInnerText.slice(textFragment.endOffset);
-      endSpanElement.innerHTML = endSpanResultHTML;
-
-    } else {
-      // the same
-      const element = document.querySelector(`[data-p-index="${startSpan[0]}"]`)
-        .querySelector(`[data-span-index="${startSpan[1]}"]`);
-
-      const innerText = element.innerText;
-      const resultHTML = innerText.slice(0, textFragment.startOffset) + `<span class="span-dict-linked-text">${innerText.slice(textFragment.startOffset, textFragment.endOffset)}</span>` + innerText.slice(textFragment.endOffset);
-
-      element.innerHTML = resultHTML;
-    }
   };
 
   const parseAndSetSelectedDictArticle = () => {
@@ -1661,18 +1651,16 @@
       console.log("Single word!");
     }
 
-
     renderSelectedDictArticleElement();
-    /*
-      const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
-        textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
-        textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
-      if (!isSelectionEmpty) {
-        cleanAllDictFragments();
-        renderTextFragmentSelection(textFragmentSelection);
-      }
-     */
+    const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
+      textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
+      textFragmentSelection.startOffset === textFragmentSelection.endOffset;
+
+    if (!isSelectionEmpty) {
+      cleanAllDictFragments();
+      renderTextFragmentSelection(textFragmentSelection);
+    }
   };
 
   const observeMap =  new Map([]);
