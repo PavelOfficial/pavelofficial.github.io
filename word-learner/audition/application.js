@@ -1054,7 +1054,63 @@
     return text
   };
 
+  const renderDictFragment = (dictFragment, date1, date2) => {
+    return dictFragment.map((item, index, array) => {
+      if (date1 && date1.getTime() > (item.timestamp !== undefined ? item.timestamp : item.datestamp)) {
+        return "";
+      }
+
+      if (date2 && date2.getTime() < (item.timestamp !== undefined ? item.timestamp : item.datestamp)) {
+        return "";
+      }
+
+      let prefix = "";
+
+      if (array[index - 1] ? (array[index - 1].date !== item.date) : true) {
+        prefix = `
+                    <tr>
+                      <td class="date-header" colspan=5>${item.date}</td>
+                    </tr>
+                  `;
+      }
+
+      if (item.type === "word") {
+        return `
+                    ${prefix}
+                    <tr>
+                      <td>${item.en}</td>
+                      <td>${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(","): ""}</td>
+                      <td>${renderRuTranslations((item.ruTranslations || []))}</td>
+                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
+                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
+                    </tr>
+                  `;
+      } else if (item.type === "phrase") {
+        return `
+                    ${prefix}
+                    <tr>
+                      <td>${renderEnPhrase(item)}</td>
+                      <td>${item.ruComment}</td>
+                      <td>${item.ru}</td>
+                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
+                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
+                    </tr>
+                  `;
+      }
+    }).join("")
+  };
+
   window.handleOpenTableInWindow = () => {
+    const separatePhraseInput = document.querySelector("#separatePhraseInput");
+    const rangeDateInput1 = document.querySelector("#rangeDateInput1");
+    const rangeDateInput2 = document.querySelector("#rangeDateInput2");
+
+    let date1 = rangeDateInput1.value.trim() ? rangeDateInput1.value.trim().split("/").map((item) => parseInt(item, 10)) : null;
+    let date2 = rangeDateInput2.value.trim() ? rangeDateInput2.value.trim().split("/").map((item) => parseInt(item, 10)) : null;
+
+    date1 = date1 ? new Date(date1[0] + 2000, date1[1] - 1, date1[2]) : null;
+    date2 = date2 ? new Date(date2[0] + 2000, date2[1] - 1, date2[2]) : null;
+
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const newWindow = window.open("", "_blank");
 
@@ -1116,42 +1172,10 @@
                 <th>text fragment</th>
                 <th>time</th>
               </tr>
-              ${dict.map((item, index, array) => {
-                let prefix = "";
-      
-                if (array[index - 1] ? (array[index - 1].date !== item.date) : true) {
-                  prefix = `
-                    <tr>
-                      <td class="date-header" colspan=5>${item.date}</td>
-                    </tr>
-                  `;
+              ${separatePhraseInput.checked ? 
+                  `${renderDictFragment(dict.filter((item) => item.type === "word"), date1, date2)}${renderDictFragment(dict.filter((item) => item.type === "phrase"), date1, date2)}` : 
+                  `${renderDictFragment(dict, date1, date2)}`
                 }
-
-                if (item.type === "word") {
-                  return `
-                    ${prefix}
-                    <tr>
-                      <td>${item.en}</td>
-                      <td>${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(","): ""}</td>
-                      <td>${renderRuTranslations((item.ruTranslations || []))}</td>
-                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
-                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
-                    </tr>
-                  `;
-                } else if (item.type === "phrase") {
-                  return `
-                    ${prefix}
-                    <tr>
-                      <td>${renderEnPhrase(item)}</td>
-                      <td>${item.ruComment}</td>
-                      <td>${item.ru}</td>
-                      <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
-                      <td><nobr>${item.time} - ${item.date}</nobr></td>  
-                    </tr>
-                  `;
-                }
-              }).join("")}
-                        
             </table>
         </body>
         </html>
@@ -1594,7 +1618,7 @@
         highlightedWords: [],
         type: isASingleWord ? "word" : "phrase",
         ruTranslations: [],
-        datestamp: nowDate.getTime(),
+        timestamp: nowDate.getTime(),
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
@@ -1628,7 +1652,7 @@
         ruCurrentMeaning: [],
         type: "word",
         ruTranslations: ruTranslations,
-        datestamp: nowDate.getTime(),
+        timestamp: nowDate.getTime(),
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros((nowDate.getMonth() + 1, 3), 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,

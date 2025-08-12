@@ -458,3 +458,30 @@ ul.categories li.category-li {
     font-size: 12px;
     color: #666666;
 }
+
+.inline-form-check.inline-form-check.inline-form-check.inline-form-check {
+    display: inline-block;
+    font-size: 10px;
+    min-height: 1rem;
+    padding-left: 2.75em;
+}
+
+.form-check-input_small.form-check-input_small.form-check-input_small.form-check-input_small {
+    width: 14px;
+    height: 14px;
+}
+
+.form-control-sm-date.form-control-sm-date.form-control-sm-date.form-control-sm-date.form-control-sm-date {
+    height: 14px;
+    width: 65px;
+    line-height: 14px;
+    padding: 3px;
+}
+
+.inline-b {
+    display: inline-block;
+}
+
+.marl-2 {
+    margin-left: 3px;
+}

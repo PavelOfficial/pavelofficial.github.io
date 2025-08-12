@@ -85,7 +85,20 @@
           </div>
         </div>
         <div class="dict-container-inner-footer">
-          <button class="btn btn-outline-secondary btn-sm btn-sm-tiny">sorted table</button> <button onclick="window.handleOpenTableInWindow(event)" class="btn btn-outline-secondary btn-sm btn-sm-tiny">table</button>
+          <div class="form-check inline-form-check">
+            <input type="checkbox" class="form-check-input form-check-input_small" id="separatePhraseInput" />
+            <label class="form-check-label" for="separatePhraseInput">
+              Separate phrase
+            </label>
+          </div>
+          <span class="inline-b marl-2">
+            <input id="rangeDateInput1" class="form-control form-control-sm form-control-sm-date" type="text" placeholder="25/11/15"  />
+          </span>
+          <span class="inline-b marl-2">
+            <input id="rangeDateInput2" class="form-control form-control-sm form-control-sm-date" type="text" placeholder="25/11/16"  />
+          </span>
+
+           <button onclick="window.handleOpenTableInWindow(event)" class="btn btn-outline-secondary btn-sm btn-sm-tiny">table</button>
         </div>
       </div>
     </div>
