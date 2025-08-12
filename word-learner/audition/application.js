@@ -1076,7 +1076,7 @@
               </div>
             </div>
             <div class="dict-article__top-right">
-              <textarea class="dict-phrase-comment" onblur="window.handlePhraseBlurHandler(event)">${item.ruComment}</textarea>
+              <textarea class="dict-phrase-comment" onblur="window.handlePhraseBlurHandler(event)">${item.ruComment || ""}</textarea>
             </div>
           </div>
           <div class="dict-article__bottom">
