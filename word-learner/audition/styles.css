@@ -427,3 +427,7 @@ ul.categories li.category-li {
     background: #a6c1ff;
     border-radius: 2px;
 }
+
+.dict-word-item {
+    cursor: pointer;
+}

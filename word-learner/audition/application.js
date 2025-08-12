@@ -1037,7 +1037,7 @@
   const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText) => {
     if (item.type === "phrase") {
       return `
-        <div class="dict-article dict-article-phrase">
+        <div data-list-index="${listIndex}" class="dict-article dict-article-phrase">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1072,7 +1072,7 @@
       `;
     } else {
       return `
-        <div class="dict-article">
+        <div data-list-index="${listIndex}" class="dict-article">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1102,9 +1102,9 @@
                 return `
                         <span class="dict-hint">${item.header.slice(0, 4)}.</span>
                         ${item.items.map((item) => {
-                  return `<span class="dict-word-item">${item}</span>`;
-                }).join(", ")};
-                      `;
+                          return `<span class="dict-word-item">${item}</span>`;
+                          }).join(", ")};
+                `;
               })}          
           </div>
           <div>
@@ -1114,6 +1114,29 @@
       `;
     }
   };
+
+  document.addEventListener("click", (event) => {
+    if (event.target.matches(".dict-word-item")) {
+      const text = event.target.innerText;
+      const listIndexBox = event.target.closest("[data-list-index]");
+      const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
+
+      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+      const item = dict[listIndex];
+
+      if (!item.ruCurrentMeaning) {
+        item.ruCurrentMeaning = [];
+      }
+
+      item.ruCurrentMeaning.push(text);
+
+      listIndexBox.querySelector(".dict-article__top-right").innerText = item.ruCurrentMeaning.join(", ");
+
+      localStorage.setItem("dict", JSON.stringify(dict));
+    }
+  });
+
 
   const rerenderDictList = (dict, renderAddButton) => {
     document.querySelector(".dict-list").innerHTML = dict.map((item, index, array) => {
@@ -1396,6 +1419,7 @@
       currentDictArticle = {
         en: en,
         ru: ru,
+        ruComment: "",
         type: isASingleWord ? "word" : "phrase",
         ruTranslations: [],
         datestamp: nowDate.getTime(),
@@ -1428,6 +1452,7 @@
       currentDictArticle = {
         en: en,
         ru: ru,
+        ruCurrentMeaning: [],
         type: "word",
         ruTranslations: ruTranslations,
         datestamp: nowDate.getTime(),
