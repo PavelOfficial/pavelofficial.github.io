@@ -96,9 +96,9 @@ ul.categories li.category-li.selected {
     width: 100%;
     overflow-y: scroll;
     padding: 7px;
-    font-size: 16px;
-    line-height: 1.6;
     max-width: 450px;
+    line-height: 3;
+    font-size: 12px;
 }
 
 .succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt {
@@ -106,7 +106,8 @@ ul.categories li.category-li.selected {
 }
 
 .text-wrap-html {
-    font-size: 18px;
+    line-height: 3;
+    font-size: 15px;
 }
 
 .text-container-inner .text-wrap {
@@ -513,4 +514,8 @@ ul.categories li.category-li {
 
 .marl-2 {
     margin-left: 3px;
+}
+
+.subject-fragment {
+    text-decoration: underline;
 }

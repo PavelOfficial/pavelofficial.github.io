@@ -378,7 +378,7 @@ const textSentenceClass = "text-sentence ";
             .map((item2, index) => {
               const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
 
-              return `<span class="text-sentence" data-span-index="${index}">${item2}${text[indexOfSentenceEnd] || ""} </span>`;
+              return `<span class="text-sentence" data-span-index="${index}">${item2} </span>`;
             }).join("");
 
           item.innerHTML = nextText;
@@ -981,63 +981,69 @@ const textSentenceClass = "text-sentence ";
   document.addEventListener("keydown", (event) => {
     const key = event.key;
 
+    if (key === "F4") {
+      window.handleClickAddItemToDict(event);
+
+      return;
+    }
+
     /* rewind */
-    if (key === "q") {
-      onRewindBack10Sec();
-
-      return;
-    }
-
-    if (key === "w") {
-      onRewindBack5Sec();
-
-      return;
-    }
-
-    if (key === "e") {
-      onRewindBack2_5Sec();
-
-      return;
-    }
-
-    if (key === "r") {
-      onRewindNext2_5Sec();
-
-      return;
-    }
-
-    if (key === "t") {
-      onRewindNext5Sec();
-
-      return;
-    }
-
-    if (key === "y") {
-      onRewindNext10Sec();
-
-      return;
-    }
-
-    /* play/pause */
-    if (event.code === "Space") {
-      if (playing) {
-        pauseAudio();
-      } else {
-        playAudio();
-      }
-
-      return;
-    }
-
-    /* save word */
-    // console.log("event.code: ", event.code, event);
-    if (event.ctrlKey && key === "s") {
-      saveToLocalStorageBtt.click();
-
-
-      event.preventDefault();
-      return;
-    }
+    // if (key === "q") {
+    //   onRewindBack10Sec();
+//
+    //   return;
+    // }
+//
+    // if (key === "w") {
+    //   onRewindBack5Sec();
+//
+    //   return;
+    // }
+//
+    // if (key === "e") {
+    //   onRewindBack2_5Sec();
+//
+    //   return;
+    // }
+//
+    // if (key === "r") {
+    //   onRewindNext2_5Sec();
+//
+    //   return;
+    // }
+//
+    // if (key === "t") {
+    //   onRewindNext5Sec();
+//
+    //   return;
+    // }
+//
+    // if (key === "y") {
+    //   onRewindNext10Sec();
+//
+    //   return;
+    // }
+//
+    // /* play/pause */
+    // if (event.code === "Space") {
+    //   if (playing) {
+    //     pauseAudio();
+    //   } else {
+    //     playAudio();
+    //   }
+//
+    //   return;
+    // }
+//
+    // /* save word */
+    // // console.log("event.code: ", event.code, event);
+    // if (event.ctrlKey && key === "s") {
+    //   saveToLocalStorageBtt.click();
+//
+//
+    //   event.preventDefault();
+    //   return;
+    // }
 
   });
 
@@ -1269,7 +1275,7 @@ const textSentenceClass = "text-sentence ";
             ${item.ru}
           </div>
           <div class="dict-source-santance">
-            ${item.selectionSentencesText || ""}
+            ${renderSelectionSentencesText(item.selectionSentencesText || "", item.en.trim())}
           </div>
         </div>
       `;
@@ -1304,7 +1310,7 @@ const textSentenceClass = "text-sentence ";
             ${renderRuTranslations((item.ruTranslations || []))}          
           </div>
           <div class="dict-source-santance">
-            ${item.selectionSentencesText || ""}
+            ${renderSelectionSentencesText(item.selectionSentencesText || "", item.en.trim())}
           </div>
         </div>
       `;
@@ -1674,7 +1680,10 @@ const textSentenceClass = "text-sentence ";
       result += (selectedSpanElem || selectedSpan).innerText + " ";
     });
 
-    return result;
+    return result.replace(/\s\s/gi, " ").replace(/\s\s/gi, " ")
+      .replace(/\s\s/gi, " ").replace(/\s\s/gi, " ")
+      .replace(/\s\s/gi, " ").replace(/\s\s/gi, " ")
+      .replace(/\s\s/gi, " ").replace(/\s\s/gi, " ");
   };
 
   const renderSelectedDictArticleElement = () => {
