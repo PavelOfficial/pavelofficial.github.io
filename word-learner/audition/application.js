@@ -1309,7 +1309,7 @@ const textSentenceClass = "text-sentence ";
               </div>
             </div>
             <div class="dict-article__top-right">
-              
+              ${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(", ") : ""}
             </div>
           </div>
           <div class="dict-article__bottom">
@@ -1331,7 +1331,7 @@ const textSentenceClass = "text-sentence ";
 
       const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
-      const item = dict[listIndex];
+      const item = dict[listIndex] || currentDictArticle;
 
       if (!item.ruCurrentMeaning) {
         item.ruCurrentMeaning = [];
@@ -1636,6 +1636,9 @@ const textSentenceClass = "text-sentence ";
       selectedSpans: allNodes,
       startSpan: [baseNodePItemIndex, parseInt(baseNodeItem.getAttribute("data-span-index"), 10)],
       endSpan: [extentNodePItemIndex, parseInt(extentNodeItem.getAttribute("data-span-index"), 10)],
+
+      startOffset: baseOffset, // !!! it ie needed as a hack for empty selection detection
+      endOffset: extentOffset, // !!! it ie needed as a hack for empty selection detection
     };
   };
 
@@ -1787,6 +1790,7 @@ const textSentenceClass = "text-sentence ";
       console.log("Single word!");
     }
 
+    //
     renderSelectedDictArticleElement();
 
     const isSelectionEmpty = textFragmentSelection.startSpan[0] === textFragmentSelection.endSpan[0] &&
