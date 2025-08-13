@@ -704,23 +704,23 @@ const textSentenceClass = "text-sentence ";
           const childIndex = getChildIndex(closestWord)
           lastSelectedWords.delete(childIndex)
         } else {
-          closestWord.setAttribute("class", "source-word source-word-selected")
+          closestWord.setAttribute("class", "source-word source-word-selected");
 
-          const childIndex = getChildIndex(closestWord)
-          lastSelectedWords.add(childIndex)
+          const childIndex = getChildIndex(closestWord);
+          lastSelectedWords.add(childIndex);
         }
       }
 
       if (event.target.closest(".js-create-comment")) {
-        createComment()
+        createComment();
 
-        cleanCommentForm()
-        document.querySelector('.comment-popup').style.display = "none"
+        cleanCommentForm();
+        document.querySelector('.comment-popup').style.display = "none";
 
         // lastSelectedWords
       }
 
-      console.log("lastSelectedWords: ", lastSelectedWords)
+      console.log("lastSelectedWords: ", lastSelectedWords);
     })
 
     initSelectCategory()
@@ -1374,6 +1374,32 @@ const textSentenceClass = "text-sentence ";
         }
       });
 
+      const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
+        let dictArticleElements = item.getAttribute("data-dict-articles");
+
+        dictArticleElements = dictArticleElements.split(",").map((item) => {
+          return parseInt(item, 10);
+        });
+
+        return dictArticles.some((item2) => {
+          return dictArticleElements.indexOf(item2) !== -1;
+        });
+      });
+
+      Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
+        .forEach((item) => {
+          let classAttr = item.getAttribute("class");
+
+          classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
+
+          item.setAttribute("class", classAttr);
+        });
+
+      // выбирать всех и фильтровать по вхождению индекса в список.
+      targetSentences.forEach((item) => {
+        item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
+      });
+
       if (!dictArticles.length) {
         return;
       }
@@ -1386,6 +1412,54 @@ const textSentenceClass = "text-sentence ";
         } else {
           dictArticle.setAttribute("class", "dict-article dict-article_active");
         }
+      });
+    }
+
+    if (event.target.matches(".dict-article__word-number")) {
+      const listIndex = parseInt(event.target.closest("[data-list-index]").getAttribute("data-list-index"), 10);
+      const listItem = event.target.closest("[data-list-index]");
+
+      const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
+
+      dataList.forEach((item) => {
+        // dict-article dict-article-phrase
+        if (/dict-article-phrase/.test(item.getAttribute("class"))) {
+          item.setAttribute("class", "dict-article dict-article-phrase");
+        } else {
+          item.setAttribute("class", "dict-article");
+        }
+      });
+
+      const listDictArticle = event.target.closest("[data-list-index]");
+
+      if (/dict-article-phrase/.test(listDictArticle.getAttribute("class"))) {
+        listDictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
+      } else {
+        listDictArticle.setAttribute("class", "dict-article dict-article_active");
+      }
+
+      const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
+        let dictArticleElements = item.getAttribute("data-dict-articles");
+
+        dictArticleElements = dictArticleElements.split(",").map((item) => {
+          return parseInt(item, 10);
+        });
+
+        return dictArticleElements.indexOf(listIndex) !== -1;
+      });
+
+      Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
+        .forEach((item) => {
+          let classAttr = item.getAttribute("class");
+
+          classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
+
+          item.setAttribute("class", classAttr);
+        });
+
+      // выбирать всех и фильтровать по вхождению индекса в список.
+      targetSentences.forEach((item) => {
+        item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
       });
     }
   });

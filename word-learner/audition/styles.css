@@ -364,7 +364,7 @@ ul.categories li.category-li {
 }
 
 .dict-article_active {
-    background: #badbff;
+    background: #fceeee;
 }
 
 .dict-article__top {
@@ -386,6 +386,7 @@ ul.categories li.category-li {
 }
 
 .dict-article__word-number {
+    cursor: pointer;
     font-size: 10px;
     color: #777777;
     height: 12px;
@@ -442,6 +443,18 @@ ul.categories li.category-li {
 
 .span-dict-linked-text_3 {
     background: #89abff;
+}
+
+.span-dict-linked-text_selected.span-dict-linked-text_1 {
+    background: #ffd5d5;
+}
+
+.span-dict-linked-text_selected.span-dict-linked-text_2 {
+    background: #ffb9b9;
+}
+
+.span-dict-linked-text_selected.span-dict-linked-text_3 {
+    background: #ff8989;
 }
 
 .dict-word-item {
