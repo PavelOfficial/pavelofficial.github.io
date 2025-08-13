@@ -77,8 +77,12 @@ ul.categories li.category-li.selected {
     height: 50vh;
 }
 
+.player-container_short {
+    height: 25vh;
+}
+
 .audio-player {
-    height: 290px;
+/*    height: 290px; */
 }
 
 .text-container {
@@ -87,7 +91,7 @@ ul.categories li.category-li.selected {
     width: 100%;
     position: relative;
     overflow: hidden;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .text-container-inner {
@@ -281,6 +285,10 @@ ul.categories li.category-li.selected {
 .layout-top {
     height: 50vh;
     position: relative;
+}
+
+.layout-top_large {
+    height: 73vh;
 }
 
 .layout-top-inner {

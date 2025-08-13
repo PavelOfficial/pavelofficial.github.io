@@ -1243,7 +1243,9 @@ const textSentenceClass = "text-sentence ";
   };
 
 
-  const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText) => {
+  const renderDictItem = (item, index, renderAddButton, listIndex, selectionSentencesText, displayDeleteButton) => {
+    displayDeleteButton = displayDeleteButton === undefined ? true : displayDeleteButton;
+
     if (item.type === "phrase") {
       return `
         <div data-list-index="${listIndex}" class="dict-article dict-article-phrase">
@@ -1256,11 +1258,13 @@ const textSentenceClass = "text-sentence ";
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
                 <div>
                   ${renderEnPhrase(item)}
-                  <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}" 
-                          onclick="window.handleClickRemoveItemFromDict(event)">
-                          -
-                  </button>
+                  ${displayDeleteButton ? `
+                      <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
+                              data-index="${listIndex}" 
+                              onclick="window.handleClickRemoveItemFromDict(event)">
+                                -
+                      </button>                  
+                  ` : ""}
                 </div>
               </div>
               <div class="dict-article__transcription">
@@ -1291,11 +1295,13 @@ const textSentenceClass = "text-sentence ";
                 <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
                 <div>
                   ${item.en}
-                  <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}"
-                          onclick="window.handleClickRemoveItemFromDict(event)">
-                          -
-                  </button>
+                  ${displayDeleteButton ? `
+                    <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
+                            data-index="${listIndex}"
+                            onclick="window.handleClickRemoveItemFromDict(event)">
+                            -
+                    </button>
+                  `: ""}
                 </div>
               </div>
               <div class="dict-article__transcription">
@@ -1690,7 +1696,7 @@ const textSentenceClass = "text-sentence ";
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const selectedArticleDictItem = document.querySelector(".selected-text-item");
 
-    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, -1, selectionSentencesText);
+    selectedArticleDictItem.innerHTML = renderDictItem(currentDictArticle, dict.length + 1, true, -1, selectionSentencesText, false);
   };
 
 
@@ -1878,6 +1884,28 @@ const textSentenceClass = "text-sentence ";
       btt.click();
     }
   });
+
+  let horizontalControlsShown = true;
+
+  window.switchHorizontalLineDisplay = () => {
+    if (horizontalControlsShown) {
+      Array.from(document.querySelectorAll(".switch-visible-line")).forEach((item) => {
+        item.setAttribute("style", "display:none;");
+      });
+
+      document.querySelector(".player-container").setAttribute("class", "player-container player-container_short");
+      document.querySelector(".layout-top").setAttribute("class", "layout-top layout-top_large");
+      horizontalControlsShown = false;
+    } else {
+      Array.from(document.querySelectorAll(".switch-visible-line")).forEach((item) => {
+        item.setAttribute("style", "display:block;");
+      });
+
+      document.querySelector(".player-container").setAttribute("class", "player-container");
+      document.querySelector(".layout-top").setAttribute("class", "layout-top");
+      horizontalControlsShown = true;
+    }
+  };
 
   return
 })();

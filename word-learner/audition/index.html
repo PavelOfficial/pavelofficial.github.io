@@ -146,10 +146,13 @@
               <button type="button" class="btn btn-outline-primary btn-sm btt-icon" onclick="switchTopicList()">
                 ☰
               </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm btt-icon" onclick="switchHorizontalLineDisplay()">
+                &#9850;
+              </button>
             </div>
           </div>
           <div>
-            <div class="mb-3">
+            <div class="mb-3 switch-visible-line">
               <button class="btn btn-primary btn-sm" onclick="onRewindBack15Sec()">
                 -15
               </button>
@@ -179,7 +182,7 @@
         </div>
       </div>
     </div>
-    <div class="text-container-controls">
+    <div class="text-container-controls switch-visible-line">
       <div class="text-container-controls_showings">
         <button type="button" class="btn btn-primary btn-sm" onclick="showPrev5Sentences()">
           -5
