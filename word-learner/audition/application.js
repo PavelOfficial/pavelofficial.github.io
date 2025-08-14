@@ -1309,7 +1309,8 @@ const textSentenceClass = "text-sentence ";
               </div>
             </div>
             <div class="dict-article__top-right">
-              ${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(", ") : ""}
+              <span class="ru-current-meaning">${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(", ") : ""}</span>
+              <textarea class="dict-phrase-comment dict-phrase-comment_word" onblur="window.handlePhraseBlurHandler(event)">${item.ruComment || ""}</textarea>
             </div>
           </div>
           <div class="dict-article__bottom">
@@ -1339,7 +1340,7 @@ const textSentenceClass = "text-sentence ";
 
       item.ruCurrentMeaning.push(text);
 
-      listIndexBox.querySelector(".dict-article__top-right").innerText = item.ruCurrentMeaning.join(", ");
+      listIndexBox.querySelector(".ru-current-meaning").innerText = item.ruCurrentMeaning.join(", ");
 
       localStorage.setItem("dict", JSON.stringify(dict));
     }
@@ -1777,6 +1778,7 @@ const textSentenceClass = "text-sentence ";
       currentDictArticle = {
         en: en,
         ru: ru,
+        ruComment: "",
         ruCurrentMeaning: [],
         type: "word",
         ruTranslations: ruTranslations,

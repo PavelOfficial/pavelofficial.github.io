@@ -377,7 +377,7 @@ ul.categories li.category-li {
 }
 
 .dict-article__top {
-    height: 50px;
+    height: auto;
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -477,6 +477,11 @@ ul.categories li.category-li {
     max-height: 100%;
     font-size: 12px;
     line-height: 1em;
+}
+
+.dict-phrase-comment_word {
+    min-height: 32px;
+    max-height: 32px;
 }
 
 .span-phrase-word {
