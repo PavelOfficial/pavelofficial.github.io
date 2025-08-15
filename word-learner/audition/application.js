@@ -1783,7 +1783,7 @@ const textSentenceClass = "text-sentence ";
         type: "word",
         ruTranslations: ruTranslations,
         timestamp: nowDate.getTime(),
-        date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros((nowDate.getMonth() + 1, 3), 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
+        date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
         textSelectionFragment: textFragmentSelection,
