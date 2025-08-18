@@ -285,6 +285,21 @@
 */
   // Исключить что по фразовым глаголам: shortEngAll20001.slice(0, 1019)
 
+  const removeCopies = (list) => {
+    const listSet = new Set([]);
+    const nextList = []
+
+    list.reduce((result, item) => {
+      if (!result.has(`${item[0]}_${item[1]}`)) {
+        result.add(`${item[0]}_${item[1]}`);
+        nextList.push(item);
+      }
+
+      return result;
+    }, listSet);
+
+    return nextList;
+  }
 
   const playLists = [ {
     name: "Популярные 2000",
@@ -379,7 +394,13 @@
   }, playlistSeparator, {
     name: "Полный 20001 срез. повторение 1",
     dict: fullPackOfAllLists_Repeat_1,
-  },/* {
+  }, {
+    name: "Простые после первого прохода",
+    dict: removeCopies(fullPackOfAllLists_Repeat_2),
+  }, {
+    name: "Полный 20001 срез. Сокращенный. Повторение 2",
+    dict: excludeSublist(fullPackOfAllLists20001, removeCopies(fullPackOfAllLists_Repeat_2)),
+  }, /* {
     name: "Популярные простые 3000",
     dict: excludePopular(engDictAllIndexes3000),
   }, {
