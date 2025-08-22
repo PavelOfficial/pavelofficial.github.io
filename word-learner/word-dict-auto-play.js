@@ -395,6 +395,9 @@
     name: "Полный 20001 срез. повторение 1",
     dict: fullPackOfAllLists_Repeat_1,
   }, {
+    name: "Полный 20001 срез. повторение 2",
+    dict: excludeSublist(fullPackOfAllLists_Repeat_1, removeCopies(fullPackOfAllLists_Repeat_1_learned)),
+  }, playlistSeparator, {
     name: "Простые после первого прохода",
     dict: removeCopies(fullPackOfAllLists_Repeat_2),
   }, {
