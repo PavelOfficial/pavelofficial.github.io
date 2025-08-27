@@ -532,3 +532,9 @@ ul.categories li.category-li {
 .subject-fragment {
     text-decoration: underline;
 }
+
+.pre-text {
+    width: 100%;
+    word-wrap: normal;
+    word-break: normal;
+}

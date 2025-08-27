@@ -1,0 +1,1087 @@
+[
+  {
+    "en": "pretentious",
+    "ru": "претенциозный",
+    "ruComment": "",
+    "ruCurrentMeaning": [
+      "много о себе возомнивший",
+      "притязательный"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ПРИЛАГАТЕЛЬНЫЕ",
+        "items": [
+          "притязательный",
+          "много о себе возомнивший",
+          "показной"
+        ]
+      }
+    ],
+    "timestamp": 1755190061827,
+    "date": "2025-03-14",
+    "time": "19:47",
+    "selectionSentencesText": "Choosing the latter alternative, I began by making up my mind to leave the hotel, and to take up my quarters in some less pretentious and less expensive domicile. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          151
+        ]
+      ],
+      "startSpan": [
+        "5",
+        151
+      ],
+      "endSpan": [
+        "5",
+        151
+      ],
+      "startOffset": 0,
+      "endOffset": 12
+    }
+  },
+  {
+    "en": "take up",
+    "ru": "занимать",
+    "ruCurrentMeaning": [
+      "занимать"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ГЛАГОЛЫ",
+        "items": [
+          "занимать",
+          "принимать",
+          "браться за",
+          "поднимать",
+          "отнимать",
+          "обсуждать",
+          "одергивать",
+          "впитывать влагу",
+          "укорачивать",
+          "принимать под покровительство",
+          "возвращаться к начатому",
+          "прерывать",
+          "арестовывать"
+        ]
+      }
+    ],
+    "timestamp": 1755182485034,
+    "date": "2025-03-14",
+    "time": "17:41",
+    "selectionSentencesText": "Choosing the latter alternative, I began by making up my mind to leave the hotel, and to take up my quarters in some less pretentious and less expensive domicile. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          144
+        ],
+        [
+          "5",
+          145
+        ]
+      ],
+      "startSpan": [
+        "5",
+        144
+      ],
+      "endSpan": [
+        "5",
+        145
+      ],
+      "startOffset": 0,
+      "endOffset": 2
+    },
+    "ruComment": ""
+  },
+  {
+    "en": "rusticate",
+    "ru": "ржавея",
+    "ruCurrentMeaning": [
+      "удаляться в деревню"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ГЛАГОЛЫ",
+        "items": [
+          "рустовать",
+          "прививать простые манеры",
+          "удаляться в деревню",
+          "жить в деревне",
+          "прививать грубые манеры",
+          "огрублять"
+        ]
+      }
+    ],
+    "timestamp": 1755182398598,
+    "date": "2025-03-14",
+    "time": "17:39",
+    "selectionSentencesText": "So alarming did the state of my finances become, that I soon realized that I must either leave the metropolis and rusticate somewhere in the country, or that I must make a complete alteration in my style of living. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          109
+        ]
+      ],
+      "startSpan": [
+        "5",
+        109
+      ],
+      "endSpan": [
+        "5",
+        109
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "metropolis",
+    "ru": "мегаполис",
+    "ruCurrentMeaning": [
+      "столица"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "метрополия",
+          "столица",
+          "центр деловой или культурной жизни"
+        ]
+      }
+    ],
+    "timestamp": 1755182390981,
+    "date": "2025-03-14",
+    "time": "17:39",
+    "selectionSentencesText": "So alarming did the state of my finances become, that I soon realized that I must either leave the metropolis and rusticate somewhere in the country, or that I must make a complete alteration in my style of living. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          107
+        ]
+      ],
+      "startSpan": [
+        "5",
+        107
+      ],
+      "endSpan": [
+        "5",
+        107
+      ],
+      "startOffset": 0,
+      "endOffset": 11
+    }
+  },
+  {
+    "en": "So alarming did the state of my finances become",
+    "ru": "Так тревожно стало состояние моих финансов",
+    "ruComment": "инверсия",
+    "highlightedWords": [],
+    "type": "phrase",
+    "ruTranslations": [],
+    "timestamp": 1755182320996,
+    "date": "2025-08-14",
+    "time": "17:38",
+    "selectionSentencesText": "So alarming did the state of my finances become, that I soon realized that I must either leave the metropolis and rusticate somewhere in the country, or that I must make a complete alteration in my style of living. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          88
+        ],
+        [
+          "5",
+          89
+        ],
+        [
+          "5",
+          90
+        ],
+        [
+          "5",
+          91
+        ],
+        [
+          "5",
+          92
+        ],
+        [
+          "5",
+          93
+        ],
+        [
+          "5",
+          94
+        ],
+        [
+          "5",
+          95
+        ],
+        [
+          "5",
+          96
+        ]
+      ],
+      "startSpan": [
+        "5",
+        88
+      ],
+      "endSpan": [
+        "5",
+        96
+      ],
+      "startOffset": 0,
+      "endOffset": 6
+    }
+  },
+  {
+    "en": "irresistibly",
+    "ru": "неотразимо",
+    "ruComment": "",
+    "highlightedWords": [],
+    "type": "word",
+    "ruTranslations": [],
+    "timestamp": 1755182085343,
+    "date": "2025-08-14",
+    "time": "17:34",
+    "selectionSentencesText": "Under such circumstances, I naturally gravitated to London, that great cesspool into which all the loungers and idlers of the Empire are irresistibly drained. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          55
+        ]
+      ],
+      "startSpan": [
+        "5",
+        55
+      ],
+      "endSpan": [
+        "5",
+        55
+      ],
+      "startOffset": 12,
+      "endOffset": 0
+    }
+  },
+  {
+    "en": "lounger",
+    "ru": "зала",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "бездельник"
+        ]
+      }
+    ],
+    "timestamp": 1755182050138,
+    "date": "2025-03-14",
+    "time": "17:34",
+    "selectionSentencesText": "Under such circumstances, I naturally gravitated to London, that great cesspool into which all the loungers and idlers of the Empire are irresistibly drained. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          48
+        ]
+      ],
+      "startSpan": [
+        "5",
+        48
+      ],
+      "endSpan": [
+        "5",
+        48
+      ],
+      "startOffset": 0,
+      "endOffset": 7
+    }
+  },
+  {
+    "en": "cesspool",
+    "ru": "выгребная яма",
+    "ruCurrentMeaning": [
+      "выгребная яма"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "выгребная яма",
+          "сточный колодец"
+        ]
+      }
+    ],
+    "timestamp": 1755182028854,
+    "date": "2025-03-14",
+    "time": "17:33",
+    "selectionSentencesText": "Under such circumstances, I naturally gravitated to London, that great cesspool into which all the loungers and idlers of the Empire are irresistibly drained. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          43
+        ]
+      ],
+      "startSpan": [
+        "5",
+        43
+      ],
+      "endSpan": [
+        "5",
+        43
+      ],
+      "startOffset": 0,
+      "endOffset": 9
+    }
+  },
+  {
+    "en": "kith",
+    "ru": "кит",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "знакомые"
+        ]
+      }
+    ],
+    "timestamp": 1755181866716,
+    "date": "2025-03-14",
+    "time": "17:31",
+    "selectionSentencesText": "I had neither kith nor kin in England, and was therefore as free as air—or as free as an income of eleven shillings and sixpence a day will permit a man to be. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "5",
+          3
+        ]
+      ],
+      "startSpan": [
+        "5",
+        3
+      ],
+      "endSpan": [
+        "5",
+        3
+      ],
+      "startOffset": 0,
+      "endOffset": 5
+    }
+  },
+  {
+    "en": "Orontes",
+    "ru": "Оронтес",
+    "ruComment": "",
+    "highlightedWords": [],
+    "type": "word",
+    "ruTranslations": [],
+    "timestamp": 1755181686344,
+    "date": "2025-08-14",
+    "time": "17:28",
+    "selectionSentencesText": "I was dispatched, accordingly, in the troopship “Orontes,” and landed a month later on Portsmouth jetty, with my health irretrievably ruined, but with permission from a paternal government to spend the next nine months in attempting to improve it. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          119
+        ]
+      ],
+      "startSpan": [
+        "4",
+        119
+      ],
+      "endSpan": [
+        "4",
+        119
+      ],
+      "startOffset": 1,
+      "endOffset": 8
+    }
+  },
+  {
+    "en": "troopship",
+    "ru": "военнослужащий",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "транспорт для перевозки войск"
+        ]
+      }
+    ],
+    "timestamp": 1755181664560,
+    "date": "2025-03-14",
+    "time": "17:27",
+    "selectionSentencesText": "I was dispatched, accordingly, in the troopship “Orontes,” and landed a month later on Portsmouth jetty, with my health irretrievably ruined, but with permission from a paternal government to spend the next nine months in attempting to improve it. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          118
+        ]
+      ],
+      "startSpan": [
+        "4",
+        118
+      ],
+      "endSpan": [
+        "4",
+        118
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "despaired",
+    "ru": "отчаянно",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ПРИЛАГАТЕЛЬНЫЕ",
+        "items": [
+          "отчаявшийся"
+        ]
+      }
+    ],
+    "timestamp": 1755181542206,
+    "date": "2025-03-14",
+    "time": "17:25",
+    "selectionSentencesText": "For months my life was despaired of, and when at last I came to myself and became convalescent, I was so weak and emaciated that a medical board determined that not a day should be lost in sending me back to England. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          75
+        ]
+      ],
+      "startSpan": [
+        "4",
+        75
+      ],
+      "endSpan": [
+        "4",
+        75
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "bask",
+    "ru": "греться",
+    "ruCurrentMeaning": [
+      "греться на солнце"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ГЛАГОЛЫ",
+        "items": [
+          "греться",
+          "наслаждаться",
+          "греться на солнце"
+        ]
+      }
+    ],
+    "timestamp": 1755181133412,
+    "date": "2025-03-14",
+    "time": "17:18",
+    "selectionSentencesText": "Here I rallied, and had already improved so far as to be able to walk about the wards, and even to bask a little upon the verandah, when I was struck down by enteric fever, that curse of our Indian possessions. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          50
+        ]
+      ],
+      "startSpan": [
+        "4",
+        50
+      ],
+      "endSpan": [
+        "4",
+        50
+      ],
+      "startOffset": 0,
+      "endOffset": 5
+    }
+  },
+  {
+    "en": "wards",
+    "ru": "палаты",
+    "ruCurrentMeaning": [
+      "палата"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "палата",
+          "опека",
+          "камера",
+          "административный район",
+          "заключение",
+          "выступ",
+          "выемка",
+          "смотритель"
+        ]
+      },
+      {
+        "header": "ГЛАГОЛЫ",
+        "items": [
+          "охранять"
+        ]
+      }
+    ],
+    "timestamp": 1755181121995,
+    "date": "2025-03-14",
+    "time": "17:18",
+    "selectionSentencesText": "Here I rallied, and had already improved so far as to be able to walk about the wards, and even to bask a little upon the verandah, when I was struck down by enteric fever, that curse of our Indian possessions. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          46
+        ]
+      ],
+      "startSpan": [
+        "4",
+        46
+      ],
+      "endSpan": [
+        "4",
+        46
+      ],
+      "startOffset": 0,
+      "endOffset": 5
+    }
+  },
+  {
+    "en": "Peshawar",
+    "ru": "Пешавар",
+    "ruComment": "",
+    "highlightedWords": [],
+    "type": "word",
+    "ruTranslations": [],
+    "timestamp": 1755181057913,
+    "date": "2025-08-14",
+    "time": "17:17",
+    "selectionSentencesText": "Worn with pain, and weak from the prolonged hardships which I had undergone, I was removed, with a great train of wounded sufferers, to the base hospital at Peshawar. Here I rallied, and had already improved so far as to be able to walk about the wards, and even to bask a little upon the verandah, when I was struck down by enteric fever, that curse of our Indian possessions. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          28
+        ]
+      ],
+      "startSpan": [
+        "4",
+        28
+      ],
+      "endSpan": [
+        "4",
+        28
+      ],
+      "startOffset": 0,
+      "endOffset": 8
+    }
+  },
+  {
+    "en": "great",
+    "ru": "большой",
+    "ruCurrentMeaning": [
+      "большой"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "вельможи",
+          "сильные мира сего",
+          "великие писатели",
+          "классики",
+          "богачи"
+        ]
+      },
+      {
+        "header": "ПРИЛАГАТЕЛЬНЫЕ",
+        "items": [
+          "большой",
+          "великий",
+          "отличный",
+          "огромный",
+          "прекрасный",
+          "великолепный",
+          "замечательный",
+          "значительный",
+          "сильный",
+          "выдающийся",
+          "важный",
+          "громадный",
+          "восхитительный",
+          "долгий",
+          "искусный",
+          "возвышенный",
+          "опытный",
+          "настоящий",
+          "интенсивный",
+          "сущий",
+          "длительный",
+          "продолжительный",
+          "понимающий",
+          "разбирающийся"
+        ]
+      },
+      {
+        "header": "НАРЕЧИЯ",
+        "items": [
+          "замечательно"
+        ]
+      }
+    ],
+    "timestamp": 1755181038409,
+    "date": "2025-03-14",
+    "time": "17:17",
+    "selectionSentencesText": "Worn with pain, and weak from the prolonged hardships which I had undergone, I was removed, with a great train of wounded sufferers, to the base hospital at Peshawar. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          18
+        ]
+      ],
+      "startSpan": [
+        "4",
+        18
+      ],
+      "endSpan": [
+        "4",
+        18
+      ],
+      "startOffset": 0,
+      "endOffset": 6
+    }
+  },
+  {
+    "en": "remove",
+    "ru": "удалять",
+    "ruCurrentMeaning": [
+      "продвижение"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "удаление",
+          "шаг",
+          "колено",
+          "ступень",
+          "степень отдаления",
+          "стадия",
+          "перевод",
+          "следующее блюдо",
+          "смена блюд",
+          "расстояние",
+          "степень родства",
+          "поколение",
+          "перевод в следующий класс",
+          "продвижение"
+        ]
+      },
+      {
+        "header": "ГЛАГОЛЫ",
+        "items": [
+          "удалять",
+          "снимать",
+          "убирать",
+          "устранять",
+          "выводить",
+          "вывезти",
+          "перемещать",
+          "смещать",
+          "передвигать",
+          "отодвигать",
+          "стирать",
+          "увольнять",
+          "уносить",
+          "свезти",
+          "переезжать",
+          "сводить",
+          "перевозить",
+          "свозить",
+          "отставлять"
+        ]
+      }
+    ],
+    "timestamp": 1755181009279,
+    "date": "2025-03-14",
+    "time": "17:16",
+    "selectionSentencesText": "Worn with pain, and weak from the prolonged hardships which I had undergone, I was removed, with a great train of wounded sufferers, to the base hospital at Peshawar. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "4",
+          15
+        ]
+      ],
+      "startSpan": [
+        "4",
+        15
+      ],
+      "endSpan": [
+        "4",
+        15
+      ],
+      "startOffset": 0,
+      "endOffset": 6
+    }
+  },
+  {
+    "en": "pack-horse",
+    "ru": "упаковочная лошадь",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "вьючная лошадь"
+        ]
+      }
+    ],
+    "timestamp": 1755180981040,
+    "date": "2025-03-14",
+    "time": "17:16",
+    "selectionSentencesText": "I should have fallen into the hands of the murderous Ghazis had it not been for the devotion and courage shown by Murray, my orderly, who threw me across a pack-horse, and succeeded in bringing me safely to the British lines. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          89
+        ]
+      ],
+      "startSpan": [
+        "3",
+        89
+      ],
+      "endSpan": [
+        "3",
+        89
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "murderous",
+    "ru": "убийца",
+    "ruCurrentMeaning": [
+      "смертоносный"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ПРИЛАГАТЕЛЬНЫЕ",
+        "items": [
+          "убийственный",
+          "смертоносный",
+          "кровавый",
+          "жестокий"
+        ]
+      }
+    ],
+    "timestamp": 1755180951756,
+    "date": "2025-03-14",
+    "time": "17:15",
+    "selectionSentencesText": "I should have fallen into the hands of the murderous Ghazis had it not been for the devotion and courage shown by Murray, my orderly, who threw me across a pack-horse, and succeeded in bringing me safely to the British lines. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          68
+        ]
+      ],
+      "startSpan": [
+        "3",
+        68
+      ],
+      "endSpan": [
+        "3",
+        68
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "subclavian",
+    "ru": "подключинец",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "ПРИЛАГАТЕЛЬНЫЕ",
+        "items": [
+          "подключичный"
+        ]
+      }
+    ],
+    "timestamp": 1755180887704,
+    "date": "2025-03-14",
+    "time": "17:14",
+    "selectionSentencesText": "There I was struck on the shoulder by a Jezail bullet, which shattered the bone and grazed the subclavian artery. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          57
+        ]
+      ],
+      "startSpan": [
+        "3",
+        57
+      ],
+      "endSpan": [
+        "3",
+        57
+      ],
+      "startOffset": 0,
+      "endOffset": 11
+    }
+  },
+  {
+    "en": "Maiwand",
+    "ru": "Майванд",
+    "ruComment": "",
+    "highlightedWords": [],
+    "type": "word",
+    "ruTranslations": [],
+    "timestamp": 1755180796723,
+    "date": "2025-08-14",
+    "time": "17:13",
+    "selectionSentencesText": "I was removed from my brigade and attached to the Berkshires, with whom I served at the fatal battle of Maiwand. There I was struck on the shoulder by a Jezail bullet, which shattered the bone and grazed the subclavian artery. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          38
+        ]
+      ],
+      "startSpan": [
+        "3",
+        38
+      ],
+      "endSpan": [
+        "3",
+        38
+      ],
+      "startOffset": 0,
+      "endOffset": 7
+    }
+  },
+  {
+    "en": "Berkshires",
+    "ru": "Беркшир",
+    "ruComment": "",
+    "highlightedWords": [],
+    "type": "word",
+    "ruTranslations": [],
+    "timestamp": 1755180751284,
+    "date": "2025-08-14",
+    "time": "17:12",
+    "selectionSentencesText": "I was removed from my brigade and attached to the Berkshires, with whom I served at the fatal battle of Maiwand. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          28
+        ]
+      ],
+      "startSpan": [
+        "3",
+        28
+      ],
+      "endSpan": [
+        "3",
+        28
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "honours",
+    "ru": "награды",
+    "ruCurrentMeaning": [
+      "награды",
+      "почести"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "почести",
+          "награды",
+          "онеры"
+        ]
+      }
+    ],
+    "timestamp": 1755180673719,
+    "date": "2025-03-14",
+    "time": "17:11",
+    "selectionSentencesText": "The campaign brought honours and promotion to many, but for me it had nothing but misfortune and disaster. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "3",
+          3
+        ]
+      ],
+      "startSpan": [
+        "3",
+        3
+      ],
+      "endSpan": [
+        "3",
+        3
+      ],
+      "startOffset": 0,
+      "endOffset": 8
+    }
+  },
+  {
+    "en": "Fusiliers",
+    "ru": "Фузилер",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "фузилер",
+          "стрелок"
+        ]
+      }
+    ],
+    "timestamp": 1755180495127,
+    "date": "2025-03-14",
+    "time": "17:08",
+    "selectionSentencesText": "Having completed my studies there, I was duly attached to the Fifth Northumberland Fusiliers as Assistant Surgeon. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "2",
+          45
+        ]
+      ],
+      "startSpan": [
+        "2",
+        45
+      ],
+      "endSpan": [
+        "2",
+        45
+      ],
+      "startOffset": 0,
+      "endOffset": 10
+    }
+  },
+  {
+    "en": "Northumberland",
+    "ru": "Нортумберленд",
+    "ruCurrentMeaning": [],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "СУЩЕСТВИТЕЛЬНЫЕ",
+        "items": [
+          "Нортумберленд"
+        ]
+      }
+    ],
+    "timestamp": 1755180482410,
+    "date": "2025-03-14",
+    "time": "17:08",
+    "selectionSentencesText": "Having completed my studies there, I was duly attached to the Fifth Northumberland Fusiliers as Assistant Surgeon. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "2",
+          44
+        ]
+      ],
+      "startSpan": [
+        "2",
+        44
+      ],
+      "endSpan": [
+        "2",
+        44
+      ],
+      "startOffset": 0,
+      "endOffset": 14
+    }
+  },
+  {
+    "en": "duly",
+    "ru": "должным образом",
+    "ruCurrentMeaning": [
+      "должным образом"
+    ],
+    "type": "word",
+    "ruTranslations": [
+      {
+        "header": "НАРЕЧИЯ",
+        "items": [
+          "должным образом",
+          "правильно",
+          "в должное время"
+        ]
+      }
+    ],
+    "timestamp": 1755180416425,
+    "date": "2025-03-14",
+    "time": "17:06",
+    "selectionSentencesText": "Having completed my studies there, I was duly attached to the Fifth Northumberland Fusiliers as Assistant Surgeon. ",
+    "textSelectionFragment": {
+      "selectedSpans": [
+        [
+          "2",
+          39
+        ]
+      ],
+      "startSpan": [
+        "2",
+        39
+      ],
+      "endSpan": [
+        "2",
+        39
+      ],
+      "startOffset": 0,
+      "endOffset": 5
+    }
+  }
+]
