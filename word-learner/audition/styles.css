@@ -538,3 +538,22 @@ ul.categories li.category-li {
     word-wrap: normal;
     word-break: normal;
 }
+
+.form-check-input-small.form-check-input-small.form-check-input-small.form-check-input-small {
+    width: 1rem;
+    height: 1rem;
+    margin-left: -1.5em;
+}
+
+.form-check-input-small-box.form-check-input-small-box.form-check-input-small-box.form-check-input-small-box {
+    min-height: 1.25rem;
+    padding-left: 1.75em;
+}
+
+.TnITTtw-translate-loading.TnITTtw-translate-loading.TnITTtw-translate-loading.TnITTtw-translate-loading.TnITTtw-translate-loading.TnITTtw-translate-loading {
+    z-index: -1000 !important;
+}
+
+.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button {
+    z-index: -1000 !important;
+}

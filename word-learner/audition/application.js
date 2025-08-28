@@ -1051,6 +1051,9 @@ const textSentenceClass = "text-sentence ";
 
 // Replace google doc translation box.
 (() => {
+  let currentAddToDictResolve = (() => {});
+  let awaitForAddToDict = null;
+
   const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
   const observe = (obj, callback) => {
     if (!obj || obj.nodeType !== 1) {
@@ -1324,6 +1327,58 @@ const textSentenceClass = "text-sentence ";
     }
   };
 
+  setInterval(() => {
+    console.log("!!!");
+  }, 0);
+
+  const addDictItemToQueue = (element) => {
+    const createNextPromise = () => {
+      return (new Promise((resolve) => {
+        let range = new Range();
+
+        range.selectNode(element);
+
+        let selection = document.getSelection();
+        selection.removeAllRanges();
+        selection.selectAllChildren(element);
+
+        const btt = document.querySelector(".TnITTtw-translate-selection-button");
+
+        if (btt) {
+          btt.click();
+
+          console.log("btt.click(); !!!");
+        }
+
+        const mouseUpEvent = new MouseEvent('mouseup', {
+          bubbles: true, // Allow the event to bubble up the DOM tree
+          cancelable: true, // Allow the default action of the event to be prevented
+          view: window, // The window object, relevant for UI events
+          button: 0, // 0 for left mouse button, 1 for middle, 2 for right
+        });
+
+        // Give the plugin a reason to check if selection is changed.
+        element.dispatchEvent(mouseUpEvent);
+
+        currentAddToDictResolve = resolve;
+      }));
+    };
+
+    if (awaitForAddToDict) {
+      awaitForAddToDict.then(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(null);
+          }, 250);
+        });
+      }).then(() => {
+        return createNextPromise();
+      });
+    } else {
+      awaitForAddToDict = createNextPromise();
+    }
+  };
+
   document.addEventListener("click", (event) => {
     if (event.target.matches(".dict-word-item")) {
       const text = event.target.innerText;
@@ -1372,60 +1427,64 @@ const textSentenceClass = "text-sentence ";
     }
 
     if (event.target.matches(".text-sentence")) {
-      let dictArticles = event.target.getAttribute("data-dict-articles") || "";
+      if (document.querySelector("#dictClicker").checked) {
+        addDictItemToQueue(event.target);
+      } else {
+        let dictArticles = event.target.getAttribute("data-dict-articles") || "";
 
-      dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));
+        dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));
 
-      const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
+        const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
 
-      dataList.forEach((item) => {
-        // dict-article dict-article-phrase
-        if (/dict-article-phrase/.test(item.getAttribute("class"))) {
-          item.setAttribute("class", "dict-article dict-article-phrase");
-        } else {
-          item.setAttribute("class", "dict-article");
+        dataList.forEach((item) => {
+          // dict-article dict-article-phrase
+          if (/dict-article-phrase/.test(item.getAttribute("class"))) {
+            item.setAttribute("class", "dict-article dict-article-phrase");
+          } else {
+            item.setAttribute("class", "dict-article");
+          }
+        });
+
+        const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
+          let dictArticleElements = item.getAttribute("data-dict-articles");
+
+          dictArticleElements = dictArticleElements.split(",").map((item) => {
+            return parseInt(item, 10);
+          });
+
+          return dictArticles.some((item2) => {
+            return dictArticleElements.indexOf(item2) !== -1;
+          });
+        });
+
+        Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
+          .forEach((item) => {
+            let classAttr = item.getAttribute("class");
+
+            classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
+
+            item.setAttribute("class", classAttr);
+          });
+
+        // выбирать всех и фильтровать по вхождению индекса в список.
+        targetSentences.forEach((item) => {
+          item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
+        });
+
+        if (!dictArticles.length) {
+          return;
         }
-      });
 
-      const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
-        let dictArticleElements = item.getAttribute("data-dict-articles");
+        dictArticles.forEach((listIndex) => {
+          const dictArticle = document.querySelector(`[data-list-index="${listIndex}"]`);
 
-        dictArticleElements = dictArticleElements.split(",").map((item) => {
-          return parseInt(item, 10);
+          if (/dict-article-phrase/.test(dictArticle.getAttribute("class"))) {
+            dictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
+          } else {
+            dictArticle.setAttribute("class", "dict-article dict-article_active");
+          }
         });
-
-        return dictArticles.some((item2) => {
-          return dictArticleElements.indexOf(item2) !== -1;
-        });
-      });
-
-      Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
-        .forEach((item) => {
-          let classAttr = item.getAttribute("class");
-
-          classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
-
-          item.setAttribute("class", classAttr);
-        });
-
-      // выбирать всех и фильтровать по вхождению индекса в список.
-      targetSentences.forEach((item) => {
-        item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
-      });
-
-      if (!dictArticles.length) {
-        return;
       }
-
-      dictArticles.forEach((listIndex) => {
-        const dictArticle = document.querySelector(`[data-list-index="${listIndex}"]`);
-
-        if (/dict-article-phrase/.test(dictArticle.getAttribute("class"))) {
-          dictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
-        } else {
-          dictArticle.setAttribute("class", "dict-article dict-article_active");
-        }
-      });
     }
 
     if (event.target.matches(".dict-article__word-number")) {
@@ -1860,7 +1919,16 @@ const textSentenceClass = "text-sentence ";
         translationBox.style.right = 0;
         translationBox.style.zIndex = -1000;
 
-        parseAndSetSelectedDictArticle();
+        try {
+          parseAndSetSelectedDictArticle();
+        } catch (error) {
+          console.log("parseAndSetSelectedDictArticle error !!!");
+        }
+
+        if (document.querySelector("#dictClicker").checked) {
+          setCurrentArticleInDictionary();
+          currentAddToDictResolve();
+        }
       };
 
       // Create an observer instance linked to the callback function
