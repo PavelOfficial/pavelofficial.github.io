@@ -94,15 +94,18 @@ ul.categories li.category-li.selected {
     /* margin-top: 20px; */
 }
 
+.text-sentence:hover {
+    background: rgba(0,0,0, 0.05);
+}
+
 .text-container-inner {
     position: absolute;
     height: 100%;
     width: 100%;
     overflow-y: scroll;
     padding: 7px;
-    max-width: 450px;
+    max-width: 750px;
     line-height: 3;
-    font-size: 12px;
 }
 
 .succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt.succeed-btt {
@@ -111,7 +114,7 @@ ul.categories li.category-li.selected {
 
 .text-wrap-html {
     line-height: 3;
-    font-size: 15px;
+    font-size: 19px;
 }
 
 .text-container-inner .text-wrap {

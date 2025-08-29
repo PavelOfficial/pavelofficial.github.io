@@ -1327,10 +1327,6 @@ const textSentenceClass = "text-sentence ";
     }
   };
 
-  setInterval(() => {
-    console.log("!!!");
-  }, 0);
-
   const addDictItemToQueue = (element) => {
     const createNextPromise = () => {
       return (new Promise((resolve) => {
