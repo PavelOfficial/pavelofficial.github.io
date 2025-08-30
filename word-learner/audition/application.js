@@ -1330,31 +1330,35 @@ const textSentenceClass = "text-sentence ";
   const addDictItemToQueue = (element) => {
     const createNextPromise = () => {
       return (new Promise((resolve) => {
-        let range = new Range();
-
-        range.selectNode(element);
-
         let selection = document.getSelection();
         selection.removeAllRanges();
         selection.selectAllChildren(element);
 
-        const btt = document.querySelector(".TnITTtw-translate-selection-button");
 
-        if (btt) {
-          btt.click();
+        // const mouseDownEvent = new MouseEvent('mousedown', {
+        //   bubbles: true, // Allow the event to bubble up the DOM tree
+        //   cancelable: true, // Allow the default action of the event to be prevented
+        //   view: window, // The window object, relevant for UI events
+        //   button: 0, // 0 for left mouse button, 1 for middle, 2 for right
+        // });
+//
+        // // Give the plugin a reason to check if selection is changed.
+        // element.dispatchEvent(mouseDownEvent);
+        const event2Obj = {
+          bubbles: true,
+          cancelable: true,
+          button: 0, // 0 for left button, 1 for middle, 2 for right
+        };
 
-          console.log("btt.click(); !!!");
-        }
+        document.body.dispatchEvent(new KeyboardEvent('mousedown', event2Obj));
 
-        const mouseUpEvent = new MouseEvent('mouseup', {
-          bubbles: true, // Allow the event to bubble up the DOM tree
-          cancelable: true, // Allow the default action of the event to be prevented
-          view: window, // The window object, relevant for UI events
-          button: 0, // 0 for left mouse button, 1 for middle, 2 for right
-        });
+        const event3Obj = {
+          bubbles: true,
+          cancelable: true,
+          button: 0, // 0 for left button, 1 for middle, 2 for right
+        };
 
-        // Give the plugin a reason to check if selection is changed.
-        element.dispatchEvent(mouseUpEvent);
+        document.body.dispatchEvent(new KeyboardEvent('mouseup', event3Obj));
 
         currentAddToDictResolve = resolve;
       }));
@@ -1362,18 +1366,36 @@ const textSentenceClass = "text-sentence ";
 
     if (awaitForAddToDict) {
       awaitForAddToDict.then(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(null);
-          }, 250);
-        });
-      }).then(() => {
         return createNextPromise();
       });
     } else {
       awaitForAddToDict = createNextPromise();
     }
   };
+
+
+  document.addEventListener("click", (event) => {
+    if (event.target.matches(".text-sentence") && event.button === 0) {
+      if (document.querySelector("#dictClicker").checked) {
+        dictClickerMouseDownStart = true;
+
+        console.log("addDictItemToQueue !!!");
+        addDictItemToQueue(event.target);
+
+
+
+        const target = event.target;
+        target.setAttribute("data-clicked", "enabled");
+
+        setTimeout(() => {
+          target.removeAttribute("data-clicked");
+        }, 350);
+
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  });
 
   document.addEventListener("click", (event) => {
     if (event.target.matches(".dict-word-item")) {
@@ -1423,9 +1445,7 @@ const textSentenceClass = "text-sentence ";
     }
 
     if (event.target.matches(".text-sentence")) {
-      if (document.querySelector("#dictClicker").checked) {
-        addDictItemToQueue(event.target);
-      } else {
+      if (!document.querySelector("#dictClicker").checked) {
         let dictArticles = event.target.getAttribute("data-dict-articles") || "";
 
         dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));

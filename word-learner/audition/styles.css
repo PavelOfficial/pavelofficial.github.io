@@ -96,6 +96,11 @@ ul.categories li.category-li.selected {
 
 .text-sentence:hover {
     background: rgba(0,0,0, 0.05);
+    cursor: default;
+}
+
+.text-sentence[data-clicked=enabled] {
+    background: rgba(0,0,0, 0.1);
 }
 
 .text-container-inner {
