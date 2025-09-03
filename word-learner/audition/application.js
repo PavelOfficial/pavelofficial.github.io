@@ -58,8 +58,13 @@ const textSentenceClass = "text-sentence ";
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
     dict.forEach((item, index) => {
-      if (item.textSelectionFragment) {
-        renderTextFragmentSelection(item.textSelectionFragment, index);
+      try {
+        if (item.textSelectionFragment) {
+          renderTextFragmentSelection(item.textSelectionFragment, index);
+        }
+      } catch (error) {
+        // if one is not save other will be rendered
+        console.log(error);
       }
     });
   };
@@ -1549,6 +1554,26 @@ const textSentenceClass = "text-sentence ";
       targetSentences.forEach((item) => {
         item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
       });
+
+      if (targetSentences[0]) {
+        const targetElement = targetSentences[0];
+        const textContainer = document.querySelector(".text-container-inner");
+
+        const targetElementRect = targetElement.getBoundingClientRect();
+        const textContainerRect = textContainer.getBoundingClientRect();
+
+        // добавить textContainerRect.top
+        if ((targetElementRect.top < textContainerRect.top) ||
+            (targetElementRect.bottom > textContainerRect.bottom)) {
+          const deltaTop = targetElementRect.top - textContainerRect.top;
+          const putToCenterDelta = (textContainerRect.height / 2);
+
+          textContainer.scrollTo({
+            left: 0,
+            top: textContainer.scrollTop + deltaTop - putToCenterDelta,
+          });
+        }
+      }
     }
   });
 
@@ -1562,6 +1587,7 @@ const textSentenceClass = "text-sentence ";
   const setCurrentArticleInDictionary = () => {
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
+    /*
     const indexOfTarget = dict.findIndex((dictItem) => {
       return dictItem.en === currentDictArticle.en;
     });
@@ -1573,8 +1599,11 @@ const textSentenceClass = "text-sentence ";
 
       dict.unshift(item);
     } else {
-      dict.unshift(currentDictArticle);
-    }
+    */
+
+    dict.unshift(currentDictArticle);
+
+    // }
 
     rerenderDictList(dict, false);
     localStorage.setItem("dict", JSON.stringify(dict));
@@ -2004,8 +2033,6 @@ const textSentenceClass = "text-sentence ";
 
 // Safe to localstorage.
 (() => {
-
-
   const downloadWordListBtt = document.querySelector(".download-word-list-btt");
 
   function downloadAsFile(data, name) {
