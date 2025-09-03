@@ -1505,6 +1505,29 @@ const textSentenceClass = "text-sentence ";
             dictArticle.setAttribute("class", "dict-article dict-article_active");
           }
         });
+
+        const firstDictArticleIndex = dictArticles[0];
+
+        if (firstDictArticleIndex !== undefined) {
+          const dictArticle = document.querySelector(`[data-list-index="${firstDictArticleIndex}"]`);
+          const dictArticleRect = dictArticle.getBoundingClientRect();
+
+          const dictContainer = document.querySelector(".dict-container-inner");
+          const dictContainerRect = dictContainer.getBoundingClientRect();
+
+          // добавить textContainerRect.top
+          if ((dictArticleRect.top < dictContainerRect.top) ||
+            (dictArticleRect.bottom > dictContainerRect.bottom)) {
+            const deltaTop = dictArticleRect.top - dictContainerRect.top;
+            const putToCenterDelta = (dictContainerRect.height / 2);
+
+            dictContainer.scrollTo({
+              left: 0,
+              top: dictContainer.scrollTop + deltaTop - putToCenterDelta,
+            });
+          }
+
+        }
       }
     }
 
