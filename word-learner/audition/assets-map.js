@@ -89,6 +89,10 @@ const auditionUrlsTales = [
 const auditionUrlsTaleTexts = [
   "/audition/texts/2001.json",
   "/audition/texts/2002.json",
+  "/audition/texts/2003.json",
+  "/audition/texts/2004.json",
+  "/audition/texts/2005.json",
+  "/audition/texts/2006.json",
 ];
 
 const leadingZeros = (num, count) => {
