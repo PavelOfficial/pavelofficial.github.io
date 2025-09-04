@@ -403,6 +403,9 @@
   }, {
     name: "Полный 20001 срез. Сокращенный. Повторение 2",
     dict: excludeSublist(fullPackOfAllLists20001, removeCopies(fullPackOfAllLists_Repeat_2)),
+  }, {
+    name: "Полный 20001 срез. Сокращенный. Повторение 3",
+    dict: removeCopies(fullPackOfAllLists_Repeat_3),
   }, /* {
     name: "Популярные простые 3000",
     dict: excludePopular(engDictAllIndexes3000),
