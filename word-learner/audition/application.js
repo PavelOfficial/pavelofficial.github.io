@@ -378,13 +378,23 @@ const textSentenceClass = "text-sentence ";
 
           item.setAttribute("data-p-index", index);
 
-          const nextText = text.split(/\s/gi)
-            .filter((item) => item.trim())
-            .map((item2, index) => {
-              const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
+          const nextText = text.replace(/(\w+)?(\s|\.|\\|\!|\?|\,|\—|\-|\—|\(|\)|\*|\&|\%|\$|\#|\@|\/|\|)?/gi, (match, p1, p2) => {
+            return `${!!p1 ? 
+                  `<span class="text-sentence" data-span-index="${index}"
+                    >${p1}</span>`
+                : ""
+              }${!!p2 ? `<span>${p2}</span>` : ""}`;
+          });
 
-              return `<span class="text-sentence" data-span-index="${index}">${item2} </span>`;
-            }).join("");
+          /*
+            const nextText = text.split(/\s/gi)
+              .filter((item) => item.trim())
+              .map((item2, index) => {
+                const indexOfSentenceEnd = text.indexOf(item2) + item2.length;
+
+                return `<span class="text-sentence" data-span-index="${index}">${item2} </span>`;
+              }).join("");
+           */
 
           item.innerHTML = nextText;
         });
