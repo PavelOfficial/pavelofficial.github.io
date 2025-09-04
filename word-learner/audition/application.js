@@ -377,10 +377,13 @@ const textSentenceClass = "text-sentence ";
           const text = String(item.innerText);
 
           item.setAttribute("data-p-index", index);
+          let wordIndex = 0;
 
           const nextText = text.replace(/(\w+)?(\s|\.|\\|\!|\?|\,|\—|\-|\—|\(|\)|\*|\&|\%|\$|\#|\@|\/|\|)?/gi, (match, p1, p2) => {
+            wordIndex += 1;
+
             return `${!!p1 ? 
-                  `<span class="text-sentence" data-span-index="${index}"
+                  `<span class="text-sentence" data-span-index="${wordIndex}"
                     >${p1}</span>`
                 : ""
               }${!!p2 ? `<span>${p2}</span>` : ""}`;
@@ -1067,6 +1070,7 @@ const textSentenceClass = "text-sentence ";
 // Replace google doc translation box.
 (() => {
   let currentAddToDictResolve = (() => {});
+  let currentAddToDictResolveFlag = false;
   let awaitForAddToDict = null;
 
   const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -1376,6 +1380,7 @@ const textSentenceClass = "text-sentence ";
         document.body.dispatchEvent(new KeyboardEvent('mouseup', event3Obj));
 
         currentAddToDictResolve = resolve;
+        currentAddToDictResolveFlag = false;
       }));
     };
 
@@ -1392,8 +1397,6 @@ const textSentenceClass = "text-sentence ";
   document.addEventListener("click", (event) => {
     if (event.target.matches(".text-sentence") && event.button === 0) {
       if (document.querySelector("#dictClicker").checked) {
-        dictClickerMouseDownStart = true;
-
         console.log("addDictItemToQueue !!!");
         addDictItemToQueue(event.target);
 
@@ -2003,9 +2006,10 @@ const textSentenceClass = "text-sentence ";
           console.log("parseAndSetSelectedDictArticle error !!!");
         }
 
-        if (document.querySelector("#dictClicker").checked) {
+        if (document.querySelector("#dictClicker").checked && !currentAddToDictResolveFlag) {
           setCurrentArticleInDictionary();
           currentAddToDictResolve();
+          currentAddToDictResolveFlag = true;
         }
       };
 
