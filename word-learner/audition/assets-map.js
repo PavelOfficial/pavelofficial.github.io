@@ -86,6 +86,11 @@ const auditionUrlsTales = [
   "/audition/texts/1008.json",
 ];
 
+const auditionUrlsTaleTexts = [
+  "/audition/texts/2001.json",
+  "/audition/texts/2002.json",
+];
+
 const leadingZeros = (num, count) => {
   return String('0000000000000' + num).slice(-count)
 }
@@ -132,5 +137,9 @@ const categories = [
   {
     title: "Tales",
     auditions: auditionUrlsTales,
+  },
+  {
+    title: "Tale texts",
+    auditions: auditionUrlsTaleTexts,
   },
 ]
