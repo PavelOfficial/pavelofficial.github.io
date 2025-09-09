@@ -320,3 +320,24 @@ ul li input[type=checkbox] {
     flex-direction: row;
     justify-content: space-between;
 }
+
+.word-checkbox-item.word-checkbox-semiknown {
+    display: none;
+}
+
+.word-checkbox-item.word-checkbox-known {
+    display: none;
+}
+
+.three-checkbox-box .word-checkbox-item.word-checkbox-semiknown {
+    display: initial;
+}
+
+.three-checkbox-box .word-checkbox-item.word-checkbox-known {
+    display: initial;
+}
+
+.three-checkbox-box .current-playlist-box {
+    width: 400px;
+    min-width: 300px;
+}

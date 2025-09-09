@@ -29,6 +29,27 @@
     return nextWords
   }
 
+  const layoutContainer = document.querySelector(".bootstrap-app");
+  const layoutContainerClass = layoutContainer.getAttribute("class")
+  const threeCheckboxSortingCheckbox = document.querySelector("#three-checkbox-sorting");
+  threeCheckboxSortingCheckbox.checked = JSON.parse(localStorage.getItem("threeCheckboxSortingMode") || "false");
+
+  const applyThreeCheckboxSortingMode = (checked) => {
+    if (checked) {
+      layoutContainer.setAttribute("class", `${layoutContainerClass} three-checkbox-box`)
+    } else {
+      layoutContainer.setAttribute("class", `${layoutContainerClass}`)
+    }
+  };
+
+  applyThreeCheckboxSortingMode(threeCheckboxSortingCheckbox.checked);
+
+  threeCheckboxSortingCheckbox.onchange = (event) => {
+    localStorage.setItem("threeCheckboxSortingMode", JSON.stringify(event.target.checked));
+
+    applyThreeCheckboxSortingMode(event.target.checked);
+  };
+
   const autoSkipOnCheckCheckboxOption = document.querySelector(".js-auto-skip-on-check");
   const reversedWordDescription = document.querySelector(".js-reversed-word-description");
 
@@ -1379,8 +1400,8 @@
         <li>
           <div>
             <input class="word-checkbox-item word-checkbox-unknown" id="word-checkbox-${pack}-${index}" ${checkedWords.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', '')" />
-            <input class="word-checkbox-item word-checkbox-semiknown" style="display: none;" id="word-checkbox-semiknown-${pack}-${index}" ${checkedWordsSemiknown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'semiknown')" />
-            <input class="word-checkbox-item word-checkbox-known" style="display: none;" id="word-checkbox-known-${pack}-${index}" ${checkedWordsKnown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'known')" />     
+            <input class="word-checkbox-item word-checkbox-semiknown" id="word-checkbox-semiknown-${pack}-${index}" ${checkedWordsSemiknown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'semiknown')" />
+            <input class="word-checkbox-item word-checkbox-known" id="word-checkbox-known-${pack}-${index}" ${checkedWordsKnown.has(`${pack}-${index}`) ? 'checked="checked"' : ''} type="checkbox" onchange="handleChangeWordCheckbox(event, ${index}, '${pack}', 'known')" />     
           </div>
           <div class="list-item-caption" onclick="handleSelectDictItem('${pack}', ${index})"><div class="list-item-caption__index">${leadingZeros(arrayIndex + 1)}</div>${word}</div>
         </li>
