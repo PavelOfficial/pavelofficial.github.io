@@ -341,3 +341,11 @@ ul li input[type=checkbox] {
     width: 400px;
     min-width: 300px;
 }
+
+.current-checkbox-additional {
+    visibility: hidden;
+}
+
+.three-checkbox-box .current-checkbox-additional {
+    visibility: visible;
+}
