@@ -60,7 +60,7 @@ const textSentenceClass = "text-sentence ";
     dict.forEach((item, index) => {
       try {
         if (item.textSelectionFragment) {
-          renderTextFragmentSelection(item.textSelectionFragment, index);
+          renderTextFragmentSelection(item.textSelectionFragment, dict.length - index);
         }
       } catch (error) {
         // if one is not save other will be rendered
@@ -1094,7 +1094,7 @@ const textSentenceClass = "text-sentence ";
     const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
 
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
-    const item = dict[listIndex];
+    const item = dict[dict.length - listIndex];
 
     item.ruComment = text;
 
@@ -1269,8 +1269,7 @@ const textSentenceClass = "text-sentence ";
     displayDeleteButton = displayDeleteButton === undefined ? true : displayDeleteButton;
 
     if (item.type === "phrase") {
-      return `
-        <div data-list-index="${listIndex}" class="dict-article dict-article-phrase">
+      return `<div data-list-index="${index}" class="dict-article dict-article-phrase">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1303,11 +1302,9 @@ const textSentenceClass = "text-sentence ";
           <div class="dict-source-santance">
             ${renderSelectionSentencesText(item.selectionSentencesText || "", item.en.trim())}
           </div>
-        </div>
-      `;
+        </div>`;
     } else {
-      return `
-        <div data-list-index="${listIndex}" class="dict-article">
+      return `<div data-list-index="${index}" class="dict-article">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1341,8 +1338,7 @@ const textSentenceClass = "text-sentence ";
           <div class="dict-source-santance">
             ${renderSelectionSentencesText(item.selectionSentencesText || "", item.en.trim())}
           </div>
-        </div>
-      `;
+        </div>`;
     }
   };
 
@@ -1423,7 +1419,7 @@ const textSentenceClass = "text-sentence ";
 
       const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
-      const item = dict[listIndex] || currentDictArticle;
+      const item = dict[dict.length - listIndex] || currentDictArticle;
 
       if (!item.ruCurrentMeaning) {
         item.ruCurrentMeaning = [];
@@ -1442,7 +1438,7 @@ const textSentenceClass = "text-sentence ";
       const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
 
       const dict = JSON.parse(localStorage.getItem("dict") || "[]");
-      const item = dict[listIndex];
+      const item = dict[dict.length - listIndex];
 
       if (!item.highlightedWords) {
         item.highlightedWords = [];
@@ -1620,6 +1616,14 @@ const textSentenceClass = "text-sentence ";
     }).join("");
   };
 
+  const rerenderDictFirstElement = (dict, renderAddButton) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = renderDictItem(dict[0], dict.length, renderAddButton, 0);
+
+    const firstChild = document.querySelector(".dict-list > *:first-child");
+    document.querySelector(".dict-list").insertBefore(tempDiv.childNodes[0], firstChild);
+  };
+
   const setCurrentArticleInDictionary = () => {
     let dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
@@ -1641,7 +1645,8 @@ const textSentenceClass = "text-sentence ";
 
     // }
 
-    rerenderDictList(dict, false);
+    // rerenderDictList(dict, false);
+    rerenderDictFirstElement(dict, false);
     localStorage.setItem("dict", JSON.stringify(dict));
   };
 
