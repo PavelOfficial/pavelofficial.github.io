@@ -565,3 +565,48 @@ ul.categories li.category-li {
 .TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button.TnITTtw-translate-selection-button {
     z-index: -1000 !important;
 }
+
+.help-popup,
+.settings-popup,
+.comment-popup {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100dvh;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-panel {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.data-textarea {
+    width: 100%;
+    height: 450px;
+}
+
+.huge-dictionary .dict-container {
+    min-width: 600px;
+    max-width: 600px;
+}
+
+.huge-dictionary .dict-article__bottom {
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.huge-dictionary .dict-article__word-number {
+    font-size: 20px;
+    line-height: 28px;
+    height: 28px;
+}
+
+.huge-dictionary .dict-source-santance {
+    font-size: 14px;
+    line-height: 18px;
+}

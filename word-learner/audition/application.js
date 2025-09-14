@@ -2048,6 +2048,50 @@ const textSentenceClass = "text-sentence ";
 
   let horizontalControlsShown = true;
 
+  let hugeDictionary = JSON.parse(localStorage.getItem("hugeDictionary") || "false");
+
+  document.querySelector(".js-huge-dictionary").checked = hugeDictionary;
+
+  const applyLayoutContainerHugeDictionary = (checked) => {
+    if (checked) {
+      document.querySelector(".layout-container").setAttribute("class", "layout-container huge-dictionary");
+    } else {
+      document.querySelector(".layout-container").setAttribute("class", "layout-container");
+    }
+  };
+
+  applyLayoutContainerHugeDictionary(hugeDictionary);
+
+  window.onHugeDictionaryChange = (event) => {
+    const checked = event.target.checked;
+
+    localStorage.setItem("hugeDictionary", JSON.stringify(checked));
+    applyLayoutContainerHugeDictionary(checked);
+  };
+
+  window.applyDataToDict = () => {
+    document.querySelector(".settings-popup").style.display = "flex";
+
+    const text = document.querySelector(".js-data-text-area").value;
+
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      alert("wrong json");
+    }
+
+    localStorage.setItem("dict", text);
+    window.location.reload();
+  };
+
+  window.openSettings = () => {
+    document.querySelector(".settings-popup").style.display = "flex";
+  };
+
+  window.closeSettingsPopup = () => {
+    document.querySelector(".settings-popup").style.display = "none";
+  };
+
   window.switchHorizontalLineDisplay = () => {
     if (horizontalControlsShown) {
       Array.from(document.querySelectorAll(".switch-visible-line")).forEach((item) => {

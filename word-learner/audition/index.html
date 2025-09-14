@@ -149,6 +149,9 @@
               <button type="button" class="btn btn-outline-secondary btn-sm btt-icon" onclick="switchHorizontalLineDisplay()">
                 &#9850;
               </button>
+              <button type="button" class="btn btn-lg btn-primary btt-icon btn-play" onclick="openSettings()">
+                  🔧
+              </button>
             </div>
           </div>
           <div>
@@ -212,6 +215,44 @@
         <div class="form-check form-check-inline form-check-input-small-box">
           <input class="form-check-input form-check-input-small" type="checkbox" id="dictClicker" alt="Dict clicker">
           <label class="form-check-label" for="dictClicker">Dict clicker</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: none" class="settings-popup padded">
+  <div class="top-panel">
+    <div class="mt-3">
+      <h3>Options</h3>
+      <div class="container no-pads mt-3">
+        <input class="form-check-input js-huge-dictionary" type="checkbox" onchange="onHugeDictionaryChange(event)" value="" checked />
+        <label class="form-check-label form-check-label_large">
+          Huge dictionary
+        </label>
+      </div>
+    </div>
+    <div class="mt-3">
+      <h3>Checked in range</h3>
+      <div>
+        <textarea class="data-textarea js-data-text-area">
+
+        </textarea>
+      </div>
+      <div class="mt-2">
+        <button class="btn btn-primary btn-lg" onclick="applyDataToDict()">
+          Apply data to dict
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-panel mt-3">
+    <div class="container no-pads">
+      <div class="row">
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary close-settings-button" onclick="closeSettingsPopup()">
+            <span class="bi icon-btt"></span>
+          </button>
         </div>
       </div>
     </div>
