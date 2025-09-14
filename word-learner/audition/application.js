@@ -1,10 +1,11 @@
 const textSentenceClass = "text-sentence ";
-
-(() => {
+/*
   const leadingZeros = (value, count) => {
     return `0000000000000${value}`.slice(-count)
   };
+ */
 
+(() => {
   let currentCategory = null
   let soundValue = 1
   let auditions = null
@@ -2082,6 +2083,22 @@ const textSentenceClass = "text-sentence ";
 
     localStorage.setItem("dict", text);
     window.location.reload();
+  };
+
+  function downloadAsFile(data, fileName) {
+    let a = document.createElement("a");
+    let file = new Blob([data], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+  }
+
+  window.saveDataToDict = () => {
+    const data = localStorage.getItem("dict") || "";
+    const date = (new Date());
+    const dateString = `${leadingZeros(date.getFullYear(), 4)}-${leadingZeros(date.getMonth() + 1, 2)}-${leadingZeros(date.getDate(), 2)}_${leadingZeros(date.getHours(), 2)}-${leadingZeros(date.getMinutes(), 2)}`;
+
+    downloadAsFile(data, `result-${dateString}.json`);
   };
 
   window.openSettings = () => {
