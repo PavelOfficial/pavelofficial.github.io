@@ -2075,6 +2075,21 @@ const textSentenceClass = "text-sentence ";
 
     const text = document.querySelector(".js-data-text-area").value;
 
+    const file = document.querySelector(".js-input-dict-data").files[0];
+
+    if (file) {
+      file.text()
+        .then((textString) => {
+          localStorage.setItem("dict", textString);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error reading Blob as text:", error);
+        });
+
+      return;
+    }
+
     try {
       JSON.parse(text);
     } catch (error) {
