@@ -1,4 +1,5 @@
 const textSentenceClass = "text-sentence ";
+let isNewDictPickerWordAddToDict = false;
 /*
   const leadingZeros = (value, count) => {
     return `0000000000000${value}`.slice(-count)
@@ -1349,6 +1350,8 @@ const textSentenceClass = "text-sentence ";
         let selection = document.getSelection();
         selection.removeAllRanges();
         selection.selectAllChildren(element);
+        isNewDictPickerWordAddToDict = true
+        // !!!!
 
 
         // const mouseDownEvent = new MouseEvent('mousedown', {
@@ -1396,8 +1399,6 @@ const textSentenceClass = "text-sentence ";
       if (document.querySelector("#dictClicker").checked) {
         console.log("addDictItemToQueue !!!");
         addDictItemToQueue(event.target);
-
-
 
         const target = event.target;
         target.setAttribute("data-clicked", "enabled");
@@ -1946,11 +1947,17 @@ const textSentenceClass = "text-sentence ";
       textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
     if (!isSelectionEmpty) {
-      cleanAllDictFragments();
+      if (!isNewDictPickerWordAddToDict) {
+        cleanAllDictFragments();
+      }
+
+      // !!
       window.renderTextFragmentSelection(textFragmentSelection, -1);
     }
 
-    window.renderListTextFragments();
+    if (!isNewDictPickerWordAddToDict) {
+      window.renderListTextFragments();
+    }
   };
 
   const observeMap =  new Map([]);
