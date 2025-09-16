@@ -615,3 +615,12 @@ ul.categories li.category-li {
     color: #888888;
     font-size: 12px;
 }
+
+[data-removed="true"] {
+    background: #e4e5ff;
+}
+
+[data-removed="true"].dict-article_active {
+    background: #d9c3ff;
+}
+

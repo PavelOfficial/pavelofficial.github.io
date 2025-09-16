@@ -1124,6 +1124,10 @@ let isNewDictPickerWordAddToDict = false;
         return "";
       }
 
+      if (item.removed) {
+        return "";
+      }
+
       let prefix = "";
 
       if (array[index - 1] ? (array[index - 1].date !== item.date) : true) {
@@ -1277,7 +1281,7 @@ let isNewDictPickerWordAddToDict = false;
     displayDeleteButton = displayDeleteButton === undefined ? true : displayDeleteButton;
 
     if (item.type === "phrase") {
-      return `<div data-list-index="${index}" class="dict-article dict-article-phrase">
+      return `<div data-list-index="${index}" data-removed="${item.removed ? "true" : "false"}" class="dict-article dict-article-phrase">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1315,7 +1319,7 @@ let isNewDictPickerWordAddToDict = false;
           </div>
         </div>`;
     } else {
-      return `<div data-list-index="${index}" class="dict-article">
+      return `<div data-list-index="${index}" data-removed="${item.removed ? "true" : "false"}" class="dict-article">
           <div class="dict-article__top-controls"${!renderAddButton ? " style='display: none;'" : ''}>
             <button class="btn btn-primary btn-sm btn-sm-short"  onclick="window.handleClickAddItemToDict(event)">+</button>
           </div>
@@ -1630,6 +1634,13 @@ let isNewDictPickerWordAddToDict = false;
     }).join("");
   };
 
+  const rerenderDictListItem = (dictItem, index, array) => {
+    const revIndex = array.length - index
+
+    const div = document.querySelector(`[data-list-index="${revIndex}"]`);
+    div.outerHTML = renderDictItem(dictItem, revIndex, false, index);
+  };
+
   const rerenderDictFirstElement = (dict, renderAddButton) => {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = renderDictItem(dict[0], dict.length, renderAddButton, 0);
@@ -1680,9 +1691,10 @@ let isNewDictPickerWordAddToDict = false;
     const index = parseInt(event.target.getAttribute("data-index"));
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
-    dict.splice(index, 1);
+    dict[index].removed = !dict[index].removed;
 
-    rerenderDictList(dict, false);
+    rerenderDictListItem(dict[index], index, dict);
+    // rerenderDictList(dict, false);
     localStorage.setItem("dict", JSON.stringify(dict));
   };
 
@@ -1911,6 +1923,7 @@ let isNewDictPickerWordAddToDict = false;
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
         textSelectionFragment: textFragmentSelection,
+        removed: false,
       };
     } else {
       // TnITTtw-variant-row TnITTtw-t - блок
@@ -1948,6 +1961,7 @@ let isNewDictPickerWordAddToDict = false;
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
         selectionSentencesText: selectionSentencesText,
         textSelectionFragment: textFragmentSelection,
+        removed: false,
       };
 
       console.log("Single word!");
