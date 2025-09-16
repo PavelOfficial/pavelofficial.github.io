@@ -1138,7 +1138,10 @@ let isNewDictPickerWordAddToDict = false;
         return `
                     ${prefix}
                     <tr>
-                      <td>${item.en}</td>
+                      <td>
+                        <div>${item.en}</div>
+                        <div>${String(item.trascription).trim() ? `[${item.trascription}]` : ""}</div>
+                      </td>
                       <td>${item.ruCurrentMeaning ? item.ruCurrentMeaning.join(","): ""}</td>
                       <td>${renderRuTranslations((item.ruTranslations || []))}</td>
                       <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
@@ -1149,7 +1152,10 @@ let isNewDictPickerWordAddToDict = false;
         return `
                     ${prefix}
                     <tr>
-                      <td>${renderEnPhrase(item)}</td>
+                      <td>
+                        <div>${renderEnPhrase(item)}</div>
+                        <div>${String(item.trascription).trim() ? `[${item.trascription}]` : ""}</div>
+                      </td>
                       <td>${item.ruComment}</td>
                       <td>${item.ru}</td>
                       <td>${renderSelectionSentencesText(item.selectionSentencesText, item.en)}</td>
@@ -1289,6 +1295,9 @@ let isNewDictPickerWordAddToDict = false;
                       </button>                  
                   ` : ""}
                 </div>
+                <div class="trascription-text">
+                  ${item.trascription || ""}
+                </div>
               </div>
               <div class="dict-article__transcription">
                 ${item.date} - ${item.time}
@@ -1323,6 +1332,9 @@ let isNewDictPickerWordAddToDict = false;
                             -
                     </button>
                   `: ""}
+                </div>
+                <div class="trascription-text">
+                  ${item.trascription || ""}
                 </div>
               </div>
               <div class="dict-article__transcription">
@@ -1888,6 +1900,7 @@ let isNewDictPickerWordAddToDict = false;
 
       currentDictArticle = {
         en: en,
+        transcription: "",
         ru: ru,
         ruComment: "",
         highlightedWords: [],
@@ -1924,6 +1937,7 @@ let isNewDictPickerWordAddToDict = false;
       const nowDate = new Date()
       currentDictArticle = {
         en: en,
+        transcription: "",
         ru: ru,
         ruComment: "",
         ruCurrentMeaning: [],
@@ -2148,6 +2162,48 @@ let isNewDictPickerWordAddToDict = false;
       document.querySelector(".player-container").setAttribute("class", "player-container");
       document.querySelector(".layout-top").setAttribute("class", "layout-top");
       horizontalControlsShown = true;
+    }
+  };
+
+  window.saveEngTextList = () => {
+    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+    const text = dict.map((item) => {
+      return item.en;
+    }).join("\n");
+
+    const date = new Date();
+    const dateString = `${leadingZeros(date.getFullYear(), 4)}-${leadingZeros(date.getMonth() + 1, 2)}-${leadingZeros(date.getDate(), 2)}_${leadingZeros(date.getHours(), 2)}-${leadingZeros(date.getMinutes(), 2)}`;
+
+    downloadAsFile(text, `eng-list-${dateString}.json`);
+  };
+
+  window.applyTranscriptionsToDict = () => {
+    const fileInput = document.querySelector(".js-apply-transcriptions-to-dict");
+    const file = fileInput.files[0];
+
+    if (file) {
+      file.text()
+        .then((textString) => {
+          const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+          let items = textString.split("\n").map(item => item.trim());
+
+          if (!items[items.length - 1].trim()) {
+            items = items.slice(0, -1);
+          }
+
+          dict.forEach((item, index, array) => {
+            array[index].trascription = items[index];
+          });
+
+
+          localStorage.setItem("dict", JSON.stringify(dict));
+        })
+        .catch((error) => {
+          console.error("Error reading Blob as text:", error);
+        });
+
+      return;
     }
   };
 

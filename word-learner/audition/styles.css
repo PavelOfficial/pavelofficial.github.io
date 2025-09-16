@@ -610,3 +610,8 @@ ul.categories li.category-li {
     font-size: 14px;
     line-height: 18px;
 }
+
+.trascription-text {
+    color: #888888;
+    font-size: 12px;
+}
