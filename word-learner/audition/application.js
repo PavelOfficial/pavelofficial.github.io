@@ -1181,8 +1181,12 @@ let isNewDictPickerWordAddToDict = false;
     date1 = date1 ? new Date(date1[0] + 2000, date1[1] - 1, date1[2]) : null;
     date2 = date2 ? new Date(date2[0] + 2000, date2[1] - 1, date2[2]) : null;
 
-    const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    let dict = JSON.parse(localStorage.getItem("dict") || "[]");
     const newWindow = window.open("", "_blank");
+
+    if (document.querySelector("#sortingFormStart").checked) {
+      dict = dict.reverse();
+    }
 
     newWindow.document.write(`
         <!DOCTYPE html>
