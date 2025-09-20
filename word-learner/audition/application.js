@@ -2129,14 +2129,16 @@ let isNewDictPickerWordAddToDict = false;
       return;
     }
 
-    try {
-      JSON.parse(text);
-    } catch (error) {
-      alert("wrong json");
-    }
+    if (prompt("Are you sure to overwrite data? And lose old data?")) {
+      try {
+        JSON.parse(text);
 
-    localStorage.setItem("dict", text);
-    window.location.reload();
+        localStorage.setItem("dict", text);
+        window.location.reload();
+      } catch (error) {
+        alert("wrong json");
+      }
+    }
   };
 
   function downloadAsFile(data, fileName) {
