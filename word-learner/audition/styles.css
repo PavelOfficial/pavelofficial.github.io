@@ -420,6 +420,8 @@ ul.categories li.category-li {
 
 .ru-current-meaning {
     display: block;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .dict-article__bottom {

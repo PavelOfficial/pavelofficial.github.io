@@ -1454,6 +1454,25 @@ let isNewDictPickerWordAddToDict = false;
       localStorage.setItem("dict", JSON.stringify(dict));
     }
 
+    if (event.target.closest(".ru-current-meaning")) {
+      const listIndexBox = event.target.closest("[data-list-index]");
+      const listIndex = parseInt(listIndexBox.getAttribute("data-list-index"), 10);
+
+      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+      const item = dict[dict.length - listIndex] || currentDictArticle;
+
+      if (!item.ruCurrentMeaning) {
+        item.ruCurrentMeaning = [];
+      }
+
+      item.ruCurrentMeaning = [];
+
+      listIndexBox.querySelector(".ru-current-meaning").innerText = "";
+
+      localStorage.setItem("dict", JSON.stringify(dict));
+    }
+
     if (event.target.matches(".span-phrase-word")) {
       const phraseWordIndex = parseInt(event.target.getAttribute("data-phrase-word-index"), 10);
       const listIndexBox = event.target.closest("[data-list-index]");
