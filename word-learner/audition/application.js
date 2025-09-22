@@ -2104,12 +2104,33 @@ let isNewDictPickerWordAddToDict = false;
 
   applyLayoutContainerHugeDictionary(hugeDictionary);
 
+  let hideExtraDict = JSON.parse(localStorage.getItem("hideExtraDict") || "false");
+  document.querySelector(".js-extra-dict-info").checked = hideExtraDict;
+
+  const applyLayoutContainerHideExtraInfo = (checked) => {
+    if (checked) {
+      document.querySelector(".layout-container").setAttribute("data-hide-extra-info", "true");
+    } else {
+      document.querySelector(".layout-container").setAttribute("data-hide-extra-info", "false");
+    }
+  };
+
+  applyLayoutContainerHideExtraInfo(hideExtraDict);
+
   window.onHugeDictionaryChange = (event) => {
     const checked = event.target.checked;
 
     localStorage.setItem("hugeDictionary", JSON.stringify(checked));
     applyLayoutContainerHugeDictionary(checked);
   };
+
+  window.onHideExtraDictInfo = (event) => {
+    const checked = event.target.checked;
+
+    localStorage.setItem("hideExtraDict", JSON.stringify(checked));
+    applyLayoutContainerHideExtraInfo(checked);
+  };
+
 
   window.applyDataToDict = () => {
     document.querySelector(".settings-popup").style.display = "flex";

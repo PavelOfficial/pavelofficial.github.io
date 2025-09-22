@@ -594,8 +594,13 @@ ul.categories li.category-li {
 }
 
 .huge-dictionary .dict-container {
-    min-width: 600px;
-    max-width: 600px;
+    min-width: 50%;
+    max-width: 50%;
+}
+
+[data-hide-extra-info="true"].huge-dictionary .dict-article__transcription,
+[data-hide-extra-info="true"].huge-dictionary .dict-source-santance {
+    display: none;
 }
 
 .huge-dictionary .dict-article__bottom {
