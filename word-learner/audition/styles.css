@@ -78,7 +78,7 @@ ul.categories li.category-li.selected {
 }
 
 .player-container_short {
-    height: 9vh;
+    height: 18vh;
 }
 
 .player-container_short .audio-player-progress {
@@ -300,7 +300,7 @@ ul.categories li.category-li.selected {
 }
 
 .layout-top_large {
-    height: 91vh;
+    height: 82vh;
 }
 
 .layout-top-inner {
