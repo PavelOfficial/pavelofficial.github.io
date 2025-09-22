@@ -1862,7 +1862,9 @@ let isNewDictPickerWordAddToDict = false;
           .querySelector(`[data-span-index="${selectedSpan[1]}"]`);
       }
 
-      result += (selectedSpanElem || selectedSpan).innerText + " ";
+      const targetNode = (selectedSpanElem || selectedSpan)
+
+      result += ((typeof targetNode.textContent === "string" ? targetNode.textContent : targetNode.innerText) || "") + " ";
     });
 
     return result.replace(/\s\s/gi, " ").replace(/\s\s/gi, " ")
