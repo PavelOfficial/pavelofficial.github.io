@@ -1292,8 +1292,8 @@ let isNewDictPickerWordAddToDict = false;
           <div class="dict-article__top">
             <div class="dict-article__top-left">
               <div class="dict-article__word">
-                <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
-                <div>
+                <div class="dict-article__word-number word-index">${leadingZeros(index, 5)}</div>
+                <div class="dict-article__word-number">
                   ${renderEnPhrase(item)}
                   ${displayDeleteButton ? `
                       <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
@@ -1330,8 +1330,8 @@ let isNewDictPickerWordAddToDict = false;
           <div class="dict-article__top">
             <div class="dict-article__top-left">
               <div class="dict-article__word">
-                <div class="dict-article__word-number">${leadingZeros(index, 5)}</div>
-                <div>
+                <div class="dict-article__word-number word-index">${leadingZeros(index, 5)}</div>
+                <div class="dict-article__word-number">
                   ${item.en}
                   ${displayDeleteButton ? `
                     <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 

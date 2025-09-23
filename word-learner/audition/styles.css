@@ -412,10 +412,11 @@ ul.categories li.category-li {
 .dict-article__word-number {
     cursor: pointer;
     font-size: 10px;
-    color: #777777;
+    color: #000000;
     height: 12px;
     overflow: hidden;
 }
+
 
 .dict-article__top-right {
     flex: 1;
@@ -609,8 +610,13 @@ ul.categories li.category-li {
 }
 
 [data-hide-extra-info="true"].huge-dictionary .dict-article__transcription,
-[data-hide-extra-info="true"].huge-dictionary .dict-source-santance {
+[data-hide-extra-info="true"].huge-dictionary .dict-source-santance,
+[data-hide-extra-info="true"].huge-dictionary .word-index {
     display: none;
+}
+
+.word-index {
+    color: #888888;
 }
 
 .huge-dictionary .dict-article__bottom {
