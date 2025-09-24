@@ -5,6 +5,17 @@ let isNewDictPickerWordAddToDict = false;
     return `0000000000000${value}`.slice(-count)
   };
  */
+const YANDEX_DICT_KEY = "dict";
+
+const requestYandexDict = (phrase) => {
+  if (window.location.hostname === "localhost") {
+    return fetch(`https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${YANDEX_DICT_KEY}&lang=en-ru&text=${phrase}`)
+      .then((response) => response.json());
+  } else {
+    return Promise.resolve({});
+  }
+};
+
 
 (() => {
   let currentCategory = null
@@ -1365,51 +1376,59 @@ let isNewDictPickerWordAddToDict = false;
   };
 
   const addDictItemToQueue = (element) => {
-    const createNextPromise = () => {
-      return (new Promise((resolve) => {
+    if (document.querySelector(".js-special-dictionary").checked) {
+      new Promise(() => {
         let selection = document.getSelection();
         selection.removeAllRanges();
         selection.selectAllChildren(element);
-        isNewDictPickerWordAddToDict = true
-        // !!!!
-
-
-        // const mouseDownEvent = new MouseEvent('mousedown', {
-        //   bubbles: true, // Allow the event to bubble up the DOM tree
-        //   cancelable: true, // Allow the default action of the event to be prevented
-        //   view: window, // The window object, relevant for UI events
-        //   button: 0, // 0 for left mouse button, 1 for middle, 2 for right
-        // });
-//
-        // // Give the plugin a reason to check if selection is changed.
-        // element.dispatchEvent(mouseDownEvent);
-        const event2Obj = {
-          bubbles: true,
-          cancelable: true,
-          button: 0, // 0 for left button, 1 for middle, 2 for right
-        };
-
-        document.body.dispatchEvent(new KeyboardEvent('mousedown', event2Obj));
-
-        const event3Obj = {
-          bubbles: true,
-          cancelable: true,
-          button: 0, // 0 for left button, 1 for middle, 2 for right
-        };
-
-        document.body.dispatchEvent(new KeyboardEvent('mouseup', event3Obj));
-
-        currentAddToDictResolve = resolve;
-        currentAddToDictResolveFlag = false;
-      }));
-    };
-
-    if (awaitForAddToDict) {
-      awaitForAddToDict.then(() => {
-        return createNextPromise();
       });
     } else {
-      awaitForAddToDict = createNextPromise();
+      const createNextPromise = () => {
+        return (new Promise((resolve) => {
+          let selection = document.getSelection();
+          selection.removeAllRanges();
+          selection.selectAllChildren(element);
+          isNewDictPickerWordAddToDict = true;
+          // !!!!
+
+
+          // const mouseDownEvent = new MouseEvent('mousedown', {
+          //   bubbles: true, // Allow the event to bubble up the DOM tree
+          //   cancelable: true, // Allow the default action of the event to be prevented
+          //   view: window, // The window object, relevant for UI events
+          //   button: 0, // 0 for left mouse button, 1 for middle, 2 for right
+          // });
+//
+          // // Give the plugin a reason to check if selection is changed.
+          // element.dispatchEvent(mouseDownEvent);
+          const event2Obj = {
+            bubbles: true,
+            cancelable: true,
+            button: 0, // 0 for left button, 1 for middle, 2 for right
+          };
+
+          document.body.dispatchEvent(new KeyboardEvent('mousedown', event2Obj));
+
+          const event3Obj = {
+            bubbles: true,
+            cancelable: true,
+            button: 0, // 0 for left button, 1 for middle, 2 for right
+          };
+
+          document.body.dispatchEvent(new KeyboardEvent('mouseup', event3Obj));
+
+          currentAddToDictResolve = resolve;
+          currentAddToDictResolveFlag = false;
+        }));
+      };
+
+      if (awaitForAddToDict) {
+        awaitForAddToDict.then(() => {
+          return createNextPromise();
+        });
+      } else {
+        awaitForAddToDict = createNextPromise();
+      }
     }
   };
 
@@ -1909,87 +1928,200 @@ let isNewDictPickerWordAddToDict = false;
     });
   };
 
+  let lastYandexDictRequest = Promise.resolve(null);
 
-  const parseAndSetSelectedDictArticle = () => {
-    const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
+  let lastSelectionChangeText = "";
+  let selectionChanged = false;
+  let lastSelectionChangeFinishText = "";
+  document.onselectionchange = (event) => {
+    if (document.querySelector(".js-special-dictionary").checked) {
+      const selObj = window.getSelection();
+      const text = selObj.toString().trim();
 
-    if (!ticket) {
-      return;
+      selectionChanged = true;
+      lastSelectionChangeText = text;
+    }
+  };
+
+  document.addEventListener("mouseup", (event) => {
+    if (selectionChanged) {
+      const textFragmentSelection1 = getTextFragmentSelection();
+      const selectionSentencesText2 = getSelectionText(textFragmentSelection1);
+      const selection = {
+        textFragmentSelection: textFragmentSelection1,
+        selectionSentencesText: selectionSentencesText2,
+      };
+
+      setTimeout(() => {
+          const text = lastSelectionChangeText;
+
+          if (!!text) {
+            isNewDictPickerWordAddToDict = true; // ??? It should be redone.
+
+            lastYandexDictRequest = lastYandexDictRequest.then(() => {
+              return new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                }, 400);
+              });
+            }).then(() => {
+              return requestYandexDict(text);
+            }).then((response) => {
+              parseAndSetSelectedDictArticle(response, selection, () => {
+                if (document.querySelector("#dictClicker").checked) {
+                  setCurrentArticleInDictionary();
+                }
+              });
+
+              return null;
+            }).catch((error) => error)
+              .finally(() => {
+                return null;
+              });
+          }
+      }, 65);
     }
 
-    const enBody = ticket.querySelector(".TnITTtw-original .TnITTtw-mv-text-part");
-    const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
-    const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
+    selectionChanged = false;
+  });
 
-    textFragmentSelection = getTextFragmentSelection();
-    selectionSentencesText = getSelectionText(textFragmentSelection);
+  const parseAndSetSelectedDictArticle = (dictArticle, selection, beforeRender) => {
+    let yaDictCase = false;
 
-    if (!enBody || !ruBody) {
-      const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
-      const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
-      const type = "";
+    if (document.querySelector(".js-special-dictionary").checked) {
+      yaDictCase = true;
 
-      const en = String(enBodyText.innerText).trim();
-      const ru = String(ruBodyText.innerText).trim();
+      let en = "";
+      let ru = "";
+      let transcription = "";
+      let ruTranslations = [];
 
-      const isASingleWord = !/\s/.test(en);
+      const def = dictArticle.def;
+
+      if (def && def.length) {
+        en = def[0].text;
+        transcription = def[0].ts;
+
+        if (def[0].tr && def[0].tr.length) {
+          ru = def[0].tr[0].text;
+        }
+
+        ruTranslations = def.map((item) => {
+          return {
+            header: item.pos,
+            items: item.tr.map((item) => {
+              return item.text.trim();
+            }),
+          }
+        });
+      }
+
       const nowDate = new Date();
 
       currentDictArticle = {
         en: en,
-        transcription: "",
+        transcription: transcription,
         ru: ru,
         ruComment: "",
         highlightedWords: [],
-        type: isASingleWord ? "word" : "phrase",
-        ruTranslations: [],
-        timestamp: nowDate.getTime(),
-        date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
-        time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
-        selectionSentencesText: selectionSentencesText,
-        textSelectionFragment: textFragmentSelection,
-        removed: false,
-      };
-    } else {
-      // TnITTtw-variant-row TnITTtw-t - блок
-      // TnITTtw-v-pos TnITTtw-t - заголовок
-      // .TnITTtw-v-closest-wrap .TnITTtw-main-of-item - переводы
-
-      // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
-      const translationBocks = Array.from(ticket.querySelectorAll(".TnITTtw-variant-row.TnITTtw-t"));
-      const ruTranslations = translationBocks.map((translationBock) => {
-        const header = String(translationBock.querySelector(".TnITTtw-v-pos.TnITTtw-t").innerText).trim();
-        const items = Array.from(translationBock.querySelectorAll(".TnITTtw-main-of-item.TnITTtw-t")).map((item) => {
-          return String(item.innerText).trim();
-        });
-
-        return {
-          header,
-          items,
-        };
-      });
-
-      const en = String(enBody.innerText).trim();
-      const ru = String(ruBody.innerText).trim();
-
-      const nowDate = new Date()
-      currentDictArticle = {
-        en: en,
-        transcription: "",
-        ru: ru,
-        ruComment: "",
-        ruCurrentMeaning: [],
         type: "word",
         ruTranslations: ruTranslations,
         timestamp: nowDate.getTime(),
         date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
         time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
-        selectionSentencesText: selectionSentencesText,
-        textSelectionFragment: textFragmentSelection,
+        selectionSentencesText: selection.selectionSentencesText,
+        textSelectionFragment: selection.textFragmentSelection,
         removed: false,
       };
 
-      console.log("Single word!");
+      selectionSentencesText = selection.selectionSentencesText;
+      textFragmentSelection = selection.textFragmentSelection;
+
+    } else {
+      const ticket = document.querySelector("div.TnITTtw-tooltip-main-wrap");
+
+      if (!ticket) {
+        return;
+      }
+
+      const enBody = ticket.querySelector(".TnITTtw-original .TnITTtw-mv-text-part");
+      const ruBody = ticket.querySelector(".TnITTtw-main-variant .TnITTtw-mv-text-part");
+      const ruOthers = Array.from(ticket.querySelectorAll(".TnITTtw-v-closest-wrap .TnITTtw-main-of-item"));
+
+      textFragmentSelection = getTextFragmentSelection();
+      selectionSentencesText = getSelectionText(textFragmentSelection);
+
+      if (!enBody || !ruBody) {
+        const enBodyText = ticket.querySelector(".TnITTtw-original-wrap.TnITTtw-padded-single-translation .TnITTtw-mv-text-part.TnITTtw-t");
+        const ruBodyText = ticket.querySelector(".TnITTtw-padded-single-translation.TnITTtw-trans-wrap .TnITTtw-tpart.TnITTtw-t");
+        const type = "";
+
+        const en = String(enBodyText.innerText).trim();
+        const ru = String(ruBodyText.innerText).trim();
+
+        const isASingleWord = !/\s/.test(en);
+        const nowDate = new Date();
+
+        currentDictArticle = {
+          en: en,
+          transcription: "",
+          ru: ru,
+          ruComment: "",
+          highlightedWords: [],
+          type: isASingleWord ? "word" : "phrase",
+          ruTranslations: [],
+          timestamp: nowDate.getTime(),
+          date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
+          time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+          selectionSentencesText: selectionSentencesText,
+          textSelectionFragment: textFragmentSelection,
+          removed: false,
+        };
+      } else {
+        // TnITTtw-variant-row TnITTtw-t - блок
+        // TnITTtw-v-pos TnITTtw-t - заголовок
+        // .TnITTtw-v-closest-wrap .TnITTtw-main-of-item - переводы
+
+        // const bodies = Array.from(ticket.querySelectorAll(".gtx-body"));
+        const translationBocks = Array.from(ticket.querySelectorAll(".TnITTtw-variant-row.TnITTtw-t"));
+        const ruTranslations = translationBocks.map((translationBock) => {
+          const header = String(translationBock.querySelector(".TnITTtw-v-pos.TnITTtw-t").innerText).trim();
+          const items = Array.from(translationBock.querySelectorAll(".TnITTtw-main-of-item.TnITTtw-t")).map((item) => {
+            return String(item.innerText).trim();
+          });
+
+          return {
+            header,
+            items,
+          };
+        });
+
+        const en = String(enBody.innerText).trim();
+        const ru = String(ruBody.innerText).trim();
+
+        const nowDate = new Date()
+        currentDictArticle = {
+          en: en,
+          transcription: "",
+          ru: ru,
+          ruComment: "",
+          ruCurrentMeaning: [],
+          type: "word",
+          ruTranslations: ruTranslations,
+          timestamp: nowDate.getTime(),
+          date: `${leadingZeros(nowDate.getFullYear(), 4)}-${leadingZeros(nowDate.getMonth() + 1, 2)}-${leadingZeros(nowDate.getDate(), 2)}`,
+          time: `${leadingZeros(nowDate.getHours(), 2)}:${leadingZeros(nowDate.getMinutes(), 2)}`,
+          selectionSentencesText: selectionSentencesText,
+          textSelectionFragment: textFragmentSelection,
+          removed: false,
+        };
+
+        console.log("Single word!");
+      }
+    }
+
+    if (beforeRender) {
+      beforeRender();
     }
 
     //
@@ -1999,13 +2131,16 @@ let isNewDictPickerWordAddToDict = false;
       textFragmentSelection.startSpan[1] === textFragmentSelection.endSpan[1] &&
       textFragmentSelection.startOffset === textFragmentSelection.endOffset;
 
-    if (!isSelectionEmpty) {
+    if (yaDictCase ? document.querySelector("#dictClicker").checked : !isSelectionEmpty) {
       if (!isNewDictPickerWordAddToDict) {
         cleanAllDictFragments();
       }
 
+      const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+
+      window.renderTextFragmentSelection(textFragmentSelection, dict.length);
       // !!
-      window.renderTextFragmentSelection(textFragmentSelection, -1);
+      // window.renderTextFragmentSelection(textFragmentSelection, -1);
     }
 
     if (!isNewDictPickerWordAddToDict) {
@@ -2059,6 +2194,7 @@ let isNewDictPickerWordAddToDict = false;
       const config = { attributes: true, childList: false, subtree: false };
 
       // Callback function to execute when mutations are observed
+      // !!! The moment when dict article panel is appeared in dom.
       const callback = (mutationList, observer) => {
         translationBox.style.top = "";
         translationBox.style.left = "";
@@ -2066,16 +2202,19 @@ let isNewDictPickerWordAddToDict = false;
         translationBox.style.right = 0;
         translationBox.style.zIndex = -1000;
 
-        try {
-          parseAndSetSelectedDictArticle();
-        } catch (error) {
-          console.log("parseAndSetSelectedDictArticle error !!!");
-        }
+        // Block if other dictionary is working.
+        if (!document.querySelector(".js-special-dictionary").checked) {
+          try {
+            parseAndSetSelectedDictArticle();
+          } catch (error) {
+            console.log("parseAndSetSelectedDictArticle error !!!");
+          }
 
-        if (document.querySelector("#dictClicker").checked && !currentAddToDictResolveFlag) {
-          setCurrentArticleInDictionary();
-          currentAddToDictResolve();
-          currentAddToDictResolveFlag = true;
+          if (document.querySelector("#dictClicker").checked && !currentAddToDictResolveFlag) {
+            setCurrentArticleInDictionary();
+            currentAddToDictResolve();
+            currentAddToDictResolveFlag = true;
+          }
         }
       };
 
@@ -2135,6 +2274,13 @@ let isNewDictPickerWordAddToDict = false;
   };
 
   applyLayoutContainerHideExtraInfo(hideExtraDict);
+
+  let specialDictionaryChecked = JSON.parse(localStorage.getItem("useSpecialDictionary") || "false");
+  document.querySelector(".js-special-dictionary").checked = specialDictionaryChecked;
+
+  window.onSpecialDictionaryChange = (event) => {
+    localStorage.setItem("useSpecialDictionary", JSON.stringify(event.target.checked));
+  };
 
   window.onHugeDictionaryChange = (event) => {
     const checked = event.target.checked;
