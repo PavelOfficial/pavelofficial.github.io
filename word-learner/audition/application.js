@@ -5,12 +5,23 @@ let isNewDictPickerWordAddToDict = false;
     return `0000000000000${value}`.slice(-count)
   };
  */
-const YANDEX_DICT_KEY = "dict";
+let YANDEX_DICT_KEY = "dict";
+let configPromise = (() => {
+  return fetch("/word-learner/audition/config.json").then((res) => {
+    return res.json();
+  }).then((config) => {
+    YANDEX_DICT_KEY = config.API_KEY;
+
+    return null;
+  }).catch(() => {}).finally(() => {});
+})();
 
 const requestYandexDict = (phrase) => {
   if (window.location.hostname === "localhost") {
-    return fetch(`https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${YANDEX_DICT_KEY}&lang=en-ru&text=${phrase}`)
-      .then((response) => response.json());
+    return configPromise.then(() => {
+      return fetch(`https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${YANDEX_DICT_KEY}&lang=en-ru&text=${phrase}`)
+        .then((response) => response.json());
+    })
   } else {
     return Promise.resolve({});
   }
@@ -1958,23 +1969,49 @@ const requestYandexDict = (phrase) => {
           if (!!text) {
             isNewDictPickerWordAddToDict = true; // ??? It should be redone.
 
-            lastYandexDictRequest = lastYandexDictRequest.then(() => {
-              return new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve();
-                }, 400);
-              });
-            }).then(() => {
-              return requestYandexDict(text);
-            }).then((response) => {
-              parseAndSetSelectedDictArticle(response, selection, () => {
-                if (document.querySelector("#dictClicker").checked) {
-                  setCurrentArticleInDictionary();
-                }
-              });
+            const tryNextRequest = (optionsText, prevOptionsText) => {
+              return lastYandexDictRequest.then(() => {
+                return new Promise((resolve) => {
+                  setTimeout(() => {
+                    resolve();
+                  }, 400);
+                });
+              }).then(() => {
+                return requestYandexDict(optionsText);
+              }).then((response) => {
+                if ((!response.defs || !response.defs.length)) {
+                  if (/ies$/.test(optionsText)) {
+                    return tryNextRequest(optionsText.replace(/ies$/, "y"));
+                  }
 
-              return null;
-            }).catch((error) => error)
+                  if (/s$/.test(optionsText)) {
+                    return tryNextRequest(optionsText.replace(/s$/, ""));
+                  }
+
+                  if (/ied$/.test(optionsText)) {
+                    return tryNextRequest(optionsText.replace(/ied$/, "y"));
+                  }
+
+                  if (/ed$/.test(optionsText) && !prevOptionsText) {
+                    return tryNextRequest(optionsText.replace(/d$/, ""), optionsText);
+                  }
+
+                  if (/e$/.test(optionsText) && /ed$/.test(prevOptionsText)) {
+                    return tryNextRequest(optionsText.replace(/e$/, ""));
+                  }
+                }
+
+                parseAndSetSelectedDictArticle(response, selection, () => {
+                  if (document.querySelector("#dictClicker").checked) {
+                    setCurrentArticleInDictionary();
+                  }
+                });
+
+                return null;
+              })
+            };
+
+            lastYandexDictRequest = tryNextRequest(text.trim()).catch((error) => error)
               .finally(() => {
                 return null;
               });
