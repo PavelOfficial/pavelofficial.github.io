@@ -1285,7 +1285,7 @@ const requestYandexDict = (phrase) => {
   const renderRuTranslations = (ruTranslations) => {
     return ruTranslations.map((item) => {
       return `
-          <span class="dict-hint">${item.header.slice(0, 4)}.</span>
+          <span class="dict-hint">${item.header ? `${item.header.slice(0, 4)}.` : ""}</span>
           ${item.items.map((item) => {
             return `<span class="dict-word-item">${item}</span>`;
           }).join(", ")};
@@ -1326,7 +1326,7 @@ const requestYandexDict = (phrase) => {
                   ` : ""}
                 </div>
                 <div class="trascription-text">
-                  ${item.trascription || ""}
+                  ${item.trasncription || ""}
                 </div>
               </div>
               <div class="dict-article__transcription">
@@ -1364,7 +1364,7 @@ const requestYandexDict = (phrase) => {
                   `: ""}
                 </div>
                 <div class="trascription-text">
-                  ${item.trascription || ""}
+                  ${item.transcription || ""}
                 </div>
               </div>
               <div class="dict-article__transcription">
@@ -1970,16 +1970,18 @@ const requestYandexDict = (phrase) => {
             isNewDictPickerWordAddToDict = true; // ??? It should be redone.
 
             const tryNextRequest = (optionsText, prevOptionsText) => {
-              return lastYandexDictRequest.then(() => {
-                return new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                  }, 400);
-                });
-              }).then(() => {
+              return (new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                }, 400);
+              })).then(() => {
                 return requestYandexDict(optionsText);
               }).then((response) => {
-                if ((!response.defs || !response.defs.length)) {
+                if (!response.defs && response.def) {
+                  response.defs = response.def;
+                }
+
+                if (!response.defs || !response.defs.length) {
                   if (/ies$/.test(optionsText)) {
                     return tryNextRequest(optionsText.replace(/ies$/, "y"));
                   }
@@ -1993,11 +1995,19 @@ const requestYandexDict = (phrase) => {
                   }
 
                   if (/ed$/.test(optionsText) && !prevOptionsText) {
-                    return tryNextRequest(optionsText.replace(/d$/, ""), optionsText);
+                    return tryNextRequest(optionsText.replace(/d$/, ""), prevOptionsText || optionsText);
                   }
 
                   if (/e$/.test(optionsText) && /ed$/.test(prevOptionsText)) {
-                    return tryNextRequest(optionsText.replace(/e$/, ""));
+                    return tryNextRequest(optionsText.replace(/e$/, ""), prevOptionsText || optionsText);
+                  }
+
+                  const charList = optionsText.split("");
+
+                  const lastChar = charList.pop();
+                  const preLastChar = charList.pop();
+                  if (lastChar === preLastChar && /ed$/.test(prevOptionsText)) {
+                    return tryNextRequest(optionsText.replace(/.$/, ""), prevOptionsText || optionsText);
                   }
                 }
 
@@ -2011,7 +2021,9 @@ const requestYandexDict = (phrase) => {
               })
             };
 
-            lastYandexDictRequest = tryNextRequest(text.trim()).catch((error) => error)
+            lastYandexDictRequest = lastYandexDictRequest
+              .then(() => tryNextRequest(text.trim()))
+              .catch((error) => error)
               .finally(() => {
                 return null;
               });
@@ -2033,7 +2045,7 @@ const requestYandexDict = (phrase) => {
       let transcription = "";
       let ruTranslations = [];
 
-      const def = dictArticle.def;
+      const def = dictArticle.defs || dictArticle.def;
 
       if (def && def.length) {
         en = def[0].text;
