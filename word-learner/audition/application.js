@@ -109,8 +109,6 @@ const requestYandexDict = (phrase) => {
     const allSettledResult = await Promise.allSettled(auditionPromises)
     const allSettledResultJSONs = await Promise.allSettled(allSettledResult.map((response) => response.value.json()))
 
-    console.log("allSettledResultJSONs all: ", allSettledResultJSONs.map(result => result.value))
-
     return allSettledResultJSONs.map((result, index) => ({ ...result.value, url: allAuditionUrls[index] }))
   }
 
@@ -763,8 +761,6 @@ const requestYandexDict = (phrase) => {
 
         // lastSelectedWords
       }
-
-      console.log("lastSelectedWords: ", lastSelectedWords);
     })
 
     initSelectCategory()
@@ -1971,8 +1967,6 @@ const requestYandexDict = (phrase) => {
 
       pluginResponseMap.set(pluginResponseMapKey, Promise.resolve(null));
 
-      console.log("set initial promise: ", pluginResponseMapKey, null);
-
       setTimeout(() => {
           const text = lastSelectionChangeText;
 
@@ -2032,10 +2026,8 @@ const requestYandexDict = (phrase) => {
                 };
 
                 const resolveValue = (response) => {
-                  console.log("resolveValue !!!");
                   parseAndSetSelectedDictArticle(null, null, () => {
                     if (document.querySelector("#dictClicker").checked) {
-                      console.log("setCurrentArticleInDictionary(); !!!");
                       setCurrentArticleInDictionary();
                     }
                   }, response);
@@ -2260,7 +2252,6 @@ const requestYandexDict = (phrase) => {
           removed: false,
         };
 
-        console.log("Single word!");
       }
     }
 
@@ -2268,7 +2259,6 @@ const requestYandexDict = (phrase) => {
       beforeRender();
     }
 
-    console.log("currentDictArticle: ", currentDictArticle);
     //
     renderSelectedDictArticleElement();
 
@@ -2286,15 +2276,12 @@ const requestYandexDict = (phrase) => {
 
       const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
-      console.log("window.renderTextFragmentSelection(textFragmentSelection1, dict.length); !!!");
       window.renderTextFragmentSelection(textFragmentSelection1, dict.length);
       // !!
       // window.renderTextFragmentSelection(textFragmentSelection, -1);
     }
 
-    console.log("if (!isNewDictPickerWordAddToDict) { ");
     if (!isNewDictPickerWordAddToDict) {
-      console.log("window.renderListTextFragments();");
       window.renderListTextFragments();
     }
   };
@@ -2415,8 +2402,6 @@ const requestYandexDict = (phrase) => {
 
             const promise = pluginResponseMap.get(JSON.stringify(textFragmentSelection.selectedSpans));
 
-            console.log("set: ", JSON.stringify(textFragmentSelection.selectedSpans), storedTicked);
-
             pluginResponseMap.set(JSON.stringify(textFragmentSelection.selectedSpans), promise.then(() => storedTicked));
           }
         }
@@ -2439,7 +2424,6 @@ const requestYandexDict = (phrase) => {
       if (observerItem) {
         observerItem.disconnect();
 
-        console.log("observeMap.get(removedItem).disconnect(); !!!");
       }
     }
 
