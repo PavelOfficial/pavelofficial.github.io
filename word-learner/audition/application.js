@@ -1971,6 +1971,8 @@ const requestYandexDict = (phrase) => {
 
       pluginResponseMap.set(pluginResponseMapKey, Promise.resolve(null));
 
+      console.log("set initial promise: ", pluginResponseMapKey, null);
+
       setTimeout(() => {
           const text = lastSelectionChangeText;
 
@@ -1990,32 +1992,34 @@ const requestYandexDict = (phrase) => {
                 }
 
                 if (!response.defs || !response.defs.length) {
-                  if (/ies$/.test(optionsText)) {
-                    return tryNextRequest(optionsText.replace(/ies$/, "y"));
-                  }
+                  if (!/\s/.test(optionsText.trim())) {
+                    if (/ies$/.test(optionsText)) {
+                      return tryNextRequest(optionsText.replace(/ies$/, "y"));
+                    }
 
-                  if (/s$/.test(optionsText)) {
-                    return tryNextRequest(optionsText.replace(/s$/, ""));
-                  }
+                    if (/s$/.test(optionsText)) {
+                      return tryNextRequest(optionsText.replace(/s$/, ""));
+                    }
 
-                  if (/ied$/.test(optionsText)) {
-                    return tryNextRequest(optionsText.replace(/ied$/, "y"));
-                  }
+                    if (/ied$/.test(optionsText)) {
+                      return tryNextRequest(optionsText.replace(/ied$/, "y"));
+                    }
 
-                  if (/ed$/.test(optionsText) && !prevOptionsText) {
-                    return tryNextRequest(optionsText.replace(/d$/, ""), prevOptionsText || optionsText);
-                  }
+                    if (/ed$/.test(optionsText) && !prevOptionsText) {
+                      return tryNextRequest(optionsText.replace(/d$/, ""), prevOptionsText || optionsText);
+                    }
 
-                  if (/e$/.test(optionsText) && /ed$/.test(prevOptionsText)) {
-                    return tryNextRequest(optionsText.replace(/e$/, ""), prevOptionsText || optionsText);
-                  }
+                    if (/e$/.test(optionsText) && /ed$/.test(prevOptionsText)) {
+                      return tryNextRequest(optionsText.replace(/e$/, ""), prevOptionsText || optionsText);
+                    }
 
-                  const charList = optionsText.split("");
+                    const charList = optionsText.split("");
 
-                  const lastChar = charList.pop();
-                  const preLastChar = charList.pop();
-                  if (lastChar === preLastChar && /ed$/.test(prevOptionsText)) {
-                    return tryNextRequest(optionsText.replace(/.$/, ""), prevOptionsText || optionsText);
+                    const lastChar = charList.pop();
+                    const preLastChar = charList.pop();
+                    if (lastChar === preLastChar && /ed$/.test(prevOptionsText)) {
+                      return tryNextRequest(optionsText.replace(/.$/, ""), prevOptionsText || optionsText);
+                    }
                   }
                 }
 
@@ -2028,8 +2032,12 @@ const requestYandexDict = (phrase) => {
                 };
 
                 const resolveValue = (response) => {
+                  console.log("resolveValue !!!");
                   parseAndSetSelectedDictArticle(null, null, () => {
-                    setCurrentArticleInDictionary();
+                    if (document.querySelector("#dictClicker").checked) {
+                      console.log("setCurrentArticleInDictionary(); !!!");
+                      setCurrentArticleInDictionary();
+                    }
                   }, response);
                 };
 
@@ -2038,26 +2046,32 @@ const requestYandexDict = (phrase) => {
 
                   return promise.then((value) => {
                     if (value === null || !value) {
-                      return (new Promise((resolve) => {
-                        setTimeout(() => {
-                          resolve()
-                        }, 750);
-                      })).then(() => {
-                        const currentPromise = pluginResponseMap.get(pluginResponseMapKey);
+                      const awaitForDictFinish = (iterationIndex) => {
+                        return (new Promise((resolve) => {
+                          setTimeout(() => {
+                            resolve();
+                          }, 750);
+                        })).then(() => {
+                          const currentPromise = pluginResponseMap.get(pluginResponseMapKey);
 
-                        return currentPromise.then((response) => {
-                          if (value !== null || !!value) {
-                            return resolveValue(response);
-                          }
+                          return currentPromise.then((value2) => {
+                            if (value2 !== null || !!value2) {
+                              return resolveValue(value2);
+                            }
 
-                          return finish();
-                        })
-                      }).catch(() => {}).finally(() => {});
+                            if (iterationIndex < 3) {
+                              return awaitForDictFinish(iterationIndex + 1);
+                            }
+
+                            return finish();
+                          });
+                        }).catch(() => {}).finally(() => {});
+                      };
+
+                      return awaitForDictFinish(0);
                     }
 
                     return resolveValue(value);
-                  }).then(() => {
-                    finish();
                   });
                 }
 
@@ -2254,28 +2268,33 @@ const requestYandexDict = (phrase) => {
       beforeRender();
     }
 
+    console.log("currentDictArticle: ", currentDictArticle);
     //
     renderSelectedDictArticleElement();
 
     const textFragmentSelection1 = pluginData && pluginData.textFragmentSelection ? pluginData.textFragmentSelection : textFragmentSelection;
 
-    const isSelectionEmpty = textFragmentSelection1.startSpan[0] === textFragmentSelection1.endSpan[0] &&
+    const isSelectionEmpty = (textFragmentSelection1.startSpan[0] === textFragmentSelection1.endSpan[0] &&
       textFragmentSelection1.startSpan[1] === textFragmentSelection1.endSpan[1] &&
-      textFragmentSelection1.startOffset === textFragmentSelection1.endOffset;
+      textFragmentSelection1.startOffset === textFragmentSelection1.endOffset) &&
+      (!textFragmentSelection1.selectedSpans.length);
 
-    if (yaDictCase ? document.querySelector("#dictClicker").checked : !isSelectionEmpty) {
+    if (!isSelectionEmpty) {
       if (!isNewDictPickerWordAddToDict) {
         cleanAllDictFragments();
       }
 
       const dict = JSON.parse(localStorage.getItem("dict") || "[]");
 
+      console.log("window.renderTextFragmentSelection(textFragmentSelection1, dict.length); !!!");
       window.renderTextFragmentSelection(textFragmentSelection1, dict.length);
       // !!
       // window.renderTextFragmentSelection(textFragmentSelection, -1);
     }
 
+    console.log("if (!isNewDictPickerWordAddToDict) { ");
     if (!isNewDictPickerWordAddToDict) {
+      console.log("window.renderListTextFragments();");
       window.renderListTextFragments();
     }
   };
@@ -2395,6 +2414,8 @@ const requestYandexDict = (phrase) => {
             storedTicked.selectionSentencesText = selectionSentencesText;
 
             const promise = pluginResponseMap.get(JSON.stringify(textFragmentSelection.selectedSpans));
+
+            console.log("set: ", JSON.stringify(textFragmentSelection.selectedSpans), storedTicked);
 
             pluginResponseMap.set(JSON.stringify(textFragmentSelection.selectedSpans), promise.then(() => storedTicked));
           }
