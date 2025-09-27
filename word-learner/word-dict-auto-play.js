@@ -428,7 +428,7 @@
     name: "Полный 20001 срез. Сокращенный. Повторение 3",
     dict: removeCopies(fullPackOfAllLists_Repeat_3),
   }, playlistSeparator, {
-    name: "Phrasal verbs Difficult",
+    name: "Phrasal verbs difficult",
     dict: removeCopies(phrasalVerbsDifficult),
   }, {
     name: "Irregular verbs difficult",
