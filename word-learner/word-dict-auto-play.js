@@ -427,7 +427,13 @@
   }, {
     name: "Полный 20001 срез. Сокращенный. Повторение 3",
     dict: removeCopies(fullPackOfAllLists_Repeat_3),
-  }, /* {
+  }, playlistSeparator, {
+    name: "Phrasal verbs Difficult",
+    dict: removeCopies(phrasalVerbsDifficult),
+  }, {
+    name: "Irregular verbs difficult",
+    dict: removeCopies(irregularVerbsDifficult),
+  },  /* {
     name: "Популярные простые 3000",
     dict: excludePopular(engDictAllIndexes3000),
   }, {
