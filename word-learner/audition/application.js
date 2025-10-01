@@ -1322,17 +1322,20 @@ const requestYandexDict = (phrase) => {
                                 -
                       </button>                
                   ` : ""}
-                  <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                  <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                          title="Непонятное предложение" 
                           data-index="${listIndex}" 
                           onclick="window.handleClickDontUnderstand(event)">
-                            н
+                            нп
                   </button>
-                  <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                  <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                          title="Интересное" 
                           data-index="${listIndex}" 
                           onclick="window.handleClickInterestingWord(event)">
                             и
                   </button>
-                  <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                  <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                          title="Повторить" 
                           data-index="${listIndex}" 
                           onclick="window.handleClickRepeatWord(event)">
                             п
@@ -1377,16 +1380,19 @@ const requestYandexDict = (phrase) => {
                   `: ""}
                   <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
                           data-index="${listIndex}" 
+                          title="Непонятное предложение"
                           onclick="window.handleClickDontUnderstand(event)">
-                            н
+                            нп
                   </button>
                   <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}" 
+                          data-index="${listIndex}"
+                          title="Интересное"
                           onclick="window.handleClickInterestingWord(event)">
                             и
                   </button>
                   <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
                           data-index="${listIndex}" 
+                          title="Повторить"
                           onclick="window.handleClickRepeatWord(event)">
                             п
                   </button>
