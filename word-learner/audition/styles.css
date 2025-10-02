@@ -421,6 +421,7 @@ ul.categories li.category-li {
 .dict-article__top-right {
     flex: 1;
     font-size: 12px;
+    min-width: 40%;
 }
 
 .ru-current-meaning {

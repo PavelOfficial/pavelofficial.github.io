@@ -94,6 +94,13 @@ const auditionUrlsTaleTexts = [
   "/audition/texts/2005.json",
   "/audition/texts/2006.json",
   "/audition/texts/2007.json",
+  "/audition/texts/2008.json",
+  "/audition/texts/2009.json",
+  "/audition/texts/2010.json",
+  "/audition/texts/2011.json",
+  "/audition/texts/2012.json",
+  "/audition/texts/2013.json",
+  "/audition/texts/2014.json",
 ];
 
 const leadingZeros = (num, count) => {
