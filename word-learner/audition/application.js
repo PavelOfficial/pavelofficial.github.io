@@ -1317,26 +1317,26 @@ const requestYandexDict = (phrase) => {
                   ${renderEnPhrase(item)}
                   ${displayDeleteButton ? `
                       <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
-                              data-index="${listIndex}" 
+                              data-index="${index}" 
                               onclick="window.handleClickRemoveItemFromDict(event)">
                                 -
                       </button>                
                   ` : ""}
                   <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
                           title="Непонятное предложение" 
-                          data-index="${listIndex}" 
+                          data-index="${index}" 
                           onclick="window.handleClickDontUnderstand(event)">
                             нп
                   </button>
                   <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
                           title="Интересное" 
-                          data-index="${listIndex}" 
+                          data-index="${index}" 
                           onclick="window.handleClickInterestingWord(event)">
                             и
                   </button>
                   <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
                           title="Повторить" 
-                          data-index="${listIndex}" 
+                          data-index="${index}" 
                           onclick="window.handleClickRepeatWord(event)">
                             п
                   </button>
@@ -1373,25 +1373,25 @@ const requestYandexDict = (phrase) => {
                   ${item.en}
                   ${displayDeleteButton ? `
                     <button class="btn btn-outline-secondary btn-sm btn-sm-tiny" 
-                            data-index="${listIndex}"
+                            data-index="${index}"
                             onclick="window.handleClickRemoveItemFromDict(event)">
                             -
                     </button>
                   `: ""}
                   <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}" 
+                          data-index="${index}" 
                           title="Непонятное предложение"
                           onclick="window.handleClickDontUnderstand(event)">
                             нп
                   </button>
                   <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}"
+                          data-index="${index}"
                           title="Интересное"
                           onclick="window.handleClickInterestingWord(event)">
                             и
                   </button>
                   <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${listIndex}" 
+                          data-index="${index}" 
                           title="Повторить"
                           onclick="window.handleClickRepeatWord(event)">
                             п
@@ -1777,10 +1777,11 @@ const requestYandexDict = (phrase) => {
   window.handleClickRemoveItemFromDict = (event) => {
     const index = parseInt(event.target.getAttribute("data-index"));
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const listIndex = dict.length - index;
 
-    dict[index].removed = !dict[index].removed;
+    dict[listIndex].removed = !dict[listIndex].removed;
 
-    rerenderDictListItem(dict[index], index, dict);
+    rerenderDictListItem(dict[listIndex], listIndex, dict);
     // rerenderDictList(dict, false);
     localStorage.setItem("dict", JSON.stringify(dict));
   };
@@ -1788,10 +1789,11 @@ const requestYandexDict = (phrase) => {
   window.handleClickDontUnderstand = (event) => {
     const index = parseInt(event.target.getAttribute("data-index"));
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const listIndex = dict.length - index;
 
-    dict[index].dontUnderstand = !dict[index].dontUnderstand;
+    dict[listIndex].dontUnderstand = !dict[listIndex].dontUnderstand;
 
-    rerenderDictListItem(dict[index], index, dict);
+    rerenderDictListItem(dict[listIndex], listIndex, dict);
 
     localStorage.setItem("dict", JSON.stringify(dict));
   };
@@ -1799,10 +1801,11 @@ const requestYandexDict = (phrase) => {
   window.handleClickInterestingWord = (event) => {
     const index = parseInt(event.target.getAttribute("data-index"));
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const listIndex = dict.length - index;
 
-    dict[index].interesting = !dict[index].interesting;
+    dict[listIndex].interesting = !dict[listIndex].interesting;
 
-    rerenderDictListItem(dict[index], index, dict);
+    rerenderDictListItem(dict[listIndex], listIndex, dict);
 
     localStorage.setItem("dict", JSON.stringify(dict));
   };
@@ -1810,10 +1813,11 @@ const requestYandexDict = (phrase) => {
   window.handleClickRepeatWord = (event) => {
     const index = parseInt(event.target.getAttribute("data-index"));
     const dict = JSON.parse(localStorage.getItem("dict") || "[]");
+    const listIndex = dict.length - index;
 
-    dict[index].repeatWord = !dict[index].repeatWord;
+    dict[listIndex].repeatWord = !dict[listIndex].repeatWord;
 
-    rerenderDictListItem(dict[index], index, dict);
+    rerenderDictListItem(dict[listIndex], listIndex, dict);
 
     localStorage.setItem("dict", JSON.stringify(dict));
   };
