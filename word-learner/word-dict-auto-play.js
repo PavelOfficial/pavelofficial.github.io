@@ -13,6 +13,29 @@
     return result
   }
 
+  const intersectLists = (words1, words2) => {
+    const words1Set = new Set([
+      ...words1,
+    ].map(([playListIndex, wordIndex]) => {
+      return String(playListIndex) + '-' + String(wordIndex);
+    }));
+
+    const words2Set = new Set([
+      ...words2,
+    ].map(([playListIndex, wordIndex]) => {
+      return String(playListIndex) + '-' + String(wordIndex);
+    }));
+
+    const intersection1 = words1Set.intersection(words2Set);
+    const list = Array.from(intersection1).map((item) => {
+      const values = item.split("-");
+
+      return [values[0], parseInt(values[1], 10)];
+    });
+
+    return list;
+  };
+
   const cleanDuplications = (words) => {
     const nextWords = []
 
@@ -320,9 +343,11 @@
     }, listSet);
 
     return nextList;
-  }
+  };
 
-  const playLists = [ {
+  const weakMemoryWords = excludeSublist(fullPackOfAllLists20001, removeCopies(fullPackOfAllLists_Repeat_2));
+
+  const playLists = [{
     name: "Популярные 2000",
     dict: engDictAllIndexes2000,
   }, {
@@ -433,179 +458,225 @@
   }, {
     name: "Irregular verbs difficult",
     dict: removeCopies(irregularVerbsDifficult),
-  },  /* {
-    name: "Популярные простые 3000",
-    dict: excludePopular(engDictAllIndexes3000),
-  }, {
-    name: "Популярные простые 5000",
-    dict: excludePopular(engDictAllIndexes5000),
-  }, {
-    name: "Популярные простые 7000",
-    dict: excludePopular(engDictAllIndexes7000),
-  }, {
-    name: "Популярные простые остаток",
-    dict: excludePopular(engDictAllIndexesAll),
   }, playlistSeparator, {
-    name: "Фразовые глаголы",
-    dict: engDictAllIndexes170,
-  }, {
-    name: "Словосочетания",
-    dict: engDictAllIndexes900,
+    name: "Плохо запомненные слова по всем спискам. Все.",
+    dict: fullPackOfAllLists_Repeat_1,
   }, playlistSeparator, {
-    name: "Выборка из 2000 сокращенных тяжелых",
-    dict: cleanDuplications(engDict2000unlearned),
+    name: "Популярные 2000. Хорошо запомненные.",
+    dict: excludeSublist(engDictAllIndexes2000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Выборка из 2000 сокращенных тяжелых 2",
-    dict: cleanDuplications(engDict2000unlearned2),
+    name: "Популярные 3000. Хорошо запомненные.",
+    dict: excludeSublist(engDictAllIndexes3000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Выборка из 2000 сокращенных тяжелых 3 (круг 2)",
-    dict: cleanDuplications(engDict2000unlearned3),
+    name: "Популярные 5000. Хорошо запомненные.",
+    dict: excludeSublist(engDictAllIndexes5000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Выборка из 2000 сокращенных тяжелых 4 (круг 2, повтор 2)",
-    dict: cleanDuplications(engDict2000unlearned4),
+    name: "Популярные 7000. Хорошо запомненные.",
+    dict: excludeSublist(engDictAllIndexes7000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Самые сложные из 2000",
-    dict: cleanDuplications(mostDifficult),
+    name: "Популярные сокращенный все 9000. Хорошо запомненные.",
+    dict: excludeSublist(engDictNotKnownIndexes9000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Выборка из 5000 сокращенных тяжелых",
-    dict: cleanDuplications(engDict5000unlearned),
+    name: "Популярные сокращенный все 12000. Новые. Хорошо запомненные.",
+    dict: excludeSublist(engDictNotKnownIndexes12000Common, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Выборка из 5000 сокращенных тяжелых 2",
-    dict: cleanDuplications(engDict5000unlearned2),
-  }, {
-    name: "Выборка из cловосочетания 1",
-    dict: cleanDuplications(engCollocationsUnlearned1),
-  }, {
-    name: "Выборка из 7000 сокращенных тяжелых 1",
-    dict: cleanDuplications(engDict7000unlearned1),
-  }, {
-    name: "Выборка из 7000 сокращенных тяжелых 2",
-    dict: cleanDuplications(engDict7000unlearned2),
-  }, {
-    name: "Выборка из 7000 сокращенных тяжелых 3",
-    dict: cleanDuplications(engDict7000unlearned3),
-  }, {
-    name: "Выборка из 2000 3000 5000 сокращенных тяжелых 1",
-    dict: cleanDuplications(engDict2000_3000_5000_unlearned1),
-  }, {
-    name: "Выборка из 5000 сокращенных c 130 тяжелых 1",
-    dict: cleanDuplications(engDict_5000_from_130_unlearned1),
-  }, {
-    name: "Словосочетания невыученные (обе пачки)",
-    dict: cleanDuplications(engCollocationsUnlearned2),
-  }, {
-    name: "Выборка из 7000 сокращенных тяжелых 4",
-    dict: cleanDuplications(engDict7000unlearned4),
-  }, {
-    name: "Выборка из после 7000 все сокращенных тяжелых 1",
-    dict: cleanDuplications(engDictAfter7000unlearned4),
-  }, {
-    name: "Выборка из после 7000 все сокращенных тяжелых 2",
-    dict: cleanDuplications(engDictAfter7000unlearned5),
+    name: "Популярные сокращенный 20001 все. Хорошо запомненные.",
+    dict: excludeSublist(engAll20001, fullPackOfAllLists_Repeat_1),
   }, playlistSeparator, {
-    name: "Повторение 8000/пачка(1650) 1",
-    dict: cleanDuplications(engDictRecollection8000_part1650_1),
+    name: "Популярные 2000. Плохо запомненные.",
+    dict: intersectLists(engDictAllIndexes2000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) 2",
-    dict: cleanDuplications(engDictRecollection8000_part1650_2),
+    name: "Популярные 3000. Плохо запомненные.",
+    dict: intersectLists(engDictAllIndexes3000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) 3",
-    dict: cleanDuplications(engDictRecollection8000_part1650_3),
+    name: "Популярные 5000. Плохо запомненные.",
+    dict: intersectLists(engDictAllIndexes5000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) 4 (фразовые глаголы)",
-    dict: cleanDuplications(engDictRecollection8000_part1650_4),
+    name: "Популярные 7000. Плохо запомненные.",
+    dict: intersectLists(engDictAllIndexes7000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) 5",
-    dict: cleanDuplications(engDictRecollection8000_part1650_5),
+    name: "Популярные сокращенный все 9000. Плохо запомненные.",
+    dict: intersectLists(engDictNotKnownIndexes9000, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) все",
-    dict: cleanDuplications([...engDictRecollection8000_part1650_1, ...engDictRecollection8000_part1650_2, ...engDictRecollection8000_part1650_3, ...engDictRecollection8000_part1650_4, ...engDictRecollection8000_part1650_5]),
+    name: "Популярные сокращенный все 12000. Новые. Плохо запомненные.",
+    dict: intersectLists(engDictNotKnownIndexes12000Common, fullPackOfAllLists_Repeat_1),
   }, {
-    name: "Повторение 8000/пачка(1650) все (сокращенный 1)",
-    dict: excludeSublist(
-      cleanDuplications([
+    name: "Популярные сокращенный 20001 все. Плохо запомненные.",
+    dict: intersectLists(engAll20001, fullPackOfAllLists_Repeat_1),
+   /* {
+      name: "Популярные простые 3000",
+      dict: excludePopular(engDictAllIndexes3000),
+    }, {
+      name: "Популярные простые 5000",
+      dict: excludePopular(engDictAllIndexes5000),
+    }, {
+      name: "Популярные простые 7000",
+      dict: excludePopular(engDictAllIndexes7000),
+    }, {
+      name: "Популярные простые остаток",
+      dict: excludePopular(engDictAllIndexesAll),
+    }, playlistSeparator, {
+      name: "Фразовые глаголы",
+      dict: engDictAllIndexes170,
+    }, {
+      name: "Словосочетания",
+      dict: engDictAllIndexes900,
+    }, playlistSeparator, {
+      name: "Выборка из 2000 сокращенных тяжелых",
+      dict: cleanDuplications(engDict2000unlearned),
+    }, {
+      name: "Выборка из 2000 сокращенных тяжелых 2",
+      dict: cleanDuplications(engDict2000unlearned2),
+    }, {
+      name: "Выборка из 2000 сокращенных тяжелых 3 (круг 2)",
+      dict: cleanDuplications(engDict2000unlearned3),
+    }, {
+      name: "Выборка из 2000 сокращенных тяжелых 4 (круг 2, повтор 2)",
+      dict: cleanDuplications(engDict2000unlearned4),
+    }, {
+      name: "Самые сложные из 2000",
+      dict: cleanDuplications(mostDifficult),
+    }, {
+      name: "Выборка из 5000 сокращенных тяжелых",
+      dict: cleanDuplications(engDict5000unlearned),
+    }, {
+      name: "Выборка из 5000 сокращенных тяжелых 2",
+      dict: cleanDuplications(engDict5000unlearned2),
+    }, {
+      name: "Выборка из cловосочетания 1",
+      dict: cleanDuplications(engCollocationsUnlearned1),
+    }, {
+      name: "Выборка из 7000 сокращенных тяжелых 1",
+      dict: cleanDuplications(engDict7000unlearned1),
+    }, {
+      name: "Выборка из 7000 сокращенных тяжелых 2",
+      dict: cleanDuplications(engDict7000unlearned2),
+    }, {
+      name: "Выборка из 7000 сокращенных тяжелых 3",
+      dict: cleanDuplications(engDict7000unlearned3),
+    }, {
+      name: "Выборка из 2000 3000 5000 сокращенных тяжелых 1",
+      dict: cleanDuplications(engDict2000_3000_5000_unlearned1),
+    }, {
+      name: "Выборка из 5000 сокращенных c 130 тяжелых 1",
+      dict: cleanDuplications(engDict_5000_from_130_unlearned1),
+    }, {
+      name: "Словосочетания невыученные (обе пачки)",
+      dict: cleanDuplications(engCollocationsUnlearned2),
+    }, {
+      name: "Выборка из 7000 сокращенных тяжелых 4",
+      dict: cleanDuplications(engDict7000unlearned4),
+    }, {
+      name: "Выборка из после 7000 все сокращенных тяжелых 1",
+      dict: cleanDuplications(engDictAfter7000unlearned4),
+    }, {
+      name: "Выборка из после 7000 все сокращенных тяжелых 2",
+      dict: cleanDuplications(engDictAfter7000unlearned5),
+    }, playlistSeparator, {
+      name: "Повторение 8000/пачка(1650) 1",
+      dict: cleanDuplications(engDictRecollection8000_part1650_1),
+    }, {
+      name: "Повторение 8000/пачка(1650) 2",
+      dict: cleanDuplications(engDictRecollection8000_part1650_2),
+    }, {
+      name: "Повторение 8000/пачка(1650) 3",
+      dict: cleanDuplications(engDictRecollection8000_part1650_3),
+    }, {
+      name: "Повторение 8000/пачка(1650) 4 (фразовые глаголы)",
+      dict: cleanDuplications(engDictRecollection8000_part1650_4),
+    }, {
+      name: "Повторение 8000/пачка(1650) 5",
+      dict: cleanDuplications(engDictRecollection8000_part1650_5),
+    }, {
+      name: "Повторение 8000/пачка(1650) все",
+      dict: cleanDuplications([...engDictRecollection8000_part1650_1, ...engDictRecollection8000_part1650_2, ...engDictRecollection8000_part1650_3, ...engDictRecollection8000_part1650_4, ...engDictRecollection8000_part1650_5]),
+    }, {
+      name: "Повторение 8000/пачка(1650) все (сокращенный 1)",
+      dict: excludeSublist(
+        cleanDuplications([
+          ...engDictRecollection8000_part1650_1,
+          ...engDictRecollection8000_part1650_2,
+          ...engDictRecollection8000_part1650_3,
+          ...engDictRecollection8000_part1650_4,
+          ...engDictRecollection8000_part1650_5,
+        ]),
+        engDictRecollection8000_part1650_5_exclution_1,
+      ),
+    }, {
+      name: "Повторение 8000/пачка(1650) все (сокращенный 2)",
+      dict: excludeSublist(
+        cleanDuplications([
+          ...engDictRecollection8000_part1650_1,
+          ...engDictRecollection8000_part1650_2,
+          ...engDictRecollection8000_part1650_3,
+          ...engDictRecollection8000_part1650_4,
+          ...engDictRecollection8000_part1650_5,
+        ]),
+        engDictRecollection8000_part1650_5_exclution_2,
+      ),
+    }, playlistSeparator, {
+      name: "Повторение 2ое - 8000/пачка(1650) 1",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_1),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) 2",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_2),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) 3",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_3),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) 4 (фразовые глаголы)",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_4),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) 5",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_5),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 1)",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_1),
+    }, {
+      name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 2)",
+      dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_2),
+    }, playlistSeparator, {
+      name: "Все по повторениям",
+      dict: cleanDuplications([
+        ...engDictRecollection_2_8000_part1650_exclution_2,
+        ...engDictRecollection_2_8000_part1650_exclution_1,
+        ...engDictRecollection_2_8000_part1650_5,
+        ...engDictRecollection_2_8000_part1650_4,
+        ...engDictRecollection_2_8000_part1650_3,
+        ...engDictRecollection_2_8000_part1650_2,
+        ...engDictRecollection_2_8000_part1650_1,
         ...engDictRecollection8000_part1650_1,
         ...engDictRecollection8000_part1650_2,
         ...engDictRecollection8000_part1650_3,
         ...engDictRecollection8000_part1650_4,
         ...engDictRecollection8000_part1650_5,
       ]),
-      engDictRecollection8000_part1650_5_exclution_1,
-    ),
-  }, {
-    name: "Повторение 8000/пачка(1650) все (сокращенный 2)",
-    dict: excludeSublist(
-      cleanDuplications([
-        ...engDictRecollection8000_part1650_1,
-        ...engDictRecollection8000_part1650_2,
-        ...engDictRecollection8000_part1650_3,
-        ...engDictRecollection8000_part1650_4,
-        ...engDictRecollection8000_part1650_5,
-      ]),
-      engDictRecollection8000_part1650_5_exclution_2,
-    ),
-  }, playlistSeparator, {
-    name: "Повторение 2ое - 8000/пачка(1650) 1",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_1),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) 2",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_2),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) 3",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_3),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) 4 (фразовые глаголы)",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_4),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) 5",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_5),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 1)",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_1),
-  }, {
-    name: "Повторение 2ое - 8000/пачка(1650) все (сокращенный 2)",
-    dict: cleanDuplications(engDictRecollection_2_8000_part1650_exclution_2),
-  }, playlistSeparator, {
-    name: "Все по повторениям",
-    dict: cleanDuplications([
-      ...engDictRecollection_2_8000_part1650_exclution_2,
-      ...engDictRecollection_2_8000_part1650_exclution_1,
-      ...engDictRecollection_2_8000_part1650_5,
-      ...engDictRecollection_2_8000_part1650_4,
-      ...engDictRecollection_2_8000_part1650_3,
-      ...engDictRecollection_2_8000_part1650_2,
-      ...engDictRecollection_2_8000_part1650_1,
-      ...engDictRecollection8000_part1650_1,
-      ...engDictRecollection8000_part1650_2,
-      ...engDictRecollection8000_part1650_3,
-      ...engDictRecollection8000_part1650_4,
-      ...engDictRecollection8000_part1650_5,
-    ]),
-  }, playlistSeparator, {
-    name: "Повторение 1 пачки 12000",
-    dict: cleanDuplications(engDictRecollection_1_12000),
-  }, {
-    name: "Повторение 2 пачки 12000",
-    dict: cleanDuplications(engDictRecollection_2_12000),
-  }, {
-    name: "Повторение 3 пачки 12000",
-    dict: cleanDuplications(engDictRecollection_3_12000),
-  }, {
-    name: "Повторение 1. Популярные 20001 все. Сокр. ч1.",
-    dict: shortEngAll20001Recollection_1,
-  }, {
-    name: "Повторение 2. Популярные 20001 все. Сокр. ч1.",
-    dict: shortEngAll20001Recollection_2,
-  }, {
-    name: "Повторение 1. Популярные 20001 все. Сокр. ч2.",
-    dict: shortEngPart20001Recollection_1,
-  }, {
-    name: "Повторение 2. Популярные 20001 все. Сокр. ч2.",
-    dict: shortEngPart20001Recollection_2,
-  }, {
-    name: "Повторение 3. Популярные 20001 все. Сокр. ч2.",
-    dict: shortEngPart20001Recollection_3,
-  }*/];
+    }, playlistSeparator, {
+      name: "Повторение 1 пачки 12000",
+      dict: cleanDuplications(engDictRecollection_1_12000),
+    }, {
+      name: "Повторение 2 пачки 12000",
+      dict: cleanDuplications(engDictRecollection_2_12000),
+    }, {
+      name: "Повторение 3 пачки 12000",
+      dict: cleanDuplications(engDictRecollection_3_12000),
+    }, {
+      name: "Повторение 1. Популярные 20001 все. Сокр. ч1.",
+      dict: shortEngAll20001Recollection_1,
+    }, {
+      name: "Повторение 2. Популярные 20001 все. Сокр. ч1.",
+      dict: shortEngAll20001Recollection_2,
+    }, {
+      name: "Повторение 1. Популярные 20001 все. Сокр. ч2.",
+      dict: shortEngPart20001Recollection_1,
+    }, {
+      name: "Повторение 2. Популярные 20001 все. Сокр. ч2.",
+      dict: shortEngPart20001Recollection_2,
+    }, {
+      name: "Повторение 3. Популярные 20001 все. Сокр. ч2.",
+      dict: shortEngPart20001Recollection_3,
+    }*/
+  }];
 
   const all12000 = engDictNotKnownIndexes12000Common;
   const all8000 = cleanDuplications([
