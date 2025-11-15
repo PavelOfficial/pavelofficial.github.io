@@ -345,7 +345,17 @@
     return nextList;
   };
 
-  const weakMemoryWords = excludeSublist(fullPackOfAllLists20001, removeCopies(fullPackOfAllLists_Repeat_2));
+  let weakMemoryWords = [].concat(
+    intersectLists(engDictAllIndexes2000, fullPackOfAllLists_Repeat_1),
+    intersectLists(engDictAllIndexes3000, fullPackOfAllLists_Repeat_1),
+    intersectLists(engDictAllIndexes5000, fullPackOfAllLists_Repeat_1),
+    intersectLists(engDictAllIndexes7000, fullPackOfAllLists_Repeat_1),
+    intersectLists(engDictNotKnownIndexes9000, fullPackOfAllLists_Repeat_1),
+    intersectLists(engDictNotKnownIndexes12000Common, fullPackOfAllLists_Repeat_1),
+    intersectLists(engAll20001, fullPackOfAllLists_Repeat_1),
+  );
+
+  weakMemoryWords = [...weakMemoryWords, ...excludeSublist(fullPackOfAllLists_Repeat_1, weakMemoryWords)];
 
   const playLists = [{
     name: "Популярные 2000",
@@ -503,6 +513,9 @@
   }, {
     name: "Популярные сокращенный 20001 все. Плохо запомненные.",
     dict: intersectLists(engAll20001, fullPackOfAllLists_Repeat_1),
+  }, {
+    name: "Плохо запомненные. Все по всем спискам. Упорядоченные.",
+    dict: weakMemoryWords,
    /* {
       name: "Популярные простые 3000",
       dict: excludePopular(engDictAllIndexes3000),
