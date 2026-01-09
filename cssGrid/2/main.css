@@ -1,0 +1,27 @@
+body {
+
+}
+
+.container {
+    border: 2px solid #000000;
+    display: grid;
+    height: 500px;
+    /* justify-items: stretch; */
+    /* align-items: center; */
+    /* align-items: stretch; */ /* */
+    /* align-content: center; */
+    /* align-content: space-around; */
+    /* align-content: space-between; */
+    /* align-content: space-evenly; */
+
+    /* justify-content: start; */
+    /* center; */
+    /* space-around; */
+    /* space-between; */
+}
+
+.container > div {
+    font-weight: bold;
+    font-size: 20px;
+    border: 2px solid #006666;
+}
