@@ -1497,6 +1497,105 @@ const requestYandexDict = (phrase) => {
     }
   });
 
+  const textSentenceClick = (event) => {
+    let dictArticles = event.target.getAttribute("data-dict-articles") || "";
+
+    dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));
+
+    const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
+
+    dataList.forEach((item) => {
+      // dict-article dict-article-phrase
+      if (/dict-article-phrase/.test(item.getAttribute("class"))) {
+        item.setAttribute("class", "dict-article dict-article-phrase");
+      } else {
+        item.setAttribute("class", "dict-article");
+      }
+    });
+
+    const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
+      let dictArticleElements = item.getAttribute("data-dict-articles");
+
+      dictArticleElements = dictArticleElements.split(",").map((item) => {
+        return parseInt(item, 10);
+      });
+
+      return dictArticles.some((item2) => {
+        return dictArticleElements.indexOf(item2) !== -1;
+      });
+    });
+
+    Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
+      .forEach((item) => {
+        let classAttr = item.getAttribute("class");
+
+        classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
+
+        item.setAttribute("class", classAttr);
+      });
+
+    // выбирать всех и фильтровать по вхождению индекса в список.
+    targetSentences.forEach((item) => {
+      item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
+    });
+
+    if (!dictArticles.length) {
+      return;
+    }
+
+    dictArticles.forEach((listIndex) => {
+      const dictArticle = document.querySelector(`[data-list-index="${listIndex}"]`);
+
+      if (/dict-article-phrase/.test(dictArticle.getAttribute("class"))) {
+        dictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
+      } else {
+        dictArticle.setAttribute("class", "dict-article dict-article_active");
+      }
+    });
+
+    const firstDictArticleIndex = dictArticles[0];
+
+    if (firstDictArticleIndex !== undefined) {
+      const dictArticle = document.querySelector(`[data-list-index="${firstDictArticleIndex}"]`);
+      const dictArticleRect = dictArticle.getBoundingClientRect();
+
+      const dictContainer = document.querySelector(".dict-container-inner");
+      const dictContainerRect = dictContainer.getBoundingClientRect();
+
+      // добавить textContainerRect.top
+      if ((dictArticleRect.top < dictContainerRect.top) ||
+        (dictArticleRect.bottom > dictContainerRect.bottom)) {
+        const deltaTop = dictArticleRect.top - dictContainerRect.top;
+        const putToCenterDelta = (dictContainerRect.height / 2);
+
+        dictContainer.scrollTo({
+          left: 0,
+          top: dictContainer.scrollTop + deltaTop - putToCenterDelta,
+        });
+      }
+    }
+  };
+
+  let contextMenuPrevented = false;
+
+  document.addEventListener('contextmenu', function(e) {
+    if (contextMenuPrevented) {
+      e.preventDefault();
+      contextMenuPrevented = false;
+    }
+  });
+
+  document.addEventListener("mouseup", (event) => {
+    if (event.button === 2 && document.querySelector("#dictClicker").checked &&
+          event.target.matches(".text-sentence")) {
+      contextMenuPrevented = true;
+
+      textSentenceClick(event);
+    } else {
+      contextMenuPrevented = false;
+    }
+  });
+
   document.addEventListener("click", (event) => {
     if (event.target.matches(".dict-word-item")) {
       const text = event.target.innerText;
@@ -1565,83 +1664,7 @@ const requestYandexDict = (phrase) => {
 
     if (event.target.matches(".text-sentence")) {
       if (!document.querySelector("#dictClicker").checked) {
-        let dictArticles = event.target.getAttribute("data-dict-articles") || "";
-
-        dictArticles = dictArticles.split(",").filter(item => item).map(listIndex => parseInt(listIndex, 10));
-
-        const dataList = Array.from(document.querySelectorAll("[data-list-index]"));
-
-        dataList.forEach((item) => {
-          // dict-article dict-article-phrase
-          if (/dict-article-phrase/.test(item.getAttribute("class"))) {
-            item.setAttribute("class", "dict-article dict-article-phrase");
-          } else {
-            item.setAttribute("class", "dict-article");
-          }
-        });
-
-        const targetSentences = Array.from(document.querySelectorAll(`[data-dict-articles]`)).filter((item) => {
-          let dictArticleElements = item.getAttribute("data-dict-articles");
-
-          dictArticleElements = dictArticleElements.split(",").map((item) => {
-            return parseInt(item, 10);
-          });
-
-          return dictArticles.some((item2) => {
-            return dictArticleElements.indexOf(item2) !== -1;
-          });
-        });
-
-        Array.from(document.querySelectorAll(".span-dict-linked-text_selected"))
-          .forEach((item) => {
-            let classAttr = item.getAttribute("class");
-
-            classAttr = classAttr.replace(/\s?span-dict-linked-text_selected\s?/, "");
-
-            item.setAttribute("class", classAttr);
-          });
-
-        // выбирать всех и фильтровать по вхождению индекса в список.
-        targetSentences.forEach((item) => {
-          item.setAttribute("class", `${item.getAttribute("class")} span-dict-linked-text_selected`);
-        });
-
-        if (!dictArticles.length) {
-          return;
-        }
-
-        dictArticles.forEach((listIndex) => {
-          const dictArticle = document.querySelector(`[data-list-index="${listIndex}"]`);
-
-          if (/dict-article-phrase/.test(dictArticle.getAttribute("class"))) {
-            dictArticle.setAttribute("class", "dict-article dict-article-phrase dict-article_active");
-          } else {
-            dictArticle.setAttribute("class", "dict-article dict-article_active");
-          }
-        });
-
-        const firstDictArticleIndex = dictArticles[0];
-
-        if (firstDictArticleIndex !== undefined) {
-          const dictArticle = document.querySelector(`[data-list-index="${firstDictArticleIndex}"]`);
-          const dictArticleRect = dictArticle.getBoundingClientRect();
-
-          const dictContainer = document.querySelector(".dict-container-inner");
-          const dictContainerRect = dictContainer.getBoundingClientRect();
-
-          // добавить textContainerRect.top
-          if ((dictArticleRect.top < dictContainerRect.top) ||
-            (dictArticleRect.bottom > dictContainerRect.bottom)) {
-            const deltaTop = dictArticleRect.top - dictContainerRect.top;
-            const putToCenterDelta = (dictContainerRect.height / 2);
-
-            dictContainer.scrollTo({
-              left: 0,
-              top: dictContainer.scrollTop + deltaTop - putToCenterDelta,
-            });
-          }
-
-        }
+        textSentenceClick(event);
       }
     }
 
@@ -1712,7 +1735,7 @@ const requestYandexDict = (phrase) => {
         }
       }
     }
-  });
+  }, true);
 
 
   const rerenderDictList = (dict, renderAddButton) => {
@@ -2026,7 +2049,7 @@ const requestYandexDict = (phrase) => {
   };
 
   document.addEventListener("mouseup", (event) => {
-    if (selectionChanged) {
+    if (selectionChanged && event.button === 0) {
       currentAddToDictResolveFlag = false;
 
       const textFragmentSelection1 = getTextFragmentSelection();
