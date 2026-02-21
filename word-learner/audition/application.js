@@ -1322,24 +1322,26 @@ const requestYandexDict = (phrase) => {
                                 -
                       </button>                
                   ` : ""}
-                  <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
-                          title="Непонятное предложение" 
-                          data-index="${index}" 
-                          onclick="window.handleClickDontUnderstand(event)">
-                            нп
-                  </button>
-                  <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
-                          title="Интересное" 
-                          data-index="${index}" 
-                          onclick="window.handleClickInterestingWord(event)">
-                            и
-                  </button>
-                  <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
-                          title="Повторить" 
-                          data-index="${index}" 
-                          onclick="window.handleClickRepeatWord(event)">
-                            п
-                  </button>
+                  <span class="word-flag-buttons">
+                    <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                            title="Непонятное предложение" 
+                            data-index="${index}" 
+                            onclick="window.handleClickDontUnderstand(event)">
+                              нп
+                    </button>
+                    <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                            title="Интересное" 
+                            data-index="${index}" 
+                            onclick="window.handleClickInterestingWord(event)">
+                              и
+                    </button>
+                    <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny"
+                            title="Повторить" 
+                            data-index="${index}" 
+                            onclick="window.handleClickRepeatWord(event)">
+                              п
+                    </button>
+                  </span>
                 </div>
                 <div class="trascription-text">
                   ${item.trasncription || ""}
@@ -1378,24 +1380,26 @@ const requestYandexDict = (phrase) => {
                             -
                     </button>
                   `: ""}
-                  <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${index}" 
-                          title="Непонятное предложение"
-                          onclick="window.handleClickDontUnderstand(event)">
-                            нп
-                  </button>
-                  <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${index}"
-                          title="Интересное"
-                          onclick="window.handleClickInterestingWord(event)">
-                            и
-                  </button>
-                  <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
-                          data-index="${index}" 
-                          title="Повторить"
-                          onclick="window.handleClickRepeatWord(event)">
-                            п
-                  </button>
+                  <span class="word-flag-buttons">
+                    <button class="btn ${item.dontUnderstand ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                            data-index="${index}" 
+                            title="Непонятное предложение"
+                            onclick="window.handleClickDontUnderstand(event)">
+                              нп
+                    </button>
+                    <button class="btn ${item.interesting ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                            data-index="${index}"
+                            title="Интересное"
+                            onclick="window.handleClickInterestingWord(event)">
+                              и
+                    </button>
+                    <button class="btn ${item.repeatWord ? "btn-secondary" : "btn-outline-secondary"} btn-sm btn-sm-tiny" 
+                            data-index="${index}" 
+                            title="Повторить"
+                            onclick="window.handleClickRepeatWord(event)">
+                              п
+                    </button>
+                  </span>
                 </div>
                 <div class="trascription-text">
                   ${item.transcription || ""}
@@ -1570,7 +1574,7 @@ const requestYandexDict = (phrase) => {
 
         dictContainer.scrollTo({
           left: 0,
-          top: dictContainer.scrollTop + deltaTop - putToCenterDelta,
+          top: dictContainer.scrollTop + deltaTop - putToCenterDelta + (dictArticleRect.height / 2),
         });
       }
     }
@@ -2541,15 +2545,28 @@ const requestYandexDict = (phrase) => {
 
   let horizontalControlsShown = true;
 
+  let bigTexts = JSON.parse(localStorage.getItem("bigTexts") || "false");
+  document.querySelector(".js-big-texts").checked = bigTexts;
+
+  const applyBigTextsChange = (checked) => {
+    if (checked) {
+      document.querySelector(".layout-container").classList.add("big-texts");
+    } else {
+      document.querySelector(".layout-container").classList.remove("big-texts");
+    }
+  };
+
+  applyBigTextsChange(bigTexts);
+
   let hugeDictionary = JSON.parse(localStorage.getItem("hugeDictionary") || "false");
 
   document.querySelector(".js-huge-dictionary").checked = hugeDictionary;
 
   const applyLayoutContainerHugeDictionary = (checked) => {
     if (checked) {
-      document.querySelector(".layout-container").setAttribute("class", "layout-container huge-dictionary");
+      document.querySelector(".layout-container").classList.add("huge-dictionary");
     } else {
-      document.querySelector(".layout-container").setAttribute("class", "layout-container");
+      document.querySelector(".layout-container").classList.remove("huge-dictionary");
     }
   };
 
@@ -2580,6 +2597,13 @@ const requestYandexDict = (phrase) => {
 
     localStorage.setItem("hugeDictionary", JSON.stringify(checked));
     applyLayoutContainerHugeDictionary(checked);
+  };
+
+  window.onBigTextsChange = (event) => {
+    const checked = event.target.checked;
+
+    localStorage.setItem("bigTexts", JSON.stringify(checked));
+    applyBigTextsChange(checked);
   };
 
   window.onHideExtraDictInfo = (event) => {

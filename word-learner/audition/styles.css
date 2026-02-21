@@ -649,3 +649,62 @@ ul.categories li.category-li {
     background: #d9c3ff;
 }
 
+.big-texts .ru-current-meaning {
+    font-size: 40px;
+}
+
+.big-texts .dict-phrase-comment {
+    font-size: 40px;
+}
+
+.big-texts .dict-phrase-comment_word {
+    min-height: 180px;
+    max-height: 180px;
+}
+
+.big-texts .trascription-text {
+    font-size: 32px;
+    color: #444444;
+}
+
+.big-texts .dict-article__word-number {
+    font-size: 40px;
+    line-height: 60px;
+    height: 60px;
+}
+
+.big-texts .word-flag-buttons {
+    display: none;
+}
+
+.big-texts [data-removed="true"] {
+    display: none;
+}
+
+.big-texts .dict-article__bottom {
+    font-size: 40px;
+    line-height: 40px;
+}
+
+.big-texts .text-wrap-html {
+    font-size: 40px;
+    line-height: 2;
+}
+
+.big-texts .layout-top_large {
+    height: 100vh;
+}
+
+.big-texts .player-container_short {
+    height: 0vh;
+}
+
+.big-texts .text-sentence:hover {
+    background: rgba(0,0,0, 0.2);
+    cursor: default;
+}
+
+.big-texts .text-sentence[data-clicked=enabled] {
+    background: rgba(0,0,0, 0.3);
+}
+
