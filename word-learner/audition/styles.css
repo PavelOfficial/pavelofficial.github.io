@@ -708,3 +708,7 @@ ul.categories li.category-li {
     background: rgba(0,0,0, 0.3);
 }
 
+.big-texts .selected-text-item {
+    display: none;
+}
+
